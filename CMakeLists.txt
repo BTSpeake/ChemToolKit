@@ -12,7 +12,10 @@ endif()
 project ("ChemToolKit")
 
 # Add source to this project's executable.
-add_executable (ChemToolKit "main.cpp"  "Molecule/Molecule.h" "Molecule/Molecule.cpp" "Molecule/Atom.h" "Molecule/Bond.h" "Maths/Vector3.h" "Maths/Vector3.cpp" "Molecule/Atom.cpp" "Molecule/Bond.cpp" "ForceField/UFF.h" "ForceField/UFFParams.h" "ForceField/UFFParams.cpp" "ForceField/ForceField.h" "ForceField/UFF.cpp" "Molecule/Angle.h")
+add_executable (ChemToolKit "main.cpp"  "Molecule/Molecule.h" "Molecule/Molecule.cpp" "Molecule/Atom.h" "Molecule/Bond.h" "Maths/Vector3.h" "Maths/Vector3.cpp" "Molecule/Atom.cpp" "Molecule/Bond.cpp" "ForceField/UFF.h" "ForceField/UFFParams.h" "ForceField/UFFParams.cpp" "ForceField/ForceField.h" "ForceField/UFF.cpp" "Molecule/Angle.h" "Molecule/Angle.cpp")
+
+file(GLOB PARAM_FILES "Resources/*.prm")
+file(COPY ${PARAM_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resources/) 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ChemToolKit PROPERTY CXX_STANDARD 20)

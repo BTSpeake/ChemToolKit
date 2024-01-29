@@ -2,7 +2,7 @@
 #include <cmath>
 
 Vector3::Vector3(double x, double y, double z)
-	: _x(x), _y(x), _z(z) {
+	: _x(x), _y(y), _z(z) {
 }
 
 // Copy constructor 

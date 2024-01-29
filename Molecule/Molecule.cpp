@@ -5,14 +5,8 @@ Molecule::Molecule() {
 }
 
 Molecule::~Molecule() {
-	for (Bond* b : _bonds) {
-		delete b;
-	}
-	_bonds.clear();
-	for (Atom* a : _atoms) {
-		delete a;
-	}
-	_atoms.clear();
+	clearBonds();
+	clearAtoms();
 }
 
 void Molecule::addAtom(int a, double x, double y, double z) {
@@ -24,4 +18,21 @@ void Molecule::addBond(int i, int j, int bo) {
 	Bond* nBond = new Bond(_atoms[i], _atoms[j]);
 	nBond->setBondOrder(bo);
 	_bonds.push_back(nBond);
+}
+
+void Molecule::clearAtoms() {
+	if (_bonds.size() != 0) {
+		clearBonds();
+	}
+	for (Atom* a : _atoms) {
+		delete a;
+	}
+	_atoms.clear();
+}
+
+void Molecule::clearBonds() {
+	for (Bond* b : _bonds) {
+		delete b;
+	}
+	_bonds.clear();
 }

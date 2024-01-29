@@ -2,6 +2,7 @@
 
 #include "Atom.h"
 #include "../Maths/Vector3.h"
+#include "../ForceField/UFFParams.h"
 
 class Bond {
 public:
@@ -16,6 +17,7 @@ public:
 
 	// Set functions 
 	void setBondOrder(int bo) { _bo = bo; };
+	void calculateConstants(UFFParameters* pi, UFFParameters* pj);
 
 	// access functions 
 	double getLength() const { return _l; };
@@ -25,9 +27,16 @@ public:
 	Vector3 getBondVector() const { return _atmj->getPosition() - _atmi->getPosition(); };
 	bool isAtomInBond(const Atom* atm) const { return (atm == _atmi) || (atm == _atmj); };
 
+	double getR0() const { return _r0; };
+	double getForceConstant() const { return _k; };
+
+
 private:
 	Atom* _atmi;
 	Atom* _atmj;
 	int _bo{ 1 };
 	double _l;
+
+	double _r0;
+	double _k;
 };

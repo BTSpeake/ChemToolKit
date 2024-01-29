@@ -15,9 +15,8 @@ Atom::Atom(const Atom& atm) {
 Atom& Atom::operator=(const Atom& atm) {
 	Vector3 vec = atm.getPosition();
 	Atom newAtm(atm.getAtomicNumber(), vec[0], vec[1], vec[2]);
-	return newAtm;
+	return newAtm; // WARNING returning adress of local variable 
 }
-
 
 
 int Atom::coordination() const {
@@ -33,9 +32,9 @@ int Atom::coordination() const {
         if (_nTriple == 1) { return 1; };
         return 0;
     case 8:
-        if (_nSingle == 2) { return 3; };
-        if (_nDouble == 1) { return 2; };
-        return 0;
+        //if (_nSingle == 2) { return 3; };
+        //if (_nDouble == 1) { return 2; };
+        return 3;
     default:
         return 0;
     }

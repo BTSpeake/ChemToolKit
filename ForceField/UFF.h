@@ -5,6 +5,7 @@
 
 #include "ForceField.h"
 #include "../Molecule/Molecule.h"
+#include "../Molecule/Atom.h"
 #include "../Molecule/Bond.h"
 #include "../Molecule/Angle.h"
 #include "UFFParams.h"
@@ -15,9 +16,11 @@ public:
 	UFF(Molecule& mol);
 	~UFF();
 
-	
+	void setupTerms();
 	void runSteps(int steps);
-	double energy();
+	double energy() { return _eBond + _eAngle + _eDihedral + _eInversion + _eVdW + _eElectro; };
+	void calculateEnergy(bool gradients);
+
 
 	// individual energy access functions 
 	double getBondEnergy() const { return _eBond; };
@@ -29,8 +32,7 @@ public:
 
 protected:
 	void setParameters();
-	void setupTerms();
-	void calculateEnergy(bool gradients);
+	
 
 private:
 	std::map<std::string, UFFParameters*> _params;
@@ -43,6 +45,10 @@ private:
 
 	std::vector <Angle*> _angles;
 
+	std::string getAtomKey(Atom* atom) const;
+
 	double E_R(Bond* bond);
 	double E_Theta(Angle* angle);
+
+	void clearAngles();
 };
