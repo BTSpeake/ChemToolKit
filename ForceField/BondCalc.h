@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Atom.h"
+#include "../Molecule/Atom.h"
 #include "../Maths/Vector3.h"
 #include "../ForceField/UFFParams.h"
 
-class Bond {
+class BondCalc {
 public:
-	Bond(Atom* atmi, Atom* atmj);
-	~Bond() = default;
+	BondCalc(Atom* atmi, Atom* atmj);
+	~BondCalc() = default;
 
-	Bond(const Bond&) = delete;
-	Bond& operator=(const Bond&) = delete;
+	BondCalc(const BondCalc&) = delete;
+	BondCalc& operator=(const BondCalc&) = delete;
 
 	// Processing functions 
 	void calculateDistance();

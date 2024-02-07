@@ -12,7 +12,7 @@ endif()
 project ("ChemToolKit")
 
 # Add source to this project's executable.
-add_executable (ChemToolKit "main.cpp"  "Molecule/Molecule.h" "Molecule/Molecule.cpp" "Molecule/Atom.h" "Molecule/Bond.h" "Maths/Vector3.h" "Maths/Vector3.cpp" "Molecule/Atom.cpp" "Molecule/Bond.cpp" "ForceField/UFF.h" "ForceField/UFFParams.h" "ForceField/UFFParams.cpp" "ForceField/ForceField.h" "ForceField/UFF.cpp" "Molecule/Angle.h" "Molecule/Angle.cpp")
+add_executable (ChemToolKit "main.cpp"  "Molecule/Molecule.h" "Molecule/Molecule.cpp" "Molecule/Atom.h" "ForceField/BondCalc.h" "Maths/Vector3.h" "Maths/Vector3.cpp" "Molecule/Atom.cpp" "ForceField/BondCalc.cpp" "ForceField/UFF.h" "ForceField/UFFParams.h" "ForceField/UFFParams.cpp" "ForceField/ForceField.h" "ForceField/UFF.cpp" "ForceField/AngleCalc.h" "ForceField/AngleCalc.cpp" "FileIO/FileIO.h" "FileIO/FileIO_XYZ.h" "FileIO/FileIO_XYZ.cpp" "FileIO/FileIO_PDB.h" "FileIO/FileIO_PDB.cpp" "FileIO/FileControl.h" "FileIO/FileControl.cpp")
 
 file(GLOB PARAM_FILES "Resources/*.prm")
 file(COPY ${PARAM_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resources/) 

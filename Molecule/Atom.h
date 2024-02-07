@@ -1,12 +1,14 @@
 #pragma once
 
 #include <map>
+#include <string>
 
 #include "../Maths/Vector3.h"
 
 class Atom {
 public:
 	Atom(int a, double x, double y, double z);
+	Atom(std::string s, double x, double y, double z);
 	~Atom() = default;
 
 	// Copy and assignment 
@@ -23,6 +25,7 @@ public:
 	unsigned int nTripleBonds() const { return _nTriple; };
 	unsigned int nBonds() const { return _nSingle + _nDouble + _nTriple; };
 	bool isAromatic() const { return _isAromatic; };
+	double getCovalentRadii() const { return covRadiiDict[_a]; }
 
 	// set functions 
 	void addSingleBond() { _nSingle++; };
@@ -33,6 +36,13 @@ public:
 	void removeTripleBond() { _nTriple--; };
 	void setAromatic(bool aromatic) { _isAromatic = aromatic; };
 
+	// reset functions 
+	void resetBonding() {
+		_nSingle = 0;
+		_nDouble = 0;
+		_nTriple = 0;
+	}
+
 
 private:
 	int _a;
@@ -42,5 +52,8 @@ private:
 	bool _isAromatic{ false };
 	Vector3 _pos;
 
-    static std::map<int, const char*> atmDict;
+	// make these const??? seems to break access functions
+    static std::map<int, const char*> atmDict; 
+	static std::map<std::string, int> symbolDict; // could we get better performance with a const char* / has approach???
+	static std::map<int, double> covRadiiDict;
 };

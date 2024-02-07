@@ -1,18 +1,18 @@
-#include "Bond.h"
+#include "BondCalc.h"
 
 #include <cmath>
 
-Bond::Bond(Atom* atmi, Atom* atmj) 
+BondCalc::BondCalc(Atom* atmi, Atom* atmj)
 	: _atmi(atmi), _atmj(atmj) {
 	calculateDistance();
 }
 
-void Bond::calculateDistance() {
+void BondCalc::calculateDistance() {
 	Vector3 bv = getBondVector();
 	_l = bv.normal();
 }
 
-void Bond::calculateConstants(UFFParameters* pi, UFFParameters* pj) {
+void BondCalc::calculateConstants(UFFParameters* pi, UFFParameters* pj) {
 	_r0 = pi->r + pj->r;
 	if (_bo > 1) {
 		double rbo = -0.1332 * (_r0)*std::log(_bo);

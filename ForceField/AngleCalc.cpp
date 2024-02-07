@@ -1,9 +1,9 @@
-#include "Angle.h"
+#include "AngleCalc.h"
 #include "../Maths/Vector3.h"
 
 #include <cmath>
 
-Angle::Angle(Bond* bi, Bond* bj) : _bi(bi), _bj(bj) {
+AngleCalc::AngleCalc(BondCalc* bi, BondCalc* bj) : _bi(bi), _bj(bj) {
 
 	if (_bi->getAtomi() == _bj->getAtomj()) {
 		_atmj = _bi->getAtomi();
@@ -29,7 +29,7 @@ Angle::Angle(Bond* bi, Bond* bj) : _bi(bi), _bj(bj) {
 	}
 }
 
-void Angle::calculateConstants(UFFParameters* pi, UFFParameters* pj, UFFParameters* pk) {
+void AngleCalc::calculateConstants(UFFParameters* pi, UFFParameters* pj, UFFParameters* pk) {
 	Vector3 v1 = _atmi->getPosition() - _atmj->getPosition();
 	Vector3 v2 = _atmk->getPosition() - _atmj->getPosition();
 

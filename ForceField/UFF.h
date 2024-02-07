@@ -6,8 +6,8 @@
 #include "ForceField.h"
 #include "../Molecule/Molecule.h"
 #include "../Molecule/Atom.h"
-#include "../Molecule/Bond.h"
-#include "../Molecule/Angle.h"
+#include "BondCalc.h"
+#include "AngleCalc.h"
 #include "UFFParams.h"
 
 
@@ -43,12 +43,14 @@ private:
 	double _eVdW{ 0.0 };
 	double _eElectro{ 0.0 };
 
-	std::vector <Angle*> _angles;
+	std::vector<BondCalc*> _bonds;
+	std::vector<AngleCalc*> _angles;
 
 	std::string getAtomKey(Atom* atom) const;
 
-	double E_R(Bond* bond);
-	double E_Theta(Angle* angle);
+	double E_R(BondCalc* bond);
+	double E_Theta(AngleCalc* angle);
 
 	void clearAngles();
+	void clearBonds();
 };

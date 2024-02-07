@@ -3,8 +3,15 @@
 #include <vector>
 
 #include "Atom.h"
-#include "Bond.h"
-#include "Angle.h"
+//#include "Bond.h"
+//#include "Angle.h"
+
+struct Bond {
+	Bond(int i, int j, int o) : _i(i), _j(j), _o(o) {};
+	unsigned int _i;
+	unsigned int _j; 
+	int _o;
+};
 
 class Molecule {
 public:
@@ -21,9 +28,15 @@ public:
 
 	// set functions ]
 	void addAtom(int a, double x, double y, double z);
-	void addBond(int i, int j, int bo = 1);
+	void addAtom(std::string s, double x, double y, double z);
+	void addBond(unsigned int i, unsigned int j, int bo = 1) {
+		if (i < nAtoms() && j < nAtoms()) { _bonds.push_back(new Bond(i, j, bo)); }
+	};
 
-	// Clean up functions
+	// processing functions 
+	void calculateBonding();
+
+	// Utility functions
 	void clearAtoms();
 	void clearBonds();
 

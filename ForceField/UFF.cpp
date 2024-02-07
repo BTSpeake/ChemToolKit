@@ -16,6 +16,7 @@ UFF::~UFF() {
 		p.second = 0;
 	}
 	_params.clear();
+	clearBonds();
 	clearAngles();
 }
 
@@ -54,20 +55,23 @@ void UFF::setupTerms() {
 	// required terms for the energy sums
 	
 	// Clear any old terms 
+	clearBonds();
 	clearAngles();
 	
 	std::string keyi; 
 	std::string keyj;
 	std::string keyk;
 	for (int i = 0; i < _mol.nBonds(); i++) {
-		keyi = getAtomKey(_mol.getBond(i)->getAtomi());
-		keyj = getAtomKey(_mol.getBond(i)->getAtomj());
-		_mol.getBond(i)->calculateConstants(_params[keyi], _params[keyj]);
+		Bond* bnd = _mol.getBond(i);
+		keyi = getAtomKey(_mol.getAtom(bnd->_i));
+		keyj = getAtomKey(_mol.getAtom(bnd->_j));
+		_bonds.push_back(new BondCalc(_mol.getAtom(bnd->_i), _mol.getAtom(bnd->_j)));
+		_bonds[i]->calculateConstants(_params[keyi], _params[keyj]);
 	}
-	for (int i = 0; i < _mol.nBonds(); i++) {
-		for (int j = (i + 1); j < _mol.nBonds(); j++) {
-			if (_mol.getBond(i)->isAtomInBond(_mol.getBond(j)->getAtomi()) || _mol.getBond(i)->isAtomInBond(_mol.getBond(j)->getAtomj())) {
-				Angle* angle = new Angle(_mol.getBond(i), _mol.getBond(j));
+	for (int i = 0; i < _bonds.size(); i++) {
+		for (int j = (i + 1); j < _bonds.size(); j++) {
+			if (_bonds[i]->isAtomInBond(_bonds[j]->getAtomi()) || _bonds[i]->isAtomInBond(_bonds[j]->getAtomj())) {
+				AngleCalc* angle = new AngleCalc(_bonds[i], _bonds[j]);
 				keyi = getAtomKey(angle->getAtomi());
 				keyj = getAtomKey(angle->getAtomj());
 				keyk = getAtomKey(angle->getAtomk());
@@ -88,23 +92,23 @@ void UFF::calculateEnergy(bool gradiants) {
 
 	// Bond energy calculation
 	for (int i = 0; i < _mol.nBonds(); i++) {
-		_eBond += E_R(_mol.getBond(i));
+		_eBond += E_R(_bonds[i]);
 	}
 	// Angle energy calculation
-	for (Angle* angle : _angles) {
+	for (AngleCalc* angle : _angles) {
 		_eAngle += E_Theta(angle);
 	}
 	
 }
 
-double UFF::E_R(Bond* bond) {
+double UFF::E_R(BondCalc* bond) {
 	double r = bond->getLength();
 	r = (r - bond->getR0());
 	double r2 = r * r;
 	return (bond->getForceConstant() * r2);
 }
 
-double UFF::E_Theta(Angle* angle) {
+double UFF::E_Theta(AngleCalc* angle) {
 	double p{ 0.0 };  // penalty function generally based on ESFF
 
 	switch (angle->getAtomj()->coordination()) {
@@ -129,6 +133,13 @@ double UFF::E_Theta(Angle* angle) {
 		double c1 = -4 * c2 * ct0;
 		return angle->getForceConstant() * (c0 + (c1 * ct) + (c2 * (2 * ct2 - 1)));
 	}
+}
+
+void UFF::clearBonds() {
+	for (auto b : _bonds) {
+		delete b;
+	}
+	_bonds.clear();
 }
 
 void UFF::clearAngles() {

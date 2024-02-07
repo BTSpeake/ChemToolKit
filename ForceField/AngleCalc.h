@@ -3,22 +3,22 @@
 #include <map>
 #include <string>
 
-#include "Atom.h"
-#include "Bond.h"
-#include "../ForceField/UFFParams.h"
+#include "../Molecule/Atom.h"
+#include "BondCalc.h"
+#include "UFFParams.h"
 
-class Angle {
+class AngleCalc {
 public:
-	Angle(Bond* bi, Bond* bj);
-	~Angle() = default;
+	AngleCalc(BondCalc* bi, BondCalc* bj);
+	~AngleCalc() = default;
 
-	Angle(const Angle&) = delete;
-	Angle& operator=(const Angle&) = delete;
+	AngleCalc(const AngleCalc&) = delete;
+	AngleCalc& operator=(const AngleCalc&) = delete;
 
 	void calculateConstants(UFFParameters* pi, UFFParameters* pj, UFFParameters* pk);
 
-	Bond* getBondi() const { return _bi; };
-	Bond* getBondj() const { return _bj; };
+	BondCalc* getBondi() const { return _bi; };
+	BondCalc* getBondj() const { return _bj; };
 	Atom* getAtomi() const { return _atmi; };
 	Atom* getAtomj() const { return _atmj; };
 	Atom* getAtomk() const { return _atmk; };
@@ -29,8 +29,8 @@ public:
 
 
 private:
-	Bond* _bi;
-	Bond* _bj;
+	BondCalc* _bi;
+	BondCalc* _bj;
 	Atom* _atmi = 0;
 	Atom* _atmj = 0; 
 	Atom* _atmk = 0;
