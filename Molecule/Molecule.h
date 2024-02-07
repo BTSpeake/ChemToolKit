@@ -21,8 +21,8 @@ public:
 	Molecule& operator=(const Molecule& mol) = delete;
 
 	// get functions 
-	int nAtoms() { return _atoms.size(); };
-	int nBonds() { return _bonds.size(); };
+	int nAtoms() const { return _atoms.size(); };
+	int nBonds() const { return _bonds.size(); };
 	Atom* getAtom(int i) const { return _atoms[i]; };
 	Bond* getBond(int i) const { return _bonds[i]; };
 

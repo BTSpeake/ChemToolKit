@@ -14,7 +14,17 @@ bool FileControl::read(std::filesystem::path fpath, std::filesystem::path ext, M
 	return false;
 }
 
-bool FileControl::write(std::filesystem::path fpath, const Molecule& mol) {
+bool FileControl::write(std::filesystem::path fpath, std::filesystem::path ext, const Molecule& mol) {
+	if (setFileType(ext)) {
+		if (ext != fpath.extension()) {
+			fpath.replace_extension(ext);
+		}
+		if (!fileExists(fpath)) { // change this to a user check or just overwrite (this could be dangerous)
+			_fileIO->setFileName(fpath);
+			_fileIO->write(mol);
+			return true;
+		}
+	}
 	return false;
 }
 

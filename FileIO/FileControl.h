@@ -31,16 +31,18 @@ public:
 
 	// Write file accessor funtions
 	bool write(std::string fname, const Molecule& mol) {
-		return false;
+		std::filesystem::path fpath(fname);
+		return write(fpath, fpath.extension(), mol);
 	}
 	bool write(std::string fname, const Molecule& mol, const char* ext) {
-		return false;
+		return write(std::filesystem::path(fname), std::filesystem::path(ext), mol);
 	}
 	bool write(const char* fname, const Molecule& mol) {
-		return false;
+		std::filesystem::path fpath(fname);
+		return write(fpath, fpath.extension(), mol);
 	}
 	bool write(const char* fname, const Molecule& mol, const char* ext) {
-		return false;
+		return write(std::filesystem::path(fname), std::filesystem::path(ext), mol);
 	}
 
 private:
@@ -54,5 +56,5 @@ private:
 	// Main read function 
 	bool read(std::filesystem::path fpath, std::filesystem::path ext, Molecule& mol);
 	// Main write function 
-	bool write(std::filesystem::path fpath, const Molecule& mol);
+	bool write(std::filesystem::path fpath, std::filesystem::path ext, const Molecule& mol);
 };

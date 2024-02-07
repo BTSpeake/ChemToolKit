@@ -30,7 +30,7 @@ int main()
 	std::cout << '\n';
 	std::cout << "Reading XYZ File:" << std::endl;
 	Molecule mol2;
-	if (fileControl.read("C:\\Users\\sil23665\\Documents\\Nottingham\\questview\\tests\\Resources\\Water_Trimer.xyz", mol2)) {
+	if (fileControl.read("\Water_Trimer.xyz", mol2)) {
 		//fio.read(mol2);
 		std::cout << "Number of Atoms: " << mol2.nAtoms() << std::endl;
 		std::cout << "Number of Bonds: " << mol2.nBonds() << std::endl;
@@ -53,7 +53,7 @@ int main()
 	std::cout << '\n';
 	std::cout << "Reading PDB File:" << std::endl; 
 	Molecule mol3; 
-	if (fileControl.read("C:\\Users\\sil23665\\Documents\\Nottingham\\questview\\tests\\Resources\\ala_phe_ala.pdb", mol3)) {
+	if (fileControl.read("ala_phe_ala.pdb", mol3)) {
 		//fpdb.read(mol3);
 		std::cout << "Number of Atoms: " << mol3.nAtoms() << std::endl;
 		std::cout << "Number of Bonds: " << mol3.nBonds() << std::endl;
@@ -67,5 +67,13 @@ int main()
 	//	std::cout << "Bond Energy:  " << uff.getBondEnergy() << std::endl;
 	//	std::cout << "Angle Energy: " << uff.getAngleEnergy() << std::endl;
 	//}
+
+	std::cout << "\nWriting XYZ File:" << std::endl;
+	if (fileControl.write("ala_phe_ala", mol3, ".xyz")) {
+		std::cout << "File written succesfully" << std::endl;
+	}
+	else {
+		std::cout << "Error when writting file" << std::endl;
+	}
 
 }
