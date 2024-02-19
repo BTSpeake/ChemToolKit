@@ -14,7 +14,7 @@ project ("ChemToolKit")
 include_directories(include "./include")
 
 # Build as shared libraries 
-#set (BUILD_SHARED_LIBS TRUE)
+# set (BUILD_SHARED_LIBS TRUE)  ::TODO::
 
 # Make the basic maths library 
 set(MATHS_SOURCES "src/Maths/Vector3.cpp") 
