@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Atom.h"
+#include "Molecule/Atom.h"
 //#include "Bond.h"
 //#include "Angle.h"
 

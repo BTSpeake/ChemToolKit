@@ -1,7 +1,7 @@
-#include "FileControl.h"
+#include "FileIO/FileControl.h"
 
-#include "FileIO_XYZ.h"
-#include "FileIO_PDB.h"
+#include "FileIO/FileIO_XYZ.h"
+#include "FileIO/FileIO_PDB.h"
 
 #include <iostream>
 

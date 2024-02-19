@@ -1,4 +1,4 @@
-#include "FileIO_XYZ.h"
+#include "FileIO/FileIO_XYZ.h"
 
 #include <sstream>
 #include <regex>

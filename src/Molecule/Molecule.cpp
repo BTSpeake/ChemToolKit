@@ -1,6 +1,6 @@
-#include "Molecule.h"
+#include "Molecule/Molecule.h"
 
-#include "../Maths/Vector3.h"
+#include "Maths/Vector3.h"
 
 Molecule::Molecule() {
 

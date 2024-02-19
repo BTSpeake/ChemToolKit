@@ -1,4 +1,4 @@
-#include "Vector3.h"
+#include "Maths/Vector3.h"
 #include <cmath>
 
 Vector3::Vector3(double x, double y, double z)

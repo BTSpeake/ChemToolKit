@@ -1,4 +1,4 @@
-#include "UFFParams.h"
+#include "ForceField/UFFParams.h"
 
 UFFParameters::UFFParameters(std::string key, double* vals) {
 	_key = key;

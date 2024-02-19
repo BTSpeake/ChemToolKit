@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Molecule/Molecule.h"
+#include "Molecule/Molecule.h"
 
 
 class ForceField {

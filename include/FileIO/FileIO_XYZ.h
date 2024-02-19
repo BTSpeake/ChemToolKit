@@ -1,5 +1,5 @@
 #pragma once
-#include "FileIO.h"
+#include "FileIO/FileIO.h"
 
 class FileIO_XYZ : public FileIO {
 public:

@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-#include "../Maths/Vector3.h"
+#include "Maths/Vector3.h"
 
 class Atom {
 public:

@@ -1,4 +1,4 @@
-#include "Atom.h"
+#include "Molecule/Atom.h"
 #include <string>
 #include <iostream>
 

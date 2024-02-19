@@ -3,9 +3,9 @@
 #include <map>
 #include <string>
 
-#include "../Molecule/Atom.h"
-#include "BondCalc.h"
-#include "UFFParams.h"
+#include "Molecule/Atom.h"
+#include "ForceField/BondCalc.h"
+#include "ForceField/UFFParams.h"
 
 class AngleCalc {
 public:

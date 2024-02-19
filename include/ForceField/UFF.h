@@ -4,11 +4,11 @@
 #include <string>
 
 #include "ForceField.h"
-#include "../Molecule/Molecule.h"
-#include "../Molecule/Atom.h"
-#include "BondCalc.h"
-#include "AngleCalc.h"
-#include "UFFParams.h"
+#include "Molecule/Molecule.h"
+#include "Molecule/Atom.h"
+#include "ForceField/BondCalc.h"
+#include "ForceField/AngleCalc.h"
+#include "ForceField/UFFParams.h"
 
 
 class UFF : protected ForceField {

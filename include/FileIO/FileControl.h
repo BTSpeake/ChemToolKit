@@ -1,7 +1,7 @@
 #pragma once
 
-#include "FileIO.h"
-#include "../Molecule/Molecule.h"
+#include "FileIO/FileIO.h"
+#include "Molecule/Molecule.h"
 
 #include <string>
 

@@ -30,7 +30,7 @@ int main()
 	std::cout << '\n';
 	std::cout << "Reading XYZ File:" << std::endl;
 	Molecule mol2;
-	if (fileControl.read("\Water_Trimer.xyz", mol2)) {
+	if (fileControl.read("tests/Water_Trimer.xyz", mol2)) {
 		//fio.read(mol2);
 		std::cout << "Number of Atoms: " << mol2.nAtoms() << std::endl;
 		std::cout << "Number of Bonds: " << mol2.nBonds() << std::endl;
@@ -53,7 +53,7 @@ int main()
 	std::cout << '\n';
 	std::cout << "Reading PDB File:" << std::endl; 
 	Molecule mol3; 
-	if (fileControl.read("ala_phe_ala.pdb", mol3)) {
+	if (fileControl.read("tests/ala_phe_ala.pdb", mol3)) {
 		//fpdb.read(mol3);
 		std::cout << "Number of Atoms: " << mol3.nAtoms() << std::endl;
 		std::cout << "Number of Bonds: " << mol3.nBonds() << std::endl;

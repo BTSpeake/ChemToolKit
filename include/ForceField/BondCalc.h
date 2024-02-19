@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Molecule/Atom.h"
-#include "../Maths/Vector3.h"
-#include "../ForceField/UFFParams.h"
+#include "Molecule/Atom.h"
+#include "Maths/Vector3.h"
+#include "ForceField/UFFParams.h"
 
 class BondCalc {
 public:
