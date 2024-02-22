@@ -18,6 +18,7 @@ public:
 	// Access functions 
 	int getAtomicNumber() const { return _a; };
 	Vector3& getPosition() { return _pos; };
+	const Vector3& getPosition() const { return _pos; };
 	const char* getSymbol() const { return Atom::atmDict[_a]; };
 	int coordination() const;
 	unsigned int nSingleBonds() const { return _nSingle; };

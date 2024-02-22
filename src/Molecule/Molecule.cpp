@@ -38,9 +38,9 @@ void Molecule::calculateBonding() {
 }
 
 void Molecule::calculateCoM() {
-	CoM[0] = 0.0;
-	CoM[1] = 0.0; 
-	CoM[2] = 0.0;
+	CoM.setX(0.0);
+	CoM.setY(0.0); 
+	CoM.setZ(0.0);
 	
 	for (Atom* atom : _atoms) {
 		CoM += atom->getPosition();
