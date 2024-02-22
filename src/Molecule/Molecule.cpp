@@ -37,6 +37,24 @@ void Molecule::calculateBonding() {
 	}
 }
 
+void Molecule::calculateCoM() {
+	CoM[0] = 0.0;
+	CoM[1] = 0.0; 
+	CoM[2] = 0.0;
+	
+	for (Atom* atom : _atoms) {
+		CoM += atom->getPosition();
+	}
+	CoM /= nAtoms();
+}
+
+void Molecule::centreOnOrigin() {
+	calculateCoM();
+	for (Atom* atom : _atoms) {
+		atom->getPosition() -= CoM;
+	}
+}
+
 
 void Molecule::clearAtoms() {
 	for (Atom* a : _atoms) {

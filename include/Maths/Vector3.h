@@ -10,7 +10,7 @@ public:
 	Vector3& operator=(const Vector3& vec);
 
 	// Access functions 
-	double operator[](int i) const;
+	double& operator[](int i);
 
 	// Math operations 
 	Vector3& operator+=(const Vector3& rhs);

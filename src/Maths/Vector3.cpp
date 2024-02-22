@@ -18,7 +18,7 @@ Vector3& Vector3::operator=(const Vector3& vec) {
 	return v;
 }
 
-double Vector3::operator[](int i) const {
+double& Vector3::operator[](int i) {
 	switch (i) {
 	case 0:
 		return _x;
@@ -27,7 +27,7 @@ double Vector3::operator[](int i) const {
 	case 2:
 		return _z;
 	default:
-		return 0.0;
+		return _x; // TODO -> This should throw an error 
 	}
 }
 

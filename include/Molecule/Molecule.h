@@ -20,27 +20,43 @@ public:
 	Molecule(const Molecule& mol) = delete;
 	Molecule& operator=(const Molecule& mol) = delete;
 
-	// get functions 
+	// get functions for atoms/bonds
 	int nAtoms() const { return _atoms.size(); };
 	int nBonds() const { return _bonds.size(); };
 	Atom* getAtom(int i) const { return _atoms[i]; };
 	Bond* getBond(int i) const { return _bonds[i]; };
 
-	// set functions ]
+	// get functions for molecule properties 
+	int getCharge() const { return _charge; };
+	double getSpinProjection() const { return _spinProj; };
+	int getMultiplicity() const { return round(2 * _spinProj) + 1; };
+	const Vector3& getCoM() const { return CoM; };
+
+	// set functions atoms/bonds 
 	void addAtom(int a, double x, double y, double z);
 	void addAtom(std::string s, double x, double y, double z);
 	void addBond(unsigned int i, unsigned int j, int bo = 1) {
 		if (i < nAtoms() && j < nAtoms()) { _bonds.push_back(new Bond(i, j, bo)); }
 	};
 
+	// set functions properties 
+	void setCharge(int charge) { _charge = charge; };
+	void setSpinProjection(double sp) { _spinProj = sp; };
+	void setMultiplicity(double m) { _spinProj = (m - 1) / 2; };
+
 	// processing functions 
 	void calculateBonding();
+	void calculateCoM();
+	void centreOnOrigin();
 
 	// Utility functions
 	void clearAtoms();
 	void clearBonds();
 
 private:
+	int _charge{ 0 };
+	double _spinProj{ 0.0 };
+	Vector3 CoM;
 	std::vector<Atom*> _atoms;
 	std::vector<Bond*> _bonds;
 };
