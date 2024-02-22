@@ -34,10 +34,7 @@ void FileIO_XYZ::read(Molecule& mol) const {
 
         std::regex dataRegex(R"(^(\w+)\s+(\S+)\s+(\S+)\s+(\S+)$)"); // Match atom symbol, coordinates
         std::smatch dataMatch;
-        if (!regex_match(line, dataMatch, dataRegex)) {
-            throw std::runtime_error("Invalid atom data format");  
-        }
-        else {
+        if (regex_match(line, dataMatch, dataRegex)) {
             mol.addAtom(dataMatch[1], std::stod(dataMatch[2]), std::stod(dataMatch[3]), std::stod(dataMatch[4]));
         }
     }

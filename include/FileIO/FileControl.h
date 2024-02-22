@@ -16,45 +16,48 @@ public:
 	// Read file accessor functions 
 	bool read(std::string fname, Molecule& mol) {
 		std::filesystem::path fpath(fname);
-		return read(fpath, fpath.extension(), mol);
+		return _read(fpath, determineFileType(fpath.extension()), mol);
 	}
 	bool read(std::string fname, Molecule& mol, const char* ext) {
-		return read(std::filesystem::path(fname), std::filesystem::path(ext), mol);
+		return _read(std::filesystem::path(fname), ext, mol);
 	}
 	bool read(const char* fname, Molecule& mol) {
 		std::filesystem::path fpath(fname);
-		return read(fpath, fpath.extension(), mol);
+		return _read(fpath, determineFileType(fpath.extension()), mol);
 	}
 	bool read(const char* fname, Molecule& mol, const char* ext) {
-		return read(std::filesystem::path(fname), std::filesystem::path(ext), mol);
+		return _read(std::filesystem::path(fname), ext, mol);
 	}
 
 	// Write file accessor funtions
 	bool write(std::string fname, const Molecule& mol) {
 		std::filesystem::path fpath(fname);
-		return write(fpath, fpath.extension(), mol);
+		return _write(fpath, determineFileType(fpath.extension()), mol);
 	}
 	bool write(std::string fname, const Molecule& mol, const char* ext) {
-		return write(std::filesystem::path(fname), std::filesystem::path(ext), mol);
+		return _write(std::filesystem::path(fname), ext, mol);
 	}
 	bool write(const char* fname, const Molecule& mol) {
 		std::filesystem::path fpath(fname);
-		return write(fpath, fpath.extension(), mol);
+		return _write(fpath, determineFileType(fpath.extension()), mol);
 	}
 	bool write(const char* fname, const Molecule& mol, const char* ext) {
-		return write(std::filesystem::path(fname), std::filesystem::path(ext), mol);
+		return _write(std::filesystem::path(fname), ext, mol);
 	}
 
 private:
 	FileIO* _fileIO = 0;
 	
 	// utility functions
-	bool setFileType(std::filesystem::path ext);
+	bool setFileType(std::string ftype);
 	bool fileExists(std::filesystem::path fpath) {
 		return std::filesystem::exists(fpath);
 	}
+	std::string determineFileType(std::filesystem::path ext);
+	std::filesystem::path getFileExtension(std::string ftype);
+
 	// Main read function 
-	bool read(std::filesystem::path fpath, std::filesystem::path ext, Molecule& mol);
+	bool _read(std::filesystem::path fpath, std::string ftype, Molecule& mol);
 	// Main write function 
-	bool write(std::filesystem::path fpath, std::filesystem::path ext, const Molecule& mol);
+	bool _write(std::filesystem::path fpath, std::string ftype, const Molecule& mol);
 };
