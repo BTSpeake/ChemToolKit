@@ -27,13 +27,13 @@ target_link_libraries(ctkMolecule ctkMaths)
 
 
 # Add source to this project's executable.
-add_executable (ChemToolKit "main.cpp" "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileControl.cpp" "src/Python/Molecule.cpp")
+add_executable (ChemToolKit "main.cpp" "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileControl.cpp" "src/Python/Molecule.cpp"  "src/FileIO/FileIO_Mol2.cpp")
 target_link_libraries(ChemToolKit ctkMaths)
 target_link_libraries(ChemToolKit ctkMolecule)
 
 file(GLOB PARAM_FILES "Resources/*.prm")
 file(COPY ${PARAM_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resources/) 
-file(GLOB TEST_FILES "tests/ala_phe_ala.pdb", "tests/Water_Trimer.xyz")
+file(GLOB TEST_FILES "tests/*")
 file(COPY ${TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/tests/)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

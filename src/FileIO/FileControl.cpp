@@ -2,11 +2,16 @@
 
 #include "FileIO/FileIO_XYZ.h"
 #include "FileIO/FileIO_PDB.h"
+#include "FileIO/FileIO_Mol2.h"
 
 #include <iostream>
 
 bool FileControl::_read(std::filesystem::path fpath, std::string ftype, Molecule& mol) {
-	if (setFileType(ftype) && fileExists(fpath)) {
+	if (!fileExists(fpath)) {
+		std::cout << "File not found!" << std::endl;
+	}
+	
+	if (setFileType(ftype)) {
 		std::cout << "found file and checked extension" << std::endl;
 		_fileIO->setFileName(fpath);
 		_fileIO->read(mol);
@@ -45,6 +50,9 @@ bool FileControl::setFileType(std::string ftype) {
 	else if (ftype == "pdb") {
 		_fileIO = new FileIO_PDB();
 	}
+	else if (ftype == "ml2") {
+		_fileIO = new FileIO_Mol2();
+	}
 	else {
 		return false;
 	}
@@ -58,6 +66,9 @@ std::string FileControl::determineFileType(std::filesystem::path ext) {
 	else if(ext == ".pdb") {
 		return "pdb";
 	}
+	else if (ext == ".mol2") {
+		return "ml2";
+	}
 	else {
 		return "";
 	}
@@ -69,6 +80,9 @@ std::filesystem::path FileControl::getFileExtension(std::string ftype) {
 	}
 	else if (ftype == "pdb") {
 		return std::filesystem::path(".pdb");
+	}
+	else if (ftype == "ml2") {
+		return std::filesystem::path(".mol2");
 	}
 	else {
 		return std::filesystem::path("");

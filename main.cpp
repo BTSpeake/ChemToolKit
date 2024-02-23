@@ -69,11 +69,21 @@ int main()
 	//}
 
 	std::cout << "\nWriting XYZ File:" << std::endl;
-	if (fileControl.write("ala_phe_ala", mol3, ".xyz")) {
+	if (fileControl.write("ala_phe_ala", mol3, "xyz")) {
 		std::cout << "File written succesfully" << std::endl;
 	}
 	else {
 		std::cout << "Error when writting file" << std::endl;
 	}
 
+
+	std::cout << "\nReading a mol2 file " << std::endl; 
+	Molecule m2mol; 
+	if (fileControl.read("tests/CTN.mol2", m2mol)) {
+		std::cout << "File read successfully" << std::endl;
+		std::cout << "nAtoms: " << m2mol.nAtoms() << std::endl;
+	}
+	else {
+		std::cout << "Error reading m2 mol file" << std::endl;
+	}
 }

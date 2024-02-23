@@ -2,8 +2,6 @@
 
 #include <sstream>
 #include <regex>
-#include <vector>
-#include <iostream>
 
 void FileIO_XYZ::read(Molecule& mol) const {
     std::ifstream file(_fname);
