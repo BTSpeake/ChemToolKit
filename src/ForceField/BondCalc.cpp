@@ -8,7 +8,7 @@ BondCalc::BondCalc(Atom* atmi, Atom* atmj)
 }
 
 void BondCalc::calculateDistance() {
-	Vector3 bv = getBondVector();
+	ctkMaths::Vector3 bv = getBondVector();
 	_l = bv.normal();
 }
 

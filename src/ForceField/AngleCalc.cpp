@@ -30,8 +30,8 @@ AngleCalc::AngleCalc(BondCalc* bi, BondCalc* bj) : _bi(bi), _bj(bj) {
 }
 
 void AngleCalc::calculateConstants(UFFParameters* pi, UFFParameters* pj, UFFParameters* pk) {
-	Vector3 v1 = _atmi->getPosition() - _atmj->getPosition();
-	Vector3 v2 = _atmk->getPosition() - _atmj->getPosition();
+	ctkMaths::Vector3 v1 = _atmi->getPosition() - _atmj->getPosition();
+	ctkMaths::Vector3 v2 = _atmk->getPosition() - _atmj->getPosition();
 
 
 

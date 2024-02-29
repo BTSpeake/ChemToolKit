@@ -25,7 +25,7 @@ void Molecule::calculateBonding() {
 	clearBonds();
 	for (int i = 0; i < nAtoms(); i++) {
 		for (int j = (i + 1); j < nAtoms(); j++) {
-			Vector3 bv = _atoms[i]->getPosition() - _atoms[j]->getPosition();
+			ctkMaths::Vector3 bv = _atoms[i]->getPosition() - _atoms[j]->getPosition();
 			double r = bv.normal();
 			double thr = 1.25 * (_atoms[i]->getCovalentRadii() + _atoms[j]->getCovalentRadii());
 			if (r < thr) {

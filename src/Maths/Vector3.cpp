@@ -1,6 +1,8 @@
 #include "Maths/Vector3.h"
 #include <cmath>
 
+using namespace ctkMaths;
+
 Vector3::Vector3(double x, double y, double z)
 	: _x(x), _y(y), _z(z) {
 }
@@ -81,10 +83,4 @@ Vector3 Vector3::operator/(const double rhs) const {
 double Vector3::normal() const {
 	double norm = dot(*this, *this);
 	return sqrt(norm);
-}
-
-// Add this to a namespace?? 
-// Does is need to be a friend and can it be in a seperate file??
-double dot(const Vector3& v1, const Vector3& v2) {
-	return (v1._x * v2._x) + (v1._y * v2._y) + (v1._z * v2._z);
 }

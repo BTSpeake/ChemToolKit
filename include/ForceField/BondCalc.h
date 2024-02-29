@@ -24,7 +24,7 @@ public:
 	Atom* getAtomi() const { return _atmi; };
 	Atom* getAtomj() const { return _atmj; };
 	int getBondOrder() const { return _bo; };
-	Vector3 getBondVector() const { return _atmj->getPosition() - _atmi->getPosition(); };
+	ctkMaths::Vector3 getBondVector() const { return _atmj->getPosition() - _atmi->getPosition(); };
 	bool isAtomInBond(const Atom* atm) const { return (atm == _atmi) || (atm == _atmj); };
 
 	double getR0() const { return _r0; };

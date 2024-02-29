@@ -30,7 +30,7 @@ public:
 	int getCharge() const { return _charge; };
 	double getSpinProjection() const { return _spinProj; };
 	int getMultiplicity() const { return round(2 * _spinProj) + 1; };
-	const Vector3& getCoM() const { return CoM; };
+	const ctkMaths::Vector3& getCoM() const { return CoM; };
 
 	// set functions atoms/bonds 
 	void addAtom(int a, double x, double y, double z);
@@ -56,7 +56,7 @@ public:
 private:
 	int _charge{ 0 };
 	double _spinProj{ 0.0 };
-	Vector3 CoM;
+	ctkMaths::Vector3 CoM;
 	std::vector<Atom*> _atoms;
 	std::vector<Bond*> _bonds;
 };

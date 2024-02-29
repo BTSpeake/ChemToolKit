@@ -18,7 +18,7 @@ include_directories(include "./include")
 
 # Make the basic maths library 
 set(MATHS_SOURCES "src/Maths/Vector3.cpp") 
-add_library(ctkMaths ${MATHS_SOURCES})
+add_library(ctkMaths ${MATHS_SOURCES} "src/Maths/Matrix33.cpp")
 
 # Make the molecular structure library 
 set(MOL_SOURCES "src/Molecule/Molecule.cpp" "src/Molecule/Atom.cpp")
@@ -27,7 +27,7 @@ target_link_libraries(ctkMolecule ctkMaths)
 
 
 # Add source to this project's executable.
-add_executable (ChemToolKit "main.cpp" "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileControl.cpp" "src/Python/Molecule.cpp"  "src/FileIO/FileIO_Mol2.cpp")
+add_executable (ChemToolKit "main.cpp" "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileControl.cpp" "src/Python/Molecule.cpp"  "src/FileIO/FileIO_Mol2.cpp" )
 target_link_libraries(ChemToolKit ctkMaths)
 target_link_libraries(ChemToolKit ctkMolecule)
 

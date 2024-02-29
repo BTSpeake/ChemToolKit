@@ -23,7 +23,7 @@ Atom::Atom(const Atom& atm) {
 }
 
 Atom& Atom::operator=(const Atom& atm) {
-	Vector3 vec = atm.getPosition();
+	ctkMaths::Vector3 vec = atm.getPosition();
 	Atom newAtm(atm.getAtomicNumber(), vec[0], vec[1], vec[2]);
 	return newAtm; // WARNING returning adress of local variable 
 }

@@ -17,8 +17,8 @@ public:
 
 	// Access functions 
 	int getAtomicNumber() const { return _a; };
-	Vector3& getPosition() { return _pos; };
-	const Vector3& getPosition() const { return _pos; };
+	ctkMaths::Vector3& getPosition() { return _pos; };
+	const ctkMaths::Vector3& getPosition() const { return _pos; };
 	const char* getSymbol() const { return Atom::atmDict[_a]; };
 	int coordination() const;
 	unsigned int nSingleBonds() const { return _nSingle; };
@@ -51,7 +51,7 @@ private:
 	unsigned int _nDouble{ 0 };
 	unsigned int _nTriple{ 0 };
 	bool _isAromatic{ false };
-	Vector3 _pos;
+	ctkMaths::Vector3 _pos;
 
 	// make these const??? seems to break access functions
     static std::map<int, const char*> atmDict; 
