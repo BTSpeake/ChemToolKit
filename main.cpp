@@ -9,8 +9,6 @@
 #include "Maths/Matrix33.h"
 
 void testMaths();
-void printVector3(const ctkMaths::Vector3& v);
-void printMatrix33(const ctkMaths::Matrix33& m);
 
 
 int main()
@@ -102,6 +100,7 @@ int main()
 }
 
 
+
 void testMaths() {
 
 	using namespace ctkMaths;
@@ -114,71 +113,63 @@ void testMaths() {
 	Vector3 v2(2, 3, 4);
 	Vector3 v3(v2);
 
-	assert(v1[0] == 1.0, "Error in creating v1 -> v1[0] value doesn't match ");
-	assert(v1[1] == 2.0, "Error in creating v1 -> v1[1] value doesn't match ");
-	assert(v1[2] == 3.0, "Error in creating v1 -> v1[2] value doesn't match ");
+	assert(v1[0] == 1.0);
+	assert(v1[1] == 2.0);
+	assert(v1[2] == 3.0);
 
-	assert(dot(v1, v2) == 20, "Error in the dot product of two vectors");
-	assert(abs(v1.normal() - 3.74166) < errThr, "Error in the calculation of v1's normal");
+	assert(dot(v1, v2) == 20);
+	assert(abs(v1.normal() - 3.74166) < errThr);
 
 	v1 *= 4;
-	assert(v1[0] == 4, "Error in the scalar multiplication of v1");
+	assert(v1[0] == 4);
 	v1.normalise(); 
-	assert(abs(v1[0] - 0.267261) < errThr, "Error in the normalisation of v1");
-	assert(abs(v1[1] - 0.534522) < errThr, "Error in the normalisation of v1");
-	assert(abs(v1[2] - 0.801784) < errThr, "Error in the normalisation of v1");
+	assert(abs(v1[0] - 0.267261) < errThr);
+	assert(abs(v1[1] - 0.534522) < errThr);
+	assert(abs(v1[2] - 0.801784) < errThr);
 
 	v3 += v2; 
 	Vector3 v4 = v3 - v2; 
-	assert(v4[0] == v2[0], "Error with vector addition/subtration");
-	assert(v4[1] == v2[1], "Error with vector addition/subtration");
-	assert(v4[2] == v2[2], "Error with vector addition/subtration");
+	assert(v4[0] == v2[0]);
+	assert(v4[1] == v2[1]);
+	assert(v4[2] == v2[2]);
+
+	Vector3 sv1 = 5.0 * v2;
+	std::cout << "v2  = " << v2 << std::endl;
+	std::cout << "sv1 = " << sv1 << std::endl;
+
 
 	Matrix33 eye = identity33();
-	assert(eye[0] == 1.0, "Error in creating identity matrix (3x3)");
-	assert(eye[1] == 0.0, "Error in creating identity matrix (3x3)");
-	assert(eye[4] == 1.0, "Error in creating identity matrix (3x3)");
-	assert(eye.value(2, 2), "Error in creating identity matrix (3x3)");
+	assert(eye[0] == 1.0);
+	assert(eye[1] == 0.0);
+	assert(eye[4] == 1.0);
+	assert(eye.value(2, 2));
 
 	Vector3 iv3 = eye * v2;
-	assert(iv3[0] == 2.0, "Error in matrix * vector function");
-	assert(iv3[1] == 3.0, "Error in matrix * vector function");
-	assert(iv3[2] == 4.0, "Error in matrix * vector function");
+	assert(iv3[0] == 2.0);
+	assert(iv3[1] == 3.0);
+	assert(iv3[2] == 4.0);
 
 	Matrix33 m1(
 		1, 2, 3,
 		4, 5, 6,
 		7, 8, 9
 	);
-	assert(m1[0] == 1.0, "Error in Matrix m1 creation/access");
-	assert(m1.value(2, 2) == 9.0, "Error in Matrix m1 creation/access");
+	assert(m1[0] == 1.0);
+	assert(m1.value(2, 2) == 9.0);
 
 	Matrix33 im1 = eye * m1;
 
-	assert(im1[0] == 1.0, "Error in matrix * matrix function");
-	assert(im1[3] == 4.0, "Error in matrix * matrix function");
-	assert(im1.value(1, 2) == 6.0, "Error in matrix * matrix function");
-	assert(im1.value(2, 2) == 9.0, "Error in matrix * matrix function");
+	assert(im1[0] == 1.0);
+	assert(im1[3] == 4.0);
+	assert(im1.value(1, 2) == 6.0);
+	assert(im1.value(2, 2) == 9.0);
 
 	m1 *= 2;
-	assert(m1[0] == 2.0, "Error in matrix *= scaler");
-	assert(m1.value(2, 2) == 18.0, "Error in matrix *= scalar");
+	assert(m1[0] == 2.0);
+	assert(m1.value(2, 2) == 18.0);
+
+	std::cout << im1 << std::endl;
 
 	std::cout << "Tests completed succesfully!" << std::endl;
 }
 
-
-
-void printVector3(const ctkMaths::Vector3& v) {
-	std::cout << '['; 
-	std::cout << v[0] << ", " << v[1] << ", " << v[2];
-	std::cout << ']';
-	std::cout << std::endl;
-}
-void printMatrix33(const ctkMaths::Matrix33& m) {
-	std::cout << "[";
-	std::cout << " [" << m[0] << ", " << m[1] << ", " << m[2] << "]\n";
-	std::cout << " [" << m[3] << ", " << m[4] << ", " << m[5] << "]\n";
-	std::cout << " [" << m[6] << ", " << m[7] << ", " << m[8] << "]";
-	std::cout << "]" << std::endl;
-}

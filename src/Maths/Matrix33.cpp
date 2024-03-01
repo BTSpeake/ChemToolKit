@@ -2,6 +2,16 @@
 
 using namespace ctkMaths;
 
+Matrix33::Matrix33()
+	: _v00(0.0), _v01(0.0), _v02(0.0), _v10(0.0), _v11(0.0), _v12(0.0), _v20(0.0), _v21(0.0), _v22(0.0)
+{};
+
+Matrix33::Matrix33(double v00, double v01, double v02, double v10, double v11, double v12, double v20, double v21, double v22)
+	: _v00(v00), _v01(v01), _v02(v02), _v10(v10), _v11(v11), _v12(v12), _v20(v20), _v21(v21), _v22(v22)
+{}
+
+Matrix33::~Matrix33() {}
+
 Matrix33::Matrix33(const Matrix33& rhs) 
 	: _v00(rhs[0]), _v01(rhs[1]), _v02(rhs[2]), _v10(rhs[3]), _v11(rhs[4]), _v12(rhs[5]), _v20(rhs[6]), _v21(rhs[7]), _v22(rhs[8])
 {}
@@ -92,6 +102,14 @@ Matrix33 Matrix33::operator*(const Matrix33& rhs) const {
 }
 
 // Access functions 
+double Matrix33::value(int i, int j) const {
+	if (i >= 0 && i < 3 && j >= 0 && j < 3) {
+		return operator[]((3 * i) + j);
+	}
+	else {
+		return 0.0;
+	}
+}
 
 double Matrix33::operator[](int i) const {
 
@@ -117,4 +135,21 @@ double Matrix33::operator[](int i) const {
 	default:
 		return 0.0;
 	}
+}
+
+Matrix33 ctkMaths::identity33() {
+	return Matrix33(
+		1.0, 0.0, 0.0,
+		0.0, 1.0, 0.0,
+		0.0, 0.0, 1.0
+	);
+}
+
+std::ostream& operator<<(std::ostream& os, const Matrix33 & m) {
+	os << "["; 
+	os << "[" << m[0] << ", " << m[1] << ", " << m[2] << "]\n";
+	os << " [" << m[3] << ", " << m[4] << ", " << m[5] << "]\n";
+	os << " [" << m[6] << ", " << m[7] << ", " << m[8] << "]]";
+	os << std::endl;
+	return os;
 }

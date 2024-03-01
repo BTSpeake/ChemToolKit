@@ -3,6 +3,9 @@
 
 using namespace ctkMaths;
 
+// Constructors
+Vector3::Vector3() : _x(0.0), _y(0.0), _z(0.0) {}
+
 Vector3::Vector3(double x, double y, double z)
 	: _x(x), _y(y), _z(z) {
 }
@@ -20,6 +23,9 @@ Vector3& Vector3::operator=(const Vector3& vec) {
 	return v;
 }
 
+// Destructor 
+Vector3::~Vector3() {}
+
 double Vector3::operator[](int i) const {
 	switch (i) {
 	case 0:
@@ -32,6 +38,10 @@ double Vector3::operator[](int i) const {
 		return 0.0; // TODO -> This should throw an error 
 	}
 }
+
+void Vector3::setX(double x) { _x = x; };
+void Vector3::setY(double y) { _y = y; };
+void Vector3::setZ(double z) { _z = z; };
 
 Vector3& Vector3::operator+=(const Vector3& rhs) {
 	_x += rhs[0];
@@ -80,7 +90,26 @@ Vector3 Vector3::operator/(const double rhs) const {
 	return v /= rhs;
 }
 
+double Vector3::operator*(const Vector3& rhs) { return dot(*this, rhs); }
+
 double Vector3::normal() const {
-	double norm = dot(*this, *this);
+	//double norm = dot(*this, *this); 
+	double norm = (_x * _x) + (_y * _y) + (_z * _z);
 	return sqrt(norm);
+}
+
+void Vector3::normalise() { *this /= normal(); }
+
+Vector3 ctkMaths::operator*(double s, const Vector3& vec) {
+	return vec * s;
+}
+//
+double ctkMaths::dot(const Vector3& v1, const Vector3& v2) {
+	return (v1[0] * v2[0]) + (v1[1] * v2[1]) + (v1[2] * v2[2]);
+};
+
+
+std::ostream& operator<<(std::ostream& os, const Vector3& v) {
+	os << "[" << v[0] << ",  " << v[1] << ",  " << v[2] << "] ";
+	return os;
 }
