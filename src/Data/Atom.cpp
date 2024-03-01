@@ -25,9 +25,12 @@ Atom::Atom(const Atom& atm) {
 }
 
 Atom& Atom::operator=(const Atom& atm) {
-	ctkMaths::Vector3 vec = atm.getPosition();
-	Atom newAtm(atm.getAtomicNumber(), vec[0], vec[1], vec[2]);
-	return newAtm; // WARNING returning adress of local variable 
+    if (this == &atm) {
+        return *this;
+    }
+    _a = atm.getAtomicNumber();
+    _pos = atm.getPosition();
+    return *this; 
 }
 
 // Access Functions 
