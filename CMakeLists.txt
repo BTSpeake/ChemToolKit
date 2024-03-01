@@ -69,4 +69,7 @@ if (BUILD_PYTHON_BINDINGS)
 
     pybind11_add_module(ctkPyDataObjs "Bindings/Python/DataObjs.cpp")
     target_link_libraries(ctkPyDataObjs PRIVATE ctkDataObjs ctkMaths)
+
+    pybind11_add_module(ctkPyFileIO "Bindings/Python/FileIO.cpp")
+    target_link_libraries(ctkPyFileIO PRIVATE ctkFileIO ctkDataObjs)
 endif()
