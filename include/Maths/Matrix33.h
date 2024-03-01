@@ -11,6 +11,7 @@
 #endif // _WIN32 
 
 #include <iostream>
+#include <string>
 #include "Maths/Vector3.h"
 
 namespace ctkMaths {
@@ -40,6 +41,8 @@ namespace ctkMaths {
 		// Access functions 
 		double value(int i, int j) const;
 		double operator[](int i) const;
+
+		std::string toString() const;
 
 	private:
 		double _v00, _v01, _v02;

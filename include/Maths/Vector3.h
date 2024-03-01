@@ -11,6 +11,7 @@
 #endif //_WIN32 
 
 #include <iostream>
+#include <string>
 
 namespace ctkMaths {
 
@@ -45,6 +46,8 @@ namespace ctkMaths {
 
 		double normal() const;
 		void normalise();
+
+		std::string toString() const;
 
 	private:
 		double _x;

@@ -50,6 +50,11 @@ int Atom::coordination() const {
     }
 }
 
+std::string Atom::toString() const {
+    std::string s = static_cast<std::string>(getSymbol()) + ":  " + _pos.toString();
+    return s;
+}
+
 
 std::map<int, const char*> Atom::atmDict = {
         {  1, "H" }, {  2, "He"}, {  3, "Li"}, {  4, "Be"}, {  5, "B" }, {  6, "C" },

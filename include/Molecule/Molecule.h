@@ -29,13 +29,13 @@ public:
 	// get functions for molecule properties 
 	int getCharge() const { return _charge; };
 	double getSpinProjection() const { return _spinProj; };
-	int getMultiplicity() const { return round(2 * _spinProj) + 1; };
+	int getMultiplicity() const { return static_cast<int>(round(2 * _spinProj)) + 1; };
 	const ctkMaths::Vector3& getCoM() const { return CoM; };
 
 	// set functions atoms/bonds 
 	void addAtom(int a, double x, double y, double z);
 	void addAtom(std::string s, double x, double y, double z);
-	void addBond(unsigned int i, unsigned int j, int bo = 1) {
+	void addBond(int i, int j, int bo = 1) {
 		if (i < nAtoms() && j < nAtoms()) { _bonds.push_back(new Bond(i, j, bo)); }
 	};
 
@@ -52,6 +52,9 @@ public:
 	// Utility functions
 	void clearAtoms();
 	void clearBonds();
+
+	std::string toString() const;
+	std::string atomsList() const;
 
 private:
 	int _charge{ 0 };

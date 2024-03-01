@@ -137,6 +137,14 @@ double Matrix33::operator[](int i) const {
 	}
 }
 
+std::string Matrix33::toString() const {
+	std::string s;
+	s += "[[" + std::to_string(_v00) + ", " + std::to_string(_v01) + ", " + std::to_string(_v02) + "]\n";
+	s += " [" + std::to_string(_v10) + ", " + std::to_string(_v11) + ", " + std::to_string(_v12) + "]\n";
+	s += " [" + std::to_string(_v20) + ", " + std::to_string(_v21) + ", " + std::to_string(_v22) + "]]";
+	return s;
+}
+
 Matrix33 ctkMaths::identity33() {
 	return Matrix33(
 		1.0, 0.0, 0.0,
@@ -146,10 +154,6 @@ Matrix33 ctkMaths::identity33() {
 }
 
 std::ostream& operator<<(std::ostream& os, const Matrix33 & m) {
-	os << "["; 
-	os << "[" << m[0] << ", " << m[1] << ", " << m[2] << "]\n";
-	os << " [" << m[3] << ", " << m[4] << ", " << m[5] << "]\n";
-	os << " [" << m[6] << ", " << m[7] << ", " << m[8] << "]]";
-	os << std::endl;
+	os << m.toString();
 	return os;
 }

@@ -29,6 +29,7 @@ public:
 	double getCovalentRadii() const { return covRadiiDict[_a]; }
 
 	// set functions 
+	void setAtomicNumber(int a) { _a = a; };
 	void addSingleBond() { _nSingle++; };
 	void addDoubleBond() { _nDouble++; };
 	void addTripleBond() { _nTriple++; };
@@ -43,6 +44,8 @@ public:
 		_nDouble = 0;
 		_nTriple = 0;
 	}
+
+	std::string toString() const;
 
 
 private:

@@ -37,7 +37,7 @@ void AngleCalc::calculateConstants(UFFParameters* pi, UFFParameters* pj, UFFPara
 
 	double l1 = v1.normal();
 	double l2 = v2.normal();
-	double d = dot(v1, v2) / (l1 * l2);
+	double d = ctkMaths::dot(v1, v2) / (l1 * l2);
 
 	if (d < -1.0) { d = -1.0; }
 	else if (d > 1.0) { d = 1.0; }

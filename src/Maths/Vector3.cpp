@@ -100,6 +100,11 @@ double Vector3::normal() const {
 
 void Vector3::normalise() { *this /= normal(); }
 
+std::string Vector3::toString() const {
+	std::string s = "[" + std::to_string(_x) + ", " + std::to_string(_y) + ", " + std::to_string(_z) + "]";
+	return s;
+}
+
 Vector3 ctkMaths::operator*(double s, const Vector3& vec) {
 	return vec * s;
 }
@@ -110,6 +115,6 @@ double ctkMaths::dot(const Vector3& v1, const Vector3& v2) {
 
 
 std::ostream& operator<<(std::ostream& os, const Vector3& v) {
-	os << "[" << v[0] << ",  " << v[1] << ",  " << v[2] << "] ";
+	os << v.toString();
 	return os;
 }

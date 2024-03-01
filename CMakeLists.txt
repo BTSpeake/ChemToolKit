@@ -45,20 +45,20 @@ endif()
 
 
 ## Python bindings
-#if (NOT Python_ROOT_DIR)
-#    set(Python_ROOT_DIR "C:/Users/sil23665/miniconda3")
-#endif()
-#find_package(Python COMPONENTS Interpreter Development REQUIRED)
-#set_target_properties(Python::Module PROPERTIES
-#        MAP_IMPORTED_CONFIG_DEBUG ";RELEASE")
-#include_directories(${Python_INCLUDE_DIRS})
-#set(pybind11_DIR "modules/pybind11-2.11.1")
-##find_package(pybind11 REQUIRED)
-#add_subdirectory(${pybind11_DIR})
-#include_directories(include "modules/pybind11-2.11.1/include")
-#
-#pybind11_add_module(ctkPyMaths "Bindings/Python/Maths.cpp")
-#target_link_libraries(ctkPyMaths PRIVATE ctkMaths)
+if (NOT Python_ROOT_DIR)
+    set(Python_ROOT_DIR "")
+endif()
+find_package(Python COMPONENTS Interpreter Development REQUIRED)
+set_target_properties(Python::Module PROPERTIES
+        MAP_IMPORTED_CONFIG_DEBUG ";RELEASE")
+include_directories(${Python_INCLUDE_DIRS})
+set(pybind11_DIR "modules/pybind11-2.11.1")
+#find_package(pybind11 REQUIRED)
+add_subdirectory(${pybind11_DIR})
+include_directories(include "modules/pybind11-2.11.1/include")
 
-#pybind11_add_module(ctkPyMolecule "Bindings/Python/Molecule.cpp")
-#target_link_libraries(ctkPyMolecule PRIVATE ctkMolecule)
+pybind11_add_module(ctkPyMaths "Bindings/Python/Maths.cpp")
+target_link_libraries(ctkPyMaths PRIVATE ctkMaths)
+
+pybind11_add_module(ctkPyMolecule "Bindings/Python/Molecule.cpp")
+target_link_libraries(ctkPyMolecule PRIVATE ctkMolecule ctkMaths)

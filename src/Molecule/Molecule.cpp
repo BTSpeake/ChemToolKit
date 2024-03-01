@@ -73,3 +73,21 @@ void Molecule::clearBonds() {
 	_bonds.clear();
 }
 
+std::string Molecule::toString() const {
+	std::string s;
+	s += "Molecule Object\n---------------\n"; 
+	s += "No. Atoms: " + std::to_string(nAtoms()) + '\n';
+	s += "No. Bonds: " + std::to_string(nBonds()) + '\n';
+	s += "Charge:    " + std::to_string(getCharge()) + '\n';
+	s += "Spin Proj: " + std::to_string(getSpinProjection()) + "\n\n";
+	s += atomsList();
+	return s;
+}
+
+std::string Molecule::atomsList() const {
+	std::string s = "\nAtoms: ";
+	for (Atom* a : _atoms) {
+		s += '\n' + a->toString();
+	}
+	return s;
+}
