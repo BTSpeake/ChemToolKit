@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-BondCalc::BondCalc(Atom* atmi, Atom* atmj)
+BondCalc::BondCalc(ctkData::Atom* atmi, ctkData::Atom* atmj)
 	: _atmi(atmi), _atmj(atmj) {
 	calculateDistance();
 }

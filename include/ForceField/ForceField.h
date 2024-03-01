@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Molecule/Molecule.h"
+#include "Data/Molecule.h"
 
 
 class ForceField {
 public:
-	ForceField(Molecule& mol) : _mol(mol) {};
+	ForceField(ctkData::Molecule& mol) : _mol(mol) {};
 	~ForceField() {};
 	
 	ForceField(const ForceField*) = delete;
@@ -16,11 +16,11 @@ public:
 	virtual double energy() = 0;
 
 	// Basic access functions
-	Molecule& getMolecule() { return _mol; };
+	ctkData::Molecule& getMolecule() { return _mol; };
 
 protected:
 	double _energy{ 0.0 };
-	Molecule& _mol;
+	ctkData::Molecule& _mol;
 
 	virtual void calculateEnergy(bool gradients) = 0;
 	virtual void setParameters() = 0;

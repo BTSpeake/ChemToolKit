@@ -1,6 +1,8 @@
-#include "Molecule/Atom.h"
+#include "Data/Atom.h"
 #include <string>
 #include <iostream>
+
+using namespace ctkData;
 
 Atom::Atom(int a, double x, double y, double z)
 	: _a(a), _pos(x, y, z) {
@@ -28,6 +30,11 @@ Atom& Atom::operator=(const Atom& atm) {
 	return newAtm; // WARNING returning adress of local variable 
 }
 
+// Access Functions 
+int Atom::getAtomicNumber() const { return _a; };
+ctkMaths::Vector3& Atom::getPosition() { return _pos; };
+const ctkMaths::Vector3& Atom::getPosition() const { return _pos; };
+const char* Atom::getSymbol() const { return Atom::atmDict[_a]; };
 
 int Atom::coordination() const {
     switch (_a) {
@@ -50,11 +57,37 @@ int Atom::coordination() const {
     }
 }
 
+unsigned int Atom::nSingleBonds() const { return _nSingle; };
+unsigned int Atom::nDoubleBonds() const { return _nDouble; };
+unsigned int Atom::nTripleBonds() const { return _nTriple; };
+unsigned int Atom::nBonds() const { return _nSingle + _nDouble + _nTriple; };
+bool Atom::isAromatic() const { return _isAromatic; };
+double Atom::getCovalentRadii() const { return covRadiiDict[_a]; }
+
+// Set Functions 
+void Atom::setAtomicNumber(int a) { _a = a; };
+void Atom::addSingleBond() { _nSingle++; };
+void Atom::addDoubleBond() { _nDouble++; };
+void Atom::addTripleBond() { _nTriple++; };
+void Atom::removeSingleBond() { _nSingle--; };
+void Atom::removeDoubleBond() { _nDouble--; };
+void Atom::removeTripleBond() { _nTriple--; };
+void Atom::setAromatic(bool aromatic) { _isAromatic = aromatic; };
+
+
+// Utility functions 
+void Atom::resetBonding() {
+    _nSingle = 0;
+    _nDouble = 0;
+    _nTriple = 0;
+}
+
 std::string Atom::toString() const {
     std::string s = static_cast<std::string>(getSymbol()) + ":  " + _pos.toString();
     return s;
 }
 
+// Static Data
 
 std::map<int, const char*> Atom::atmDict = {
         {  1, "H" }, {  2, "He"}, {  3, "Li"}, {  4, "Be"}, {  5, "B" }, {  6, "C" },

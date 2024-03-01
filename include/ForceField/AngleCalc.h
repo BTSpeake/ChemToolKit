@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-#include "Molecule/Atom.h"
+#include "Data/Atom.h"
 #include "ForceField/BondCalc.h"
 #include "ForceField/UFFParams.h"
 
@@ -19,9 +19,9 @@ public:
 
 	BondCalc* getBondi() const { return _bi; };
 	BondCalc* getBondj() const { return _bj; };
-	Atom* getAtomi() const { return _atmi; };
-	Atom* getAtomj() const { return _atmj; };
-	Atom* getAtomk() const { return _atmk; };
+	ctkData::Atom* getAtomi() const { return _atmi; };
+	ctkData::Atom* getAtomj() const { return _atmj; };
+	ctkData::Atom* getAtomk() const { return _atmk; };
 
 	double getForceConstant() const { return _k; };
 	double getTheta() const { return _theta; };
@@ -31,9 +31,9 @@ public:
 private:
 	BondCalc* _bi;
 	BondCalc* _bj;
-	Atom* _atmi = 0;
-	Atom* _atmj = 0; 
-	Atom* _atmk = 0;
+	ctkData::Atom* _atmi = 0;
+	ctkData::Atom* _atmj = 0;
+	ctkData::Atom* _atmk = 0;
 	double _theta{ 0.0 };
 	double _theta0{ 0.0 };
 	double _k{ 0.0 };

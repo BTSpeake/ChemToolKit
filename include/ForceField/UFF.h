@@ -4,8 +4,8 @@
 #include <string>
 
 #include "ForceField.h"
-#include "Molecule/Molecule.h"
-#include "Molecule/Atom.h"
+#include "Data/Molecule.h"
+#include "Data/Atom.h"
 #include "ForceField/BondCalc.h"
 #include "ForceField/AngleCalc.h"
 #include "ForceField/UFFParams.h"
@@ -13,7 +13,7 @@
 
 class UFF : protected ForceField {
 public:
-	UFF(Molecule& mol);
+	UFF(ctkData::Molecule& mol);
 	~UFF();
 
 	void setupTerms();
@@ -46,7 +46,7 @@ private:
 	std::vector<BondCalc*> _bonds;
 	std::vector<AngleCalc*> _angles;
 
-	std::string getAtomKey(Atom* atom) const;
+	std::string getAtomKey(ctkData::Atom* atom) const;
 
 	double E_R(BondCalc* bond);
 	double E_Theta(AngleCalc* angle);

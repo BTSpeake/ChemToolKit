@@ -1,6 +1,11 @@
-#include "Molecule/Molecule.h"
+#include "Data/Molecule.h"
 
 #include "Maths/Vector3.h"
+
+using namespace ctkData;
+
+// Bond -> This should eventually move to a seperate file 
+Bond::Bond(int i, int j, int o) : _i(i), _j(j), _o(o) {};
 
 Molecule::Molecule() {
 
@@ -11,6 +16,18 @@ Molecule::~Molecule() {
 	clearBonds();
 }
 
+// get functions for atoms/bonds
+int Molecule::nAtoms() const { return _atoms.size(); };
+int Molecule::nBonds() const { return _bonds.size(); };
+Atom* Molecule::getAtom(int i) const { return _atoms[i]; };
+Bond* Molecule::getBond(int i) const { return _bonds[i]; };
+
+// get functions for molecule properties 
+int Molecule::getCharge() const { return _charge; };
+double Molecule::getSpinProjection() const { return _spinProj; };
+int Molecule::getMultiplicity() const { return static_cast<int>(round(2 * _spinProj)) + 1; };
+const ctkMaths::Vector3& Molecule::getCoM() const { return CoM; };
+
 void Molecule::addAtom(int a, double x, double y, double z) {
 	Atom* nAtm = new Atom(a, x, y, z);
 	_atoms.push_back(nAtm);
@@ -20,6 +37,15 @@ void Molecule::addAtom(std::string s, double x, double y, double z) {
 	Atom* nAtm = new Atom(s, x, y, z);
 	_atoms.push_back(nAtm);
 }
+
+void Molecule::addBond(int i, int j, int bo) {
+	if (i < nAtoms() && j < nAtoms()) { _bonds.push_back(new Bond(i, j, bo)); }
+};
+
+// set functions properties 
+void Molecule::setCharge(int charge) { _charge = charge; };
+void Molecule::setSpinProjection(double sp) { _spinProj = sp; };
+void Molecule::setMultiplicity(double m) { _spinProj = (m - 1) / 2; };
 
 void Molecule::calculateBonding() {
 	clearBonds();

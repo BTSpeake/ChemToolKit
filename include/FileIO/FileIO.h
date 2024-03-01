@@ -4,7 +4,9 @@
 #include <fstream>
 #include <filesystem>
 
-#include "Molecule/Molecule.h"
+#include "Data/Molecule.h"
+
+using ctkData::Molecule;
 
 class FileIO {
 

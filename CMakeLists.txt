@@ -10,26 +10,36 @@ if (POLICY CMP0141)
 endif()
 
 project ("ChemToolKit")
-
 include_directories(include "./include")
+set(CMAKE_CXX_STANDARD 20)
 
 # Build as shared libraries 
-# set (BUILD_SHARED_LIBS TRUE)  ::TODO::
+if (CTK_BUILD_AS_STATIC)
+    set(BUILD_SHARED_LIBS False)
+else()
+    set(BUILD_SHARED_LIBS TRUE)
+endif()
 
 # Make the basic maths library 
 set(MATHS_SOURCES "src/Maths/Vector3.cpp" "src/Maths/Matrix33.cpp") 
-add_library(ctkMaths SHARED ${MATHS_SOURCES} )
+add_library(ctkMaths ${MATHS_SOURCES})
 
 # Make the molecular structure library 
-set(MOL_SOURCES "src/Molecule/Molecule.cpp" "src/Molecule/Atom.cpp")
-add_library(ctkMolecule ${MOL_SOURCES})
-target_link_libraries(ctkMolecule ctkMaths)
+set(MOL_SOURCES "src/Data/Molecule.cpp" "src/Data/Atom.cpp")
+add_library(ctkDataObjs ${MOL_SOURCES})
+target_link_libraries(ctkDataObjs ctkMaths)
+
+# Make the FileIO library 
+set(FILEIO_SOURCES "src/FileIO/FileControl.cpp" "include/FileIO/FileIO.h" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileIO_Mol2.cpp")
+#add_library(ctkFileIO ${FILEIO_SOURCES})
+#target_link_libraries(ctkFileIO ctkDataObjs)
 
 
 # Add source to this project's executable.
-add_executable (ChemToolKit "main.cpp" "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileControl.cpp" "src/FileIO/FileIO_Mol2.cpp" )
+add_executable (ChemToolKit "main.cpp" "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp"  ${FILEIO_SOURCES})
 target_link_libraries(ChemToolKit ctkMaths)
-target_link_libraries(ChemToolKit ctkMolecule)
+target_link_libraries(ChemToolKit ctkDataObjs)
+#target_link_libraries(ChemToolKit ctkFileIO)
 
 file(GLOB PARAM_FILES "Resources/*.prm")
 file(COPY ${PARAM_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resources/) 
@@ -45,20 +55,20 @@ endif()
 
 
 ## Python bindings
-if (NOT Python_ROOT_DIR)
-    set(Python_ROOT_DIR "")
+set(BUILD_PYTHON_BINDINGS ON) # -> Auto set to on for now 
+if (BUILD_PYTHON_BINDINGS)
+    find_package(Python COMPONENTS Interpreter Development REQUIRED)
+    set_target_properties(Python::Module PROPERTIES
+            MAP_IMPORTED_CONFIG_DEBUG ";RELEASE")
+    include_directories(${Python_INCLUDE_DIRS})
+    set(pybind11_DIR "modules/pybind11-2.11.1")
+    #find_package(pybind11 REQUIRED)
+    add_subdirectory(${pybind11_DIR})
+    include_directories(include "modules/pybind11-2.11.1/include")
+
+    pybind11_add_module(ctkPyMaths "Bindings/Python/Maths.cpp")
+    target_link_libraries(ctkPyMaths PRIVATE ctkMaths)
+
+    pybind11_add_module(ctkPyDataObjs "Bindings/Python/DataObjs.cpp")
+    target_link_libraries(ctkPyDataObjs PRIVATE ctkDataObjs ctkMaths)
 endif()
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
-set_target_properties(Python::Module PROPERTIES
-        MAP_IMPORTED_CONFIG_DEBUG ";RELEASE")
-include_directories(${Python_INCLUDE_DIRS})
-set(pybind11_DIR "modules/pybind11-2.11.1")
-#find_package(pybind11 REQUIRED)
-add_subdirectory(${pybind11_DIR})
-include_directories(include "modules/pybind11-2.11.1/include")
-
-pybind11_add_module(ctkPyMaths "Bindings/Python/Maths.cpp")
-target_link_libraries(ctkPyMaths PRIVATE ctkMaths)
-
-pybind11_add_module(ctkPyMolecule "Bindings/Python/Molecule.cpp")
-target_link_libraries(ctkPyMolecule PRIVATE ctkMolecule ctkMaths)

@@ -1,12 +1,14 @@
 ﻿#include <iostream>
 #include <cassert>
 
-#include "Molecule/Molecule.h"
+#include "Data/Molecule.h"
 #include "ForceField/UFF.h"
 #include "FileIO/FileControl.h"
 
 #include "Maths/Vector3.h"
 #include "Maths/Matrix33.h"
+
+using ctkData::Molecule;
 
 void testMaths();
 

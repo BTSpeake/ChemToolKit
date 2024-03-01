@@ -6,7 +6,7 @@
 
 
 
-UFF::UFF(Molecule& mol) : ForceField(mol) {
+UFF::UFF(ctkData::Molecule& mol) : ForceField(mol) {
 	setParameters();
 }
 
@@ -62,7 +62,7 @@ void UFF::setupTerms() {
 	std::string keyj;
 	std::string keyk;
 	for (int i = 0; i < _mol.nBonds(); i++) {
-		Bond* bnd = _mol.getBond(i);
+		ctkData::Bond* bnd = _mol.getBond(i);
 		keyi = getAtomKey(_mol.getAtom(bnd->_i));
 		keyj = getAtomKey(_mol.getAtom(bnd->_j));
 		_bonds.push_back(new BondCalc(_mol.getAtom(bnd->_i), _mol.getAtom(bnd->_j)));
@@ -150,7 +150,7 @@ void UFF::clearAngles() {
 	_angles.clear();
 }
 
-std::string UFF::getAtomKey(Atom* atom) const {
+std::string UFF::getAtomKey(ctkData::Atom* atom) const {
 	int coord = atom->coordination();
 	switch (atom->getAtomicNumber()) {
 	case 1:

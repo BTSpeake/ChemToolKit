@@ -1,9 +1,10 @@
-#include "Molecule/Molecule.h"
-#include "Molecule/Atom.h"
+#include "Data/Molecule.h"
+#include "Data/Atom.h"
 #include <pybind11/pybind11.h>
 
+using namespace ctkData;
 
-PYBIND11_MODULE(ctkPyMolecule, m) {
+PYBIND11_MODULE(ctkPyDataObjs, m) {
 
 	pybind11::module_::import("ctkPyMaths");
 

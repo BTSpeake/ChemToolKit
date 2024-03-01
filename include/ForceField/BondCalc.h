@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Molecule/Atom.h"
+#include "Data/Atom.h"
 #include "Maths/Vector3.h"
 #include "ForceField/UFFParams.h"
 
 class BondCalc {
 public:
-	BondCalc(Atom* atmi, Atom* atmj);
+	BondCalc(ctkData::Atom* atmi, ctkData::Atom* atmj);
 	~BondCalc() = default;
 
 	BondCalc(const BondCalc&) = delete;
@@ -21,19 +21,19 @@ public:
 
 	// access functions 
 	double getLength() const { return _l; };
-	Atom* getAtomi() const { return _atmi; };
-	Atom* getAtomj() const { return _atmj; };
+	ctkData::Atom* getAtomi() const { return _atmi; };
+	ctkData::Atom* getAtomj() const { return _atmj; };
 	int getBondOrder() const { return _bo; };
 	ctkMaths::Vector3 getBondVector() const { return _atmj->getPosition() - _atmi->getPosition(); };
-	bool isAtomInBond(const Atom* atm) const { return (atm == _atmi) || (atm == _atmj); };
+	bool isAtomInBond(const ctkData::Atom* atm) const { return (atm == _atmi) || (atm == _atmj); };
 
 	double getR0() const { return _r0; };
 	double getForceConstant() const { return _k; };
 
 
 private:
-	Atom* _atmi;
-	Atom* _atmj;
+	ctkData::Atom* _atmi;
+	ctkData::Atom* _atmj;
 	int _bo{ 1 };
 	double _l;
 

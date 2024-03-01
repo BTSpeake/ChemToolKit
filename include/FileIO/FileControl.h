@@ -1,10 +1,12 @@
 #pragma once
 
-#include "FileIO/FileIO.h"
-#include "Molecule/Molecule.h"
-
 #include <string>
+#include <filesystem>
 
+#include "FileIO/FileIO.h"
+#include "Data/Molecule.h"
+
+using ctkData::Molecule;
 
 class FileControl {
 public:
