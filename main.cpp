@@ -34,7 +34,7 @@ int main()
 		std::cout << "Angle Energy: " << uff.getAngleEnergy() << std::endl;
 	}
 	// Use file parsing 
-	FileControl fileControl;
+	ctkIO::FileControl fileControl;
 
 	std::cout << '\n';
 	std::cout << "Reading XYZ File:" << std::endl;

@@ -6,7 +6,9 @@
 
 #include <iostream>
 
-bool FileControl::_read(std::filesystem::path fpath, std::string ftype, Molecule& mol) {
+using namespace ctkIO;
+
+bool FileControl::_read(std::filesystem::path fpath, std::string ftype, ctkData::Molecule& mol) {
 	if (!fileExists(fpath)) {
 		std::cout << "File not found!" << std::endl;
 	}
@@ -20,7 +22,7 @@ bool FileControl::_read(std::filesystem::path fpath, std::string ftype, Molecule
 	return false;
 }
 
-bool FileControl::_write(std::filesystem::path fpath, std::string ftype, const Molecule& mol) {
+bool FileControl::_write(std::filesystem::path fpath, std::string ftype, const ctkData::Molecule& mol) {
 	std::cout << "Entering write function" << std::endl;
 	std::cout << "ftype = " << ftype << std::endl;
  	if (setFileType(ftype)) {
