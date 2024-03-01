@@ -19,8 +19,10 @@ Vector3::Vector3(const Vector3& vec) {
 
 // Assignement operator 
 Vector3& Vector3::operator=(const Vector3& vec) {
-	Vector3 v(vec);
-	return v;
+	_x = vec[0];
+	_y = vec[1];
+	_z = vec[2];
+	return *this;
 }
 
 // Destructor 
