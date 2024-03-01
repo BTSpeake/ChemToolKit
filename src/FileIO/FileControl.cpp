@@ -8,6 +8,41 @@
 
 using namespace ctkIO;
 
+// Public wrappers  
+// Read file accessor functions 
+bool FileControl::read(std::string fname, ctkData::Molecule& mol) {
+	std::filesystem::path fpath(fname);
+	return _read(fpath, determineFileType(fpath.extension()), mol);
+}
+bool FileControl::read(std::string fname, ctkData::Molecule& mol, const char* ext) {
+	return _read(std::filesystem::path(fname), ext, mol);
+}
+bool FileControl::read(const char* fname, ctkData::Molecule& mol) {
+	std::filesystem::path fpath(fname);
+	return _read(fpath, determineFileType(fpath.extension()), mol);
+}
+bool FileControl::read(const char* fname, ctkData::Molecule& mol, const char* ext) {
+	return _read(std::filesystem::path(fname), ext, mol);
+}
+
+// Write file accessor funtions
+bool FileControl::write(std::string fname, const ctkData::Molecule& mol) {
+	std::filesystem::path fpath(fname);
+	return _write(fpath, determineFileType(fpath.extension()), mol);
+}
+bool FileControl::write(std::string fname, const ctkData::Molecule& mol, const char* ext) {
+	return _write(std::filesystem::path(fname), ext, mol);
+}
+bool FileControl::write(const char* fname, const ctkData::Molecule& mol) {
+	std::filesystem::path fpath(fname);
+	return _write(fpath, determineFileType(fpath.extension()), mol);
+}
+bool FileControl::write(const char* fname, const ctkData::Molecule& mol, const char* ext) {
+	return _write(std::filesystem::path(fname), ext, mol);
+}
+
+
+// Private functions 
 bool FileControl::_read(std::filesystem::path fpath, std::string ftype, ctkData::Molecule& mol) {
 	if (!fileExists(fpath)) {
 		std::cout << "File not found!" << std::endl;
@@ -59,6 +94,10 @@ bool FileControl::setFileType(std::string ftype) {
 		return false;
 	}
  	return true;
+}
+
+bool FileControl::fileExists(std::filesystem::path fpath) {
+	return std::filesystem::exists(fpath);
 }
 
 std::string FileControl::determineFileType(std::filesystem::path ext) {

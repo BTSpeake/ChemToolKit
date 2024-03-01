@@ -30,25 +30,23 @@ add_library(ctkDataObjs ${MOL_SOURCES})
 target_link_libraries(ctkDataObjs ctkMaths)
 
 # Make the FileIO library 
-set(FILEIO_SOURCES "src/FileIO/FileControl.cpp" "include/FileIO/FileIO.h" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileIO_Mol2.cpp")
-#add_library(ctkFileIO ${FILEIO_SOURCES})
-#target_link_libraries(ctkFileIO ctkDataObjs)
+set(FILEIO_SOURCES "src/FileIO/FileControl.cpp" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileIO_Mol2.cpp")
+add_library(ctkFileIO ${FILEIO_SOURCES})
+target_link_libraries(ctkFileIO ctkDataObjs)
 
 
 # Add source to this project's executable.
-add_executable (ChemToolKit "main.cpp" "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp"  ${FILEIO_SOURCES})
+add_executable (ChemToolKit "main.cpp" "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp" )
 target_link_libraries(ChemToolKit ctkMaths)
 target_link_libraries(ChemToolKit ctkDataObjs)
-#target_link_libraries(ChemToolKit ctkFileIO)
+target_link_libraries(ChemToolKit ctkFileIO)
 
 file(GLOB PARAM_FILES "Resources/*.prm")
 file(COPY ${PARAM_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resources/) 
 file(GLOB TEST_FILES "tests/*")
 file(COPY ${TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/tests/)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET ChemToolKit PROPERTY CXX_STANDARD 20)
-endif()
+
 
 # TODO: Add tests and install targets if needed.
 

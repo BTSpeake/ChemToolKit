@@ -1,14 +1,23 @@
 #pragma once
 
+#ifdef _WIN32 
+#ifdef ctkFileIO_EXPORTS
+#define FILECONTROL_API __declspec(dllexport)
+#else
+#define FILECONTROL_API __declspec(dllimport)
+#endif
+#else
+#define FILECONTROL_API
+#endif // _WIN32
+
 #include <string>
 #include <filesystem>
-
 #include "FileIO/FileIO.h"
 #include "Data/Molecule.h"
 
 namespace ctkIO {
 
-	class FileControl {
+	class FILECONTROL_API FileControl {
 	public:
 		FileControl() = default;
 		~FileControl() = default;
@@ -16,45 +25,23 @@ namespace ctkIO {
 		FileControl& operator=(const FileControl&) = delete;
 
 		// Read file accessor functions 
-		bool read(std::string fname, ctkData::Molecule& mol) {
-			std::filesystem::path fpath(fname);
-			return _read(fpath, determineFileType(fpath.extension()), mol);
-		}
-		bool read(std::string fname, ctkData::Molecule& mol, const char* ext) {
-			return _read(std::filesystem::path(fname), ext, mol);
-		}
-		bool read(const char* fname, ctkData::Molecule& mol) {
-			std::filesystem::path fpath(fname);
-			return _read(fpath, determineFileType(fpath.extension()), mol);
-		}
-		bool read(const char* fname, ctkData::Molecule& mol, const char* ext) {
-			return _read(std::filesystem::path(fname), ext, mol);
-		}
+		bool read(std::string fname, ctkData::Molecule& mol);
+		bool read(std::string fname, ctkData::Molecule& mol, const char* ext);
+		bool read(const char* fname, ctkData::Molecule& mol);
+		bool read(const char* fname, ctkData::Molecule& mol, const char* ext);
 
 		// Write file accessor funtions
-		bool write(std::string fname, const ctkData::Molecule& mol) {
-			std::filesystem::path fpath(fname);
-			return _write(fpath, determineFileType(fpath.extension()), mol);
-		}
-		bool write(std::string fname, const ctkData::Molecule& mol, const char* ext) {
-			return _write(std::filesystem::path(fname), ext, mol);
-		}
-		bool write(const char* fname, const ctkData::Molecule& mol) {
-			std::filesystem::path fpath(fname);
-			return _write(fpath, determineFileType(fpath.extension()), mol);
-		}
-		bool write(const char* fname, const ctkData::Molecule& mol, const char* ext) {
-			return _write(std::filesystem::path(fname), ext, mol);
-		}
+		bool write(std::string fname, const ctkData::Molecule& mol);
+		bool write(std::string fname, const ctkData::Molecule& mol, const char* ext);
+		bool write(const char* fname, const ctkData::Molecule& mol);
+		bool write(const char* fname, const ctkData::Molecule& mol, const char* ext);
 
 	private:
 		FileIO* _fileIO = 0;
 
 		// utility functions
 		bool setFileType(std::string ftype);
-		bool fileExists(std::filesystem::path fpath) {
-			return std::filesystem::exists(fpath);
-		}
+		bool fileExists(std::filesystem::path fpath);
 		std::string determineFileType(std::filesystem::path ext);
 		std::filesystem::path getFileExtension(std::string ftype);
 
