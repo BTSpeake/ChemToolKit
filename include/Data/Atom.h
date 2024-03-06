@@ -13,6 +13,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 #include "Maths/Vector3.h"
 
 namespace ctkData {
@@ -49,6 +50,7 @@ namespace ctkData {
 		void removeDoubleBond();
 		void removeTripleBond();
 		void setAromatic(bool aromatic);
+		void addLabel(std::string label);
 
 		// reset functions 
 		void resetBonding();
@@ -63,6 +65,7 @@ namespace ctkData {
 		unsigned int _nTriple{ 0 };
 		bool _isAromatic{ false };
 		ctkMaths::Vector3 _pos;
+		std::vector<std::string> _labels;
 
 		// make these const??? seems to break access functions
 		static std::map<int, const char*> atmDict;

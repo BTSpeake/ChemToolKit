@@ -68,14 +68,15 @@ bool Atom::isAromatic() const { return _isAromatic; };
 double Atom::getCovalentRadii() const { return covRadiiDict[_a]; }
 
 // Set Functions 
-void Atom::setAtomicNumber(int a) { _a = a; };
-void Atom::addSingleBond() { _nSingle++; };
-void Atom::addDoubleBond() { _nDouble++; };
-void Atom::addTripleBond() { _nTriple++; };
-void Atom::removeSingleBond() { _nSingle--; };
-void Atom::removeDoubleBond() { _nDouble--; };
-void Atom::removeTripleBond() { _nTriple--; };
-void Atom::setAromatic(bool aromatic) { _isAromatic = aromatic; };
+void Atom::setAtomicNumber(int a) { _a = a; }
+void Atom::addSingleBond() { _nSingle++; }
+void Atom::addDoubleBond() { _nDouble++; }
+void Atom::addTripleBond() { _nTriple++; }
+void Atom::removeSingleBond() { _nSingle--; }
+void Atom::removeDoubleBond() { _nDouble--; }
+void Atom::removeTripleBond() { _nTriple--; }
+void Atom::setAromatic(bool aromatic) { _isAromatic = aromatic; }
+void Atom::addLabel(std::string label) { _labels.push_back(label); }
 
 
 // Utility functions 
@@ -87,6 +88,12 @@ void Atom::resetBonding() {
 
 std::string Atom::toString() const {
     std::string s = static_cast<std::string>(getSymbol()) + ":  " + _pos.toString();
+    if (_labels.size() > 0) {
+        s += "\nLabels: ";
+        for (std::string lbl : _labels) {
+            s += lbl + ",    ";
+        }
+    }
     return s;
 }
 
