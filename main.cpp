@@ -93,6 +93,7 @@ int main()
 	if (fileControl.read("tests/CTN.mol2", m2mol)) {
 		std::cout << "File read successfully" << std::endl;
 		std::cout << "nAtoms: " << m2mol.nAtoms() << std::endl;
+		std::cout << "nBonds: " << m2mol.nBonds() << std::endl;
 	}
 	else {
 		std::cout << "Error reading m2 mol file" << std::endl;

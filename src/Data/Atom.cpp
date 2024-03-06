@@ -65,6 +65,7 @@ unsigned int Atom::nDoubleBonds() const { return _nDouble; };
 unsigned int Atom::nTripleBonds() const { return _nTriple; };
 unsigned int Atom::nBonds() const { return _nSingle + _nDouble + _nTriple; };
 bool Atom::isAromatic() const { return _isAromatic; };
+bool Atom::isAmide() const { return _isAmide; }
 double Atom::getCovalentRadii() const { return covRadiiDict[_a]; }
 
 // Set Functions 
@@ -75,7 +76,8 @@ void Atom::addTripleBond() { _nTriple++; }
 void Atom::removeSingleBond() { _nSingle--; }
 void Atom::removeDoubleBond() { _nDouble--; }
 void Atom::removeTripleBond() { _nTriple--; }
-void Atom::setAromatic(bool aromatic) { _isAromatic = aromatic; }
+void Atom::isAromatic(bool aromatic) { _isAromatic = aromatic; }
+void Atom::isAmide(bool amide) { _isAmide = amide; }
 void Atom::addLabel(std::string label) { _labels.push_back(label); }
 
 

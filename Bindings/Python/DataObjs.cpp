@@ -40,7 +40,8 @@ PYBIND11_MODULE(ctkPyDataObjs, m) {
 		.def("coordinates", pybind11::overload_cast<>(&Atom::getPosition))
 		.def("symbol", &Atom::getSymbol)
 		.def("coordination", &Atom::coordination)
-		.def("isAromatic", &Atom::isAromatic)
+		.def("isAromatic", pybind11::overload_cast<>(&Atom::isAromatic, pybind11::const_))
+		.def("isAmide", pybind11::overload_cast<>(&Atom::isAmide, pybind11::const_))
 		.def("getCovRadii", &Atom::getCovalentRadii)
 		;
 

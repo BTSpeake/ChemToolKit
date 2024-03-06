@@ -39,6 +39,7 @@ namespace ctkData {
 		unsigned int nTripleBonds() const;
 		unsigned int nBonds() const;
 		bool isAromatic() const;
+		bool isAmide() const;
 		double getCovalentRadii() const;
 
 		// set functions 
@@ -49,7 +50,8 @@ namespace ctkData {
 		void removeSingleBond();
 		void removeDoubleBond();
 		void removeTripleBond();
-		void setAromatic(bool aromatic);
+		void isAromatic(bool aromatic);
+		void isAmide(bool amide);
 		void addLabel(std::string label);
 
 		// reset functions 
@@ -64,6 +66,7 @@ namespace ctkData {
 		unsigned int _nDouble{ 0 };
 		unsigned int _nTriple{ 0 };
 		bool _isAromatic{ false };
+		bool _isAmide{ false };
 		ctkMaths::Vector3 _pos;
 		std::vector<std::string> _labels;
 
