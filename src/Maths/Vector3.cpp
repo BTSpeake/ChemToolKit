@@ -1,5 +1,6 @@
 #include "Maths/Vector3.h"
 #include <cmath>
+#include <format>
 
 using namespace ctkMaths;
 
@@ -103,7 +104,12 @@ double Vector3::normal() const {
 void Vector3::normalise() { *this /= normal(); }
 
 std::string Vector3::toString() const {
-	std::string s = "[" + std::to_string(_x) + ", " + std::to_string(_y) + ", " + std::to_string(_z) + "]";
+	std::string s = std::format("[{0:.5},   {1:.5},   {2:.5}]", _x, _y, _z);
+	return s;
+}
+
+std::string Vector3::toSimpleStr() const {
+	std::string s = std::format("{0:.5}   {1:.5}   {2:.5}", _x, _y, _z);
 	return s;
 }
 

@@ -99,5 +99,43 @@ void FileIO_Mol2::read(ctkData::Molecule& mol) const {
 }
 
 void FileIO_Mol2::write(const ctkData::Molecule& mol) const {
+	std::ofstream file(_fname);
+	if (!file.is_open()) {
+		throw std::runtime_error("Error opening file");
+		return;
+	}
+	// Write the header 
+	file << "# Name: Unknown\n";
+	file << "# Created by: ChemToolKit\n";
+	file << "# Created: \n"; // Add the current data/time here 
+	
+	// Write the MOLECULE section 
+	file << "@<TRIPOS>MOlECULE\n";
+	file << "unknown\n"; 
+	file << "  " << mol.nAtoms() << "  " << mol.nBonds() << "  0  0  0\n";
+	file << "SMALL\n";
+	file << "NO_CHARGES\n";
+	file << "****\n"; 
+	
+	// Write the ATOM section 
+	file << "@<TRIPOS>ATOM\n";
+	for (int i = 0; i < mol.nAtoms(); i++) {
+		file << '\t' << i << "  " << mol.getAtom(i)->getSymbol() << "\t\t";
+		file << mol.getAtom(i)->getPosition().toSimpleStr() << '\t';
+		file << mol.getAtom(i)->getSYBYL() << '\n';
+	}
 
+	// Write the BOND section 
+	file << "@<TRIPOS>BOND\n";
+	for (int i = 0; i < mol.nBonds(); i++) {
+		file << '\t' << i << '\t';
+		file << mol.getBond(i)->_i << '\t';
+		file << mol.getBond(i)->_j << '\t';
+		if (mol.getAtom(mol.getBond(i)->_i)->isAromatic() && mol.getAtom(mol.getBond(i)->_j)->isAromatic()) {
+			file << "ar\n";
+		}
+		else {
+			file << mol.getBond(i)->_o << '\n';
+		}
+	}
 }

@@ -48,6 +48,7 @@ namespace ctkMaths {
 		void normalise();
 
 		std::string toString() const;
+		std::string toSimpleStr() const;
 
 	private:
 		double _x;

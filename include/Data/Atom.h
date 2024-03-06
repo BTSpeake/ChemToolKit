@@ -41,6 +41,7 @@ namespace ctkData {
 		bool isAromatic() const;
 		bool isAmide() const;
 		double getCovalentRadii() const;
+		std::string getSYBYL() const;
 
 		// set functions 
 		void setAtomicNumber(int a);

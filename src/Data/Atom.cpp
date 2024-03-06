@@ -38,6 +38,13 @@ int Atom::getAtomicNumber() const { return _a; };
 ctkMaths::Vector3& Atom::getPosition() { return _pos; };
 const ctkMaths::Vector3& Atom::getPosition() const { return _pos; };
 const char* Atom::getSymbol() const { return Atom::atmDict[_a]; };
+unsigned int Atom::nSingleBonds() const { return _nSingle; };
+unsigned int Atom::nDoubleBonds() const { return _nDouble; };
+unsigned int Atom::nTripleBonds() const { return _nTriple; };
+unsigned int Atom::nBonds() const { return _nSingle + _nDouble + _nTriple; };
+bool Atom::isAromatic() const { return _isAromatic; };
+bool Atom::isAmide() const { return _isAmide; }
+double Atom::getCovalentRadii() const { return covRadiiDict[_a]; }
 
 int Atom::coordination() const {
     switch (_a) {
@@ -60,13 +67,42 @@ int Atom::coordination() const {
     }
 }
 
-unsigned int Atom::nSingleBonds() const { return _nSingle; };
-unsigned int Atom::nDoubleBonds() const { return _nDouble; };
-unsigned int Atom::nTripleBonds() const { return _nTriple; };
-unsigned int Atom::nBonds() const { return _nSingle + _nDouble + _nTriple; };
-bool Atom::isAromatic() const { return _isAromatic; };
-bool Atom::isAmide() const { return _isAmide; }
-double Atom::getCovalentRadii() const { return covRadiiDict[_a]; }
+std::string Atom::getSYBYL() const {
+    std::string sym = getSymbol();
+    int coord;
+    switch (_a) {
+    // Hydrogen .spc .tp3??
+    // Carbon
+    case 6: // .cat???
+        coord = coordination();
+        if (_isAromatic) { return sym + ".ar"; }
+        else if (coord == 0) { return sym; }
+        else { return sym + "." + std::to_string(coord); }
+    // Nitrogen
+    case 7: // .p13 (trigonal)
+        coord = coordination();
+        if (_isAmide) { return sym + ".am"; }
+        else if (_isAromatic) { return sym + ".ar"; }
+        else if (coord == 0) { return sym; }
+        else { return sym + "." + std::to_string(coord); }
+    // Oxygen
+    case 8: // .co2 .spc .t3p
+        coord = coordination();
+        if (coord == 2 || coord == 3) { return sym + "." + std::to_string(coordination()); }
+        else { return sym; }
+    // Phosphorous
+    case 15:
+        if (coordination() == 3) { return sym + "." + std::to_string(coordination()); }
+        else { return sym; }
+    // Sulfur 
+    case 16: // .o .o2
+        coord = coordination();
+        if (coord == 2 || coord == 3) { return sym + "." + std::to_string(coordination()); }
+        else { return sym; }
+    default:
+        return sym;
+    }
+}
 
 // Set Functions 
 void Atom::setAtomicNumber(int a) { _a = a; }
@@ -90,6 +126,7 @@ void Atom::resetBonding() {
 
 std::string Atom::toString() const {
     std::string s = static_cast<std::string>(getSymbol()) + ":  " + _pos.toString();
+    //s += '\t' + getSYBYL();
     if (_labels.size() > 0) {
         s += "\nLabels: ";
         for (std::string lbl : _labels) {
