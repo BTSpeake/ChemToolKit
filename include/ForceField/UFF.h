@@ -1,5 +1,15 @@
 #pragma once
 
+#ifdef _WIN32
+#ifdef ctkForceField_EXPORTS
+#define UFF_API __declspec(dllexport)
+#else
+#define UFF_API __declspec(dllimport)
+#endif // ctkDataObjs_EXPORTS 
+#else
+#define UFF_API
+#endif //_WIN32 
+
 #include <map>
 #include <string>
 
@@ -11,7 +21,7 @@
 #include "ForceField/UFFParams.h"
 
 
-class UFF : protected ForceField {
+class UFF_API UFF : protected ForceField {
 public:
 	UFF(ctkData::Molecule& mol);
 	~UFF();

@@ -1,9 +1,19 @@
 #pragma once
 
+#ifdef _WIN32
+#ifdef ctkForceField_EXPORTS
+#define FF_API __declspec(dllexport)
+#else
+#define FF_API __declspec(dllimport)
+#endif // ctkDataObjs_EXPORTS 
+#else
+#define FF_API
+#endif //_WIN32 
+
 #include "Data/Molecule.h"
 
 
-class ForceField {
+class FF_API ForceField {
 public:
 	ForceField(ctkData::Molecule& mol) : _mol(mol) {};
 	~ForceField() {};

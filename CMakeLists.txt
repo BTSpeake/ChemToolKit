@@ -34,12 +34,17 @@ set(FILEIO_SOURCES "src/FileIO/FileControl.cpp" "src/FileIO/FileIO_XYZ.cpp" "src
 add_library(ctkFileIO ${FILEIO_SOURCES})
 target_link_libraries(ctkFileIO ctkDataObjs)
 
+# Force Field Library
+add_library(ctkForceField "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp")
+target_link_libraries(ctkForceField ctkMaths)
+target_link_libraries(ctkForceField ctkDataObjs)
 
 # Add source to this project's executable.
-add_executable (ChemToolKit "main.cpp" "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp" )
+add_executable (ChemToolKit "main.cpp" )
 target_link_libraries(ChemToolKit ctkMaths)
 target_link_libraries(ChemToolKit ctkDataObjs)
 target_link_libraries(ChemToolKit ctkFileIO)
+target_link_libraries(ChemToolKit ctkForceField)
 
 file(GLOB PARAM_FILES "Resources/*.prm")
 file(COPY ${PARAM_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resources/) 
@@ -72,4 +77,7 @@ if (CTK_BIND_PYTHON)
 
     pybind11_add_module(ctkPyFileIO "Bindings/Python/FileIO.cpp")
     target_link_libraries(ctkPyFileIO PRIVATE ctkFileIO ctkDataObjs)
+
+    pybind11_add_module(ctkPyForceField "Bindings/Python/ForceField.cpp")
+    target_link_libraries(ctkPyForceField PRIVATE ctkForceField ctkDataObjs)
 endif()
