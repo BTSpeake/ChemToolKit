@@ -53,16 +53,16 @@ file(COPY ${TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/tests/)
 
 
 ## Python bindings
-set(BUILD_PYTHON_BINDINGS ON) # -> Auto set to on for now 
-if (BUILD_PYTHON_BINDINGS)
+set(CTK_BIND_PYTHON ON) # -> Auto set to on for now 
+if (CTK_BIND_PYTHON)
+    # Find python interpreter -> hint Python_ROOT_DIR
     find_package(Python COMPONENTS Interpreter Development REQUIRED)
     set_target_properties(Python::Module PROPERTIES
             MAP_IMPORTED_CONFIG_DEBUG ";RELEASE")
     include_directories(${Python_INCLUDE_DIRS})
-    set(pybind11_DIR "modules/pybind11-2.11.1")
-    #find_package(pybind11 REQUIRED)
-    add_subdirectory(${pybind11_DIR})
-    include_directories(include "modules/pybind11-2.11.1/include")
+    # Find pybind11 -> hint pybind11_DIR
+    find_package(pybind11 REQUIRED)
+    include_directories(include pybind11_INCLUDE_DIRS)
 
     pybind11_add_module(ctkPyMaths "Bindings/Python/Maths.cpp")
     target_link_libraries(ctkPyMaths PRIVATE ctkMaths)
