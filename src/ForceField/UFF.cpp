@@ -61,12 +61,20 @@ void UFF::setupTerms() {
 	std::string keyi; 
 	std::string keyj;
 	std::string keyk;
-	for (int i = 0; i < _mol.nBonds(); i++) {
-		ctkData::Bond* bnd = _mol.getBond(i);
-		keyi = getAtomKey(_mol.getAtom(bnd->_i));
-		keyj = getAtomKey(_mol.getAtom(bnd->_j));
-		_bonds.push_back(new BondCalc(_mol.getAtom(bnd->_i), _mol.getAtom(bnd->_j)));
-		_bonds[i]->calculateConstants(_params[keyi], _params[keyj]);
+
+	for (int i = 0; i < _mol.nAtoms(); i++) {
+		for (int j = (i + 1); j < _mol.nAtoms(); j++) {
+			if (_mol.connected(i, j)) {
+				keyi = getAtomKey(_mol.getAtom(i));
+				keyj = getAtomKey(_mol.getAtom(j));
+				BondCalc* bnd = new BondCalc(_mol.getAtom(i), _mol.getAtom(j));
+				bnd->calculateConstants(_params[keyi], _params[keyj]);
+				_bonds.push_back(bnd);
+			}
+			else if (!_mol.connected13(i, j)) {
+				// Create VdW interactions 
+			}
+		}
 	}
 	for (int i = 0; i < _bonds.size(); i++) {
 		for (int j = (i + 1); j < _bonds.size(); j++) {

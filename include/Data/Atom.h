@@ -41,14 +41,18 @@ namespace ctkData {
 		bool isAromatic() const;
 		bool isAmide() const;
 		double getCovalentRadii() const;
+		bool isConnected(const int i) const;
+		const std::vector<int>& connections() const;
 		std::string getSYBYL() const;
 
 		// set functions 
 		void setAtomicNumber(int a);
-		void addSingleBond();
+		void updatePosition(const double x, const double y, const double z);
+		bool addConnection(const int i);
+		//void addSingleBond();
 		void addDoubleBond();
 		void addTripleBond();
-		void removeSingleBond();
+		//void removeSingleBond();
 		void removeDoubleBond();
 		void removeTripleBond();
 		void isAromatic(bool aromatic);
@@ -63,12 +67,12 @@ namespace ctkData {
 
 	private:
 		int _a;
-		unsigned int _nSingle{ 0 };
 		unsigned int _nDouble{ 0 };
 		unsigned int _nTriple{ 0 };
 		bool _isAromatic{ false };
 		bool _isAmide{ false };
 		ctkMaths::Vector3 _pos;
+		std::vector<int> _connections;
 		std::vector<std::string> _labels;
 
 		// make these const??? seems to break access functions

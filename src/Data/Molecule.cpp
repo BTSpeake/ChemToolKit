@@ -39,8 +39,38 @@ void Molecule::addAtom(std::string s, double x, double y, double z) {
 }
 
 void Molecule::addBond(int i, int j, int bo) {
-	if (i < nAtoms() && j < nAtoms()) { _bonds.push_back(new Bond(i, j, bo)); }
+	if (i < nAtoms() && j < nAtoms()) { 
+		if (!_atoms[i]->isConnected(j)) {
+			_atoms[i]->addConnection(j);
+			_atoms[j]->addConnection(i);
+			_bonds.push_back(new Bond(i, j, bo));
+			if (bo > 1) {
+				switch (bo) {
+				case 2:
+					_atoms[i]->addDoubleBond();
+					_atoms[j]->addDoubleBond();
+					break;
+				case 3:
+					_atoms[i]->addTripleBond();
+					_atoms[j]->addTripleBond();
+				}
+			}
+		}
+	}
 };
+
+bool Molecule::connected(const int i, const int j) const {
+	return _atoms[i]->isConnected(j);
+}
+
+bool Molecule::connected13(const int i, const int j) const {
+	for (int k : _atoms[i]->connections()) {
+		if (_atoms[j]->isConnected(k)) {
+			return true;
+		}
+	}
+	return false;
+}
 
 // set functions properties 
 void Molecule::setCharge(int charge) { _charge = charge; };
@@ -55,9 +85,7 @@ void Molecule::calculateBonding() {
 			double r = bv.normal();
 			double thr = 1.25 * (_atoms[i]->getCovalentRadii() + _atoms[j]->getCovalentRadii());
 			if (r < thr) {
-				_bonds.push_back(new Bond(i, j, 1));
-				_atoms[i]->addSingleBond();
-				_atoms[j]->addSingleBond();
+				addBond(i, j);
 			}
 		}
 	}
@@ -81,6 +109,17 @@ void Molecule::centreOnOrigin() {
 	}
 }
 
+double Molecule::calculateNNR() const {
+	double nnr{ 0.0 };
+	for (int i = 0; i < _atoms.size(); i++) {
+		for (int j = (i + 1); j < _atoms.size(); j++) {
+			ctkMaths::Vector3 rij = _atoms[i]->getPosition() - _atoms[j]->getPosition();
+			double nrij = rij.normal();
+			nnr += (_atoms[i]->getAtomicNumber() * _atoms[j]->getAtomicNumber()) / nrij;
+		}
+	}
+	return nnr;
+}
 
 void Molecule::clearAtoms() {
 	for (Atom* a : _atoms) {

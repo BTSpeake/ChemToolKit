@@ -34,6 +34,8 @@ namespace ctkData {
 		int nBonds() const;
 		Atom* getAtom(int i) const;
 		Bond* getBond(int i) const;
+		bool connected(const int i, const int j) const;
+		bool connected13(const int i, const int j) const;
 
 		// get functions for molecule properties 
 		int getCharge() const;
@@ -55,6 +57,7 @@ namespace ctkData {
 		void calculateBonding();
 		void calculateCoM();
 		void centreOnOrigin();
+		double calculateNNR() const;
 
 		// Utility functions
 		void clearAtoms();

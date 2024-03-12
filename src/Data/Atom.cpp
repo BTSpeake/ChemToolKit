@@ -9,6 +9,7 @@ Atom::Atom(int a, double x, double y, double z)
     if (atmDict.find(a) == atmDict.end()) {
         _a = 0;
     }
+    _connections.reserve(4);
 }
 
 Atom::Atom(std::string s, double x, double y, double z)
@@ -17,11 +18,13 @@ Atom::Atom(std::string s, double x, double y, double z)
     if (a != symbolDict.end()) {
         _a = a->second;
     }
+    _connections.reserve(4);
 }
 
 Atom::Atom(const Atom& atm) {
 	_a = atm.getAtomicNumber();
 	_pos = atm.getPosition();
+    _connections.reserve(4);
 }
 
 Atom& Atom::operator=(const Atom& atm) {
@@ -38,28 +41,41 @@ int Atom::getAtomicNumber() const { return _a; };
 ctkMaths::Vector3& Atom::getPosition() { return _pos; };
 const ctkMaths::Vector3& Atom::getPosition() const { return _pos; };
 const char* Atom::getSymbol() const { return Atom::atmDict[_a]; };
-unsigned int Atom::nSingleBonds() const { return _nSingle; };
+unsigned int Atom::nSingleBonds() const { return _connections.size() - _nDouble - _nTriple; };
 unsigned int Atom::nDoubleBonds() const { return _nDouble; };
 unsigned int Atom::nTripleBonds() const { return _nTriple; };
-unsigned int Atom::nBonds() const { return _nSingle + _nDouble + _nTriple; };
+unsigned int Atom::nBonds() const { return _connections.size() + _nDouble + _nTriple; };
 bool Atom::isAromatic() const { return _isAromatic; };
 bool Atom::isAmide() const { return _isAmide; }
 double Atom::getCovalentRadii() const { return covRadiiDict[_a]; }
 
+bool Atom::isConnected(const int i) const {
+    for (int j : _connections) {
+        if (i == j) {
+            return true;
+        }
+    }
+    return false;
+}
+
+const std::vector<int>& Atom::connections() const {
+    return _connections;
+}
+
 int Atom::coordination() const {
     switch (_a) {
     case 6:
-        if (_nSingle == 4) { return 3; };
-        if (_nSingle == 2 && _nDouble == 1) { return 2; };
+        if (nSingleBonds() == 4) { return 3; };
+        if (nSingleBonds() == 2 && _nDouble == 1) { return 2; };
         if (_nTriple == 1 || _nDouble == 2) { return 1; };
         return 0;
     case 7:
-        if (_nSingle == 3) { return 3; };
+        if (nSingleBonds() == 3) { return 3; };
         if (_nDouble == 1) { return 2; };
         if (_nTriple == 1) { return 1; };
         return 0;
     case 8:
-        //if (_nSingle == 2) { return 3; };
+        //if (nSingleBonds() == 2) { return 3; };
         //if (_nDouble == 1) { return 2; };
         return 3;
     default:
@@ -106,10 +122,22 @@ std::string Atom::getSYBYL() const {
 
 // Set Functions 
 void Atom::setAtomicNumber(int a) { _a = a; }
-void Atom::addSingleBond() { _nSingle++; }
+void Atom::updatePosition(const double x, const double y, const double z) {
+    _pos.setX(x);
+    _pos.setY(y);
+    _pos.setZ(z);
+}
+bool Atom::addConnection(const int i) {
+    if (isConnected(i)) {
+        return false;
+    }
+    _connections.push_back(i);
+    return true;
+}
+//void Atom::addSingleBond() { _nSingle++; }
 void Atom::addDoubleBond() { _nDouble++; }
 void Atom::addTripleBond() { _nTriple++; }
-void Atom::removeSingleBond() { _nSingle--; }
+//void Atom::removeSingleBond() { _nSingle--; }
 void Atom::removeDoubleBond() { _nDouble--; }
 void Atom::removeTripleBond() { _nTriple--; }
 void Atom::isAromatic(bool aromatic) { _isAromatic = aromatic; }
@@ -119,7 +147,8 @@ void Atom::addLabel(std::string label) { _labels.push_back(label); }
 
 // Utility functions 
 void Atom::resetBonding() {
-    _nSingle = 0;
+    //_nSingle = 0;
+    _connections.clear();
     _nDouble = 0;
     _nTriple = 0;
 }
