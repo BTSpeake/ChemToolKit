@@ -12,6 +12,13 @@ PYBIND11_MODULE(ctkPyForceField, m) {
 		.def("run", &UFF::runSteps)
 		.def("calculateEnergy", &UFF::calculateEnergy)
 		.def("energy", &UFF::energy)
+
+		.def("bondEnergy", &UFF::getBondEnergy)
+		.def("angleEnergy", &UFF::getAngleEnergy)
+		.def("dihedralEnergy", &UFF::getDihedralEnergy)
+		.def("inversionEnergy", &UFF::getInversionEnergy)
+		.def("vdwEnergy", &UFF::getVDWEnergy)
+		.def("electrostatic", &UFF::getElectrostaticEnergy)
 		;
 
 }
