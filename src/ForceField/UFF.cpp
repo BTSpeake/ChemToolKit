@@ -18,6 +18,7 @@ UFF::~UFF() {
 	_params.clear();
 	clearBonds();
 	clearAngles();
+	clearNonBonded();
 }
 
 void UFF::setParameters() {
@@ -72,7 +73,11 @@ void UFF::setupTerms() {
 				_bonds.push_back(bnd);
 			}
 			else if (!_mol.connected13(i, j)) {
-				// Create VdW interactions 
+				keyi = getAtomKey(_mol.getAtom(i));
+				keyj = getAtomKey(_mol.getAtom(j));
+				NonBond* vdw = new NonBond(_mol.getAtom(i), _mol.getAtom(j));
+				vdw->setupTerms(_params[keyi], _params[keyj], false);
+				_nonBonded.push_back(vdw);
 			}
 		}
 	}
@@ -94,6 +99,14 @@ void UFF::runSteps(int n) {
 	calculateEnergy(true);
 }
 
+double UFF::energy() const { return _eBond + _eAngle + _eDihedral + _eInversion + _eVdW + _eElectro; };
+double UFF::getBondEnergy() const { return _eBond; };
+double UFF::getAngleEnergy() const { return _eAngle; };
+double UFF::getDihedralEnergy() const { return _eDihedral; };
+double UFF::getInversionEnergy() const { return _eInversion; };
+double UFF::getVDWEnergy() const { return _eVdW; };
+double UFF::getElectrostaticEnergy() const { return _eElectro; };
+
 void UFF::calculateEnergy(bool gradiants) {
 	_eBond = 0.0;
 	_eAngle = 0.0;
@@ -106,17 +119,21 @@ void UFF::calculateEnergy(bool gradiants) {
 	for (AngleCalc* angle : _angles) {
 		_eAngle += E_Theta(angle);
 	}
+	// VdW energy calculation 
+	for (NonBond* vdw : _nonBonded) {
+		_eVdW += E_VdW(vdw);
+	}
 	
 }
 
-double UFF::E_R(BondCalc* bond) {
+double UFF::E_R(const BondCalc* bond) {
 	double r = bond->getLength();
 	r = (r - bond->getR0());
 	double r2 = r * r;
 	return (bond->getForceConstant() * r2);
 }
 
-double UFF::E_Theta(AngleCalc* angle) {
+double UFF::E_Theta(const AngleCalc* angle) {
 	double p{ 0.0 };  // penalty function generally based on ESFF
 
 	switch (angle->getAtomj()->coordination()) {
@@ -143,6 +160,17 @@ double UFF::E_Theta(AngleCalc* angle) {
 	}
 }
 
+double UFF::E_VdW(const NonBond* vdw) {
+	ctkMaths::Vector3 rij = vdw->getAtomi()->getPosition() - vdw->getAtomj()->getPosition();
+	double r = rij.normal();
+
+	double r2 = r * r; 
+	double r6 = r2 * r2 * r2;
+	double r12 = r6 * r6; 
+
+	return vdw->_dij * ((vdw->_xij12 / r12) - 2 * (vdw->_xij6 / r6));
+}
+
 void UFF::clearBonds() {
 	for (auto b : _bonds) {
 		delete b;
@@ -156,6 +184,14 @@ void UFF::clearAngles() {
 		a = 0;
 	}
 	_angles.clear();
+}
+
+void UFF::clearNonBonded() {
+	for (auto nb : _nonBonded) {
+		delete nb;
+		nb = 0;
+	}
+	_nonBonded.clear();
 }
 
 std::string UFF::getAtomKey(ctkData::Atom* atom) const {

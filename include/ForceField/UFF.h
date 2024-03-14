@@ -18,6 +18,7 @@
 #include "Data/Atom.h"
 #include "ForceField/BondCalc.h"
 #include "ForceField/AngleCalc.h"
+#include "ForceField/NonBondCalc.h"
 #include "ForceField/UFFParams.h"
 
 
@@ -28,17 +29,17 @@ public:
 
 	void setupTerms();
 	void runSteps(int steps);
-	double energy() { return _eBond + _eAngle + _eDihedral + _eInversion + _eVdW + _eElectro; };
+	double energy() const;
 	void calculateEnergy(bool gradients);
 
 
 	// individual energy access functions 
-	double getBondEnergy() const { return _eBond; };
-	double getAngleEnergy() const { return _eAngle; };
-	double getDihedralEnergy() const { return _eDihedral; };
-	double getInversionEnergy() const { return _eInversion; };
-	double getVDWEnergy() const { return _eVdW; };
-	double getElectrostaticEnergy() const { return _eElectro; };
+	double getBondEnergy() const;
+	double getAngleEnergy() const;
+	double getDihedralEnergy() const;
+	double getInversionEnergy() const;
+	double getVDWEnergy() const;
+	double getElectrostaticEnergy() const;
 
 protected:
 	void setParameters();
@@ -55,12 +56,15 @@ private:
 
 	std::vector<BondCalc*> _bonds;
 	std::vector<AngleCalc*> _angles;
+	std::vector<NonBond*> _nonBonded;
 
 	std::string getAtomKey(ctkData::Atom* atom) const;
 
-	double E_R(BondCalc* bond);
-	double E_Theta(AngleCalc* angle);
+	double E_R(const BondCalc* bond);
+	double E_Theta(const AngleCalc* angle);
+	double E_VdW(const NonBond* vdw);
 
 	void clearAngles();
 	void clearBonds();
+	void clearNonBonded();
 };

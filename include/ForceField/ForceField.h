@@ -23,10 +23,10 @@ public:
 
 	// Abstract public functions
 	virtual void runSteps(int steps) = 0;
-	virtual double energy() = 0;
+	virtual double energy() const = 0;
 
 	// Basic access functions
-	ctkData::Molecule& getMolecule() { return _mol; };
+	//ctkData::Molecule& getMolecule() { return _mol; };
 
 protected:
 	double _energy{ 0.0 };
