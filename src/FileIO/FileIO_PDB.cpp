@@ -20,7 +20,7 @@ void FileIO_PDB::read(ctkData::Molecule& mol) const {
     std::string line; 
     //std::regex headerRe(R"(^TITLE\s+(.*)$)");
     std::regex atomRe(R"(^ATOM\s+(\d+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S+)\s+$)"); 
-    std::regex hetAtomRe(R"(^HETATOM\s+(\d+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S+)\s+$)");
+    std::regex hetAtomRe(R"(^HETATM\s+(\d+)\s+(\S+)\s+(\S+)\s+(\S?)\s+(\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S?\d+\.\d+)\s+(\S+)\s+$)");
     std::regex conectRe(R"(^CONECT\s+(\d+))");
 
     while (getline(file, line)) {
@@ -36,18 +36,17 @@ void FileIO_PDB::read(ctkData::Molecule& mol) const {
             mol.getAtom(mol.nAtoms() - 1)->addLabel("PDB_HETATOM");
         }
         else if (std::regex_search(line, match, conectRe)) {
-            int atmi = std::stoi(match[1]);
+            int atmi = std::stoi(match[1]) - 1;
             std::regex digitRe(R"((\d+))");
             std::regex_token_iterator<std::string::iterator> rend;
             std::regex_token_iterator<std::string::iterator> a(line.begin(), line.end(), digitRe);
             while (a != rend) {
-                int atmj = std::stoi(*a++); 
+                int atmj = std::stoi(*a++) - 1; 
                 if (atmj > atmi) {
                     mol.addBond(atmi, atmj);
                 }
             }
         }
-        
     }
 }
 
