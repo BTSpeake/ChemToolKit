@@ -120,6 +120,35 @@ std::string Atom::getSYBYL() const {
     }
 }
 
+int Atom::standardValence() const {
+    switch (_a) {
+    case 1:
+        return 1;
+    case 5:
+    case 7:
+    case 13:
+    case 15:
+    case 31:
+        return 3; 
+    case 6:
+    case 14:
+    case 32:
+        return 4; 
+    case 8:
+    case 16:
+    case 34:
+    case 52:
+        return 2;
+    case 9:
+    case 17:
+    case 35:
+    case 53:
+        return 1;
+    default:
+        return 0;
+    }
+}
+
 // Set Functions 
 void Atom::setAtomicNumber(int a) { _a = a; }
 void Atom::updatePosition(const double x, const double y, const double z) {

@@ -44,6 +44,7 @@ namespace ctkData {
 		bool isConnected(const int i) const;
 		const std::vector<int>& connections() const;
 		std::string getSYBYL() const;
+		int standardValence() const;
 
 		// set functions 
 		void setAtomicNumber(int a);
