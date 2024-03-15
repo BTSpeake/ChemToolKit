@@ -121,6 +121,12 @@ double ctkMaths::dot(const Vector3& v1, const Vector3& v2) {
 	return (v1[0] * v2[0]) + (v1[1] * v2[1]) + (v1[2] * v2[2]);
 };
 
+Vector3 ctkMaths::cross(const Vector3& v1, const Vector3& v2) {
+	double x = v1[1] * v2[2] - v1[2] * v2[1]; 
+	double y = v1[2] * v2[0] - v1[0] * v2[2];
+	double z = v1[0] * v2[1] - v1[1] * v2[0]; 
+	return Vector3(x, y, z);
+}
 
 std::ostream& operator<<(std::ostream& os, const Vector3& v) {
 	os << v.toString();
