@@ -18,6 +18,8 @@
 #include "Data/Atom.h"
 #include "ForceField/BondCalc.h"
 #include "ForceField/AngleCalc.h"
+#include "ForceField/TorsionCalc.h"
+#include "ForceField/InversionCalc.h"
 #include "ForceField/NonBondCalc.h"
 #include "ForceField/UFFParams.h"
 
@@ -56,15 +58,21 @@ private:
 
 	std::vector<BondCalc*> _bonds;
 	std::vector<AngleCalc*> _angles;
+	std::vector<TorsionCalc*> _torsions;
+	std::vector<InversionCalc*> _inversions;
 	std::vector<NonBond*> _nonBonded;
 
 	std::string getAtomKey(ctkData::Atom* atom) const;
 
 	double E_R(const BondCalc* bond);
 	double E_Theta(const AngleCalc* angle);
+	double E_Torsion(const TorsionCalc* tor);
+	double E_Inversion(const InversionCalc* oop);
 	double E_VdW(const NonBond* vdw);
 
 	void clearAngles();
 	void clearBonds();
+	void clearTorsions();
+	void clearInversions();
 	void clearNonBonded();
 };

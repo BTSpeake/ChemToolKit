@@ -18,6 +18,8 @@ UFF::~UFF() {
 	_params.clear();
 	clearBonds();
 	clearAngles();
+	clearTorsions();
+	clearInversions();
 	clearNonBonded();
 }
 
@@ -84,15 +86,23 @@ void UFF::setupTerms() {
 	for (int i = 0; i < _bonds.size(); i++) {
 		for (int j = (i + 1); j < _bonds.size(); j++) {
 			if (_bonds[i]->isAtomInBond(_bonds[j]->getAtomi()) || _bonds[i]->isAtomInBond(_bonds[j]->getAtomj())) {
+				// Create A-B-C angle calc
 				AngleCalc* angle = new AngleCalc(_bonds[i], _bonds[j]);
 				keyi = getAtomKey(angle->getAtomi());
 				keyj = getAtomKey(angle->getAtomj());
 				keyk = getAtomKey(angle->getAtomk());
 				angle->calculateConstants(_params[keyi], _params[keyj], _params[keyk]);
 				_angles.push_back(angle);
+
+				for (int k = 0; k < _bonds.size(); k++) {
+
+				}
 			}
 		}
 	}
+
+	
+
 }
 
 void UFF::runSteps(int n) {
@@ -160,6 +170,16 @@ double UFF::E_Theta(const AngleCalc* angle) {
 	}
 }
 
+double UFF::E_Torsion(const TorsionCalc* tor) {
+	double phi = tor->getPeriodicity() * tor->getPhi();
+	phi = std::cos(phi);
+	return tor->getV() * (1 - (tor->getPhi0() * phi));
+}
+
+double UFF::E_Inversion(const InversionCalc* oop) {
+	return 0.0; 
+}
+
 double UFF::E_VdW(const NonBond* vdw) {
 	ctkMaths::Vector3 rij = vdw->getAtomi()->getPosition() - vdw->getAtomj()->getPosition();
 	double r = rij.normal();
@@ -184,6 +204,22 @@ void UFF::clearAngles() {
 		a = 0;
 	}
 	_angles.clear();
+}
+
+void UFF::clearTorsions() {
+	for (auto t : _torsions) {
+		delete t; 
+		t = 0;
+	}
+	_torsions.clear();
+}
+
+void UFF::clearInversions() {
+	for (auto oop : _inversions) {
+		delete oop;
+		oop = 0;
+	}
+	_inversions.clear();
 }
 
 void UFF::clearNonBonded() {

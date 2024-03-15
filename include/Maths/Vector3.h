@@ -60,6 +60,7 @@ namespace ctkMaths {
 	VECTOR3_API Vector3 operator*(double s, const Vector3& vec);
 
 	VECTOR3_API double dot(const Vector3& v1, const Vector3& v2);
+	VECTOR3_API Vector3 cross(const Vector3& v1, const Vector3& v2);
 
 }
 

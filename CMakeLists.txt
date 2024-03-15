@@ -35,7 +35,7 @@ add_library(ctkFileIO ${FILEIO_SOURCES})
 target_link_libraries(ctkFileIO ctkDataObjs)
 
 # Force Field Library
-add_library(ctkForceField "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp" "src/ForceField/NonBondCalc.cpp")
+add_library(ctkForceField "src/ForceField/BondCalc.cpp" "src/ForceField/UFFParams.cpp" "src/ForceField/UFF.cpp" "src/ForceField/AngleCalc.cpp" "src/ForceField/TorsionCalc.cpp" "src/ForceField/NonBondCalc.cpp")
 target_link_libraries(ctkForceField ctkMaths)
 target_link_libraries(ctkForceField ctkDataObjs)
 
