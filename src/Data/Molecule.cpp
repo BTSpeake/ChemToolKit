@@ -39,7 +39,7 @@ void Molecule::addAtom(std::string s, double x, double y, double z) {
 }
 
 void Molecule::addBond(int i, int j, int bo) {
-	_bonds.push_back(new Bond(i, j, bo));
+	_bonds.push_back(new Bond(i, j, bo)); // -> This is currently broken right now if trying to change bonds to double/triple
 	if (i < _atoms.size() && j < _atoms.size()) {
 		switch (bo) {
 		case 1:

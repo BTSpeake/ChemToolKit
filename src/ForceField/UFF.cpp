@@ -85,8 +85,13 @@ void UFF::setupTerms() {
 						if (al != _mol.getAtom(j)) {
 							// Setup TorsionCalc 
 							TorsionCalc* tor = new TorsionCalc(al, _mol.getAtom(i), _mol.getAtom(j), ak);
-							tor->setupConstants(_params[keyi], _params[keyj]);
-							_torsions.push_back(tor);
+							if (tor->setupConstants(_params[keyi], _params[keyj])) {
+								_torsions.push_back(tor);
+							}
+							else {
+								delete tor;
+							}
+							
 						}
 					}
 				}
@@ -149,8 +154,8 @@ void UFF::calculateEnergy(bool gradiants) {
 	_eAngle = 0.0;
 
 	// Bond energy calculation
-	for (int i = 0; i < _mol.nBonds(); i++) {
-		_eBond += E_R(_bonds[i]);
+	for (BondCalc* bnd : _bonds) {
+		_eBond += E_R(bnd);
 	}
 	// Angle energy calculation
 	for (AngleCalc* angle : _angles) {
