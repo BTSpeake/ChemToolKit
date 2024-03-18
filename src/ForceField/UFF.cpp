@@ -68,13 +68,31 @@ void UFF::setupTerms() {
 	for (int i = 0; i < _mol.nAtoms(); i++) {
 		for (int j = (i + 1); j < _mol.nAtoms(); j++) {
 			if (_mol.connected(i, j)) {
+				// Set ip BondCalc
 				keyi = getAtomKey(_mol.getAtom(i));
 				keyj = getAtomKey(_mol.getAtom(j));
 				BondCalc* bnd = new BondCalc(_mol.getAtom(i), _mol.getAtom(j));
 				bnd->calculateConstants(_params[keyi], _params[keyj]);
 				_bonds.push_back(bnd);
+				
+				// Search in tree 
+				for (ctkData::Atom* ak : _mol.getAtom(j)->connections()) {
+					if (ak == _mol.getAtom(i)) { continue; }
+					// Not currently setup up to do angles -> TODO
+					
+					// Search for torsion with altered ordering al->ai->aj->ak
+					for (ctkData::Atom* al : _mol.getAtom(i)->connections()) {
+						if (al != _mol.getAtom(j)) {
+							// Setup TorsionCalc 
+							TorsionCalc* tor = new TorsionCalc(al, _mol.getAtom(i), _mol.getAtom(j), ak);
+							tor->setupConstants(_params[keyi], _params[keyj]);
+							_torsions.push_back(tor);
+						}
+					}
+				}
 			}
 			else if (!_mol.connected13(i, j)) {
+				// Setup up non bonded interaction terms 
 				keyi = getAtomKey(_mol.getAtom(i));
 				keyj = getAtomKey(_mol.getAtom(j));
 				NonBond* vdw = new NonBond(_mol.getAtom(i), _mol.getAtom(j));
@@ -93,16 +111,9 @@ void UFF::setupTerms() {
 				keyk = getAtomKey(angle->getAtomk());
 				angle->calculateConstants(_params[keyi], _params[keyj], _params[keyk]);
 				_angles.push_back(angle);
-
-				for (int k = 0; k < _bonds.size(); k++) {
-
-				}
 			}
 		}
 	}
-
-	
-
 }
 
 void UFF::runSteps(int n) {
@@ -116,6 +127,22 @@ double UFF::getDihedralEnergy() const { return _eDihedral; };
 double UFF::getInversionEnergy() const { return _eInversion; };
 double UFF::getVDWEnergy() const { return _eVdW; };
 double UFF::getElectrostaticEnergy() const { return _eElectro; };
+
+int UFF::nBonds() const {
+	return _bonds.size();
+}
+int UFF::nAngles() const {
+	return _angles.size();
+}
+int UFF::nDihedrals() const {
+	return _torsions.size();
+}
+int UFF::nInversions() const {
+	return _inversions.size();
+}
+int UFF::nNonBonded() const {
+	return _nonBonded.size();
+}
 
 void UFF::calculateEnergy(bool gradiants) {
 	_eBond = 0.0;

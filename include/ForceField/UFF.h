@@ -43,6 +43,12 @@ public:
 	double getVDWEnergy() const;
 	double getElectrostaticEnergy() const;
 
+	int nBonds() const;
+	int nAngles() const; 
+	int nDihedrals() const; 
+	int nInversions() const;
+	int nNonBonded() const;
+
 protected:
 	void setParameters();
 	
