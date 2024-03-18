@@ -9,6 +9,7 @@ void FileIO_XYZ::read(ctkData::Molecule& mol) const {
     std::ifstream file(_fname);
     if (!file.is_open()) {
         throw std::runtime_error("Error opening file");
+        return;
     }
     std::string line;
     int nAtoms{ 0 };
@@ -26,14 +27,15 @@ void FileIO_XYZ::read(ctkData::Molecule& mol) const {
 
     getline(file, line); // read the comment line 
 
+    // Define the regex variables
+    std::regex dataRegex(R"(^(\w+)\s+(\S+)\s+(\S+)\s+(\S+)$)"); // Match atom symbol, coordinates
+    std::smatch dataMatch;
+
     // Parse the remaining atom data line by line 
     for (int i = 0; i < nAtoms; ++i) {
         if (!getline(file, line)) {
             throw std::runtime_error("Error reading atom data");
         }
-
-        std::regex dataRegex(R"(^(\w+)\s+(\S+)\s+(\S+)\s+(\S+)$)"); // Match atom symbol, coordinates
-        std::smatch dataMatch;
         if (regex_match(line, dataMatch, dataRegex)) {
             mol.addAtom(dataMatch[1], std::stod(dataMatch[2]), std::stod(dataMatch[3]), std::stod(dataMatch[4]));
         }
