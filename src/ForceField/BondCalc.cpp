@@ -14,8 +14,8 @@ void BondCalc::calculateDistance() {
 
 void BondCalc::calculateConstants(UFFParameters* pi, UFFParameters* pj) {
 	_r0 = pi->r + pj->r;
-	if (_bo > 1) {
-		double rbo = -0.1332 * (_r0)*std::log(_bo);
+	if (_atmi->isDouble(_atmj)) {
+		double rbo = -0.1332 * (_r0)*std::log(2);
 		_r0 += rbo;
 	}
 	double ren = (sqrt(pi->chi) - sqrt(pj->chi));
