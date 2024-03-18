@@ -41,21 +41,19 @@ namespace ctkData {
 		bool isAromatic() const;
 		bool isAmide() const;
 		double getCovalentRadii() const;
-		bool isConnected(const int i) const;
-		const std::vector<int>& connections() const;
+		bool isConnected(const Atom* a) const;
+		bool isDouble(const Atom* a) const;
+		bool isTriple(const Atom* a) const;
+		const std::vector<Atom*>& connections() const;
 		std::string getSYBYL() const;
 		int standardValence() const;
 
 		// set functions 
 		void setAtomicNumber(int a);
 		void updatePosition(const double x, const double y, const double z);
-		bool addConnection(const int i);
-		//void addSingleBond();
-		void addDoubleBond();
-		void addTripleBond();
-		//void removeSingleBond();
-		void removeDoubleBond();
-		void removeTripleBond();
+		bool addConnection(Atom* a);
+		bool addConnection(Atom* a, int bo);
+		void removeConnection(Atom* a);
 		void isAromatic(bool aromatic);
 		void isAmide(bool amide);
 		void addLabel(std::string label);
@@ -68,12 +66,12 @@ namespace ctkData {
 
 	private:
 		int _a;
-		unsigned int _nDouble{ 0 };
-		unsigned int _nTriple{ 0 };
 		bool _isAromatic{ false };
 		bool _isAmide{ false };
 		ctkMaths::Vector3 _pos;
-		std::vector<int> _connections;
+		std::vector<Atom*> _connections;
+		std::vector<Atom*> _doubles; 
+		std::vector<Atom*> _triples;
 		std::vector<std::string> _labels;
 
 		// make these const??? seems to break access functions

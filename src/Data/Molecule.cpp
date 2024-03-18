@@ -39,32 +39,40 @@ void Molecule::addAtom(std::string s, double x, double y, double z) {
 }
 
 void Molecule::addBond(int i, int j, int bo) {
-	if (i < nAtoms() && j < nAtoms()) { 
-		if (!_atoms[i]->isConnected(j)) {
-			_atoms[i]->addConnection(j);
-			_atoms[j]->addConnection(i);
-			_bonds.push_back(new Bond(i, j, bo));
-			if (bo > 1) {
-				switch (bo) {
-				case 2:
-					_atoms[i]->addDoubleBond();
-					_atoms[j]->addDoubleBond();
-					break;
-				case 3:
-					_atoms[i]->addTripleBond();
-					_atoms[j]->addTripleBond();
-				}
-			}
+
+	if (i < _atoms.size() && j < _atoms.size()) {
+		switch (bo) {
+		case 1:
+			_atoms[i]->addConnection(_atoms[j]);
+			_atoms[j]->addConnection(_atoms[i]);
+			break;
+		case 2:
+			_atoms[i]->addConnection(_atoms[j], 2);
+			_atoms[j]->addConnection(_atoms[i], 2);
+			break;
+		case 3:
+			_atoms[i]->addConnection(_atoms[j], 3);
+			_atoms[j]->addConnection(_atoms[i], 3);
+			break;
 		}
 	}
+	return;
 };
 
 bool Molecule::connected(const int i, const int j) const {
-	return _atoms[i]->isConnected(j);
+	if (j < 0 || j >= _atoms.size()) {
+		return false;
+	}
+	else if (i < 0 || i >= _atoms.size()) {
+		return false;
+	}
+	else {
+		return _atoms[i]->isConnected(_atoms[j]);
+	}
 }
 
 bool Molecule::connected13(const int i, const int j) const {
-	for (int k : _atoms[i]->connections()) {
+	for (Atom* k : _atoms[i]->connections()) {
 		if (_atoms[j]->isConnected(k)) {
 			return true;
 		}
