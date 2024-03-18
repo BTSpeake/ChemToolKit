@@ -45,6 +45,10 @@ void FileIO_XYZ::read(ctkData::Molecule& mol) const {
 
 
     file.close();
+
+    // Calculate bonding as default for xyz files
+    mol.calculateBonding();
+
 }
 
 
