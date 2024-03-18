@@ -19,6 +19,15 @@ PYBIND11_MODULE(ctkPyForceField, m) {
 		.def("inversionEnergy", &UFF::getInversionEnergy)
 		.def("vdwEnergy", &UFF::getVDWEnergy)
 		.def("electrostatic", &UFF::getElectrostaticEnergy)
+
+		.def("nBonds", &UFF::nBonds)
+		.def("nAngles", &UFF::nAngles)
+		.def("nDihedrals", &UFF::nDihedrals)
+		.def("nTorsions", &UFF::nDihedrals)
+		.def("nInversions", &UFF::nInversions)
+		.def("nOOP", &UFF::nInversions)
+		.def("nNonBonded", &UFF::nNonBonded)
+
 		;
 
 }
