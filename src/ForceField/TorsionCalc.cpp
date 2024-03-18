@@ -1,14 +1,14 @@
 #include "ForceField/TorsionCalc.h"
 #include "Maths/Vector3.h"
 
-TorsionCalc::TorsionCalc(const BondCalc* bi, const BondCalc* bj, const BondCalc* bk)
-	: _bi(bi), _bj(bj), _bk(bk) {
+TorsionCalc::TorsionCalc(const ctkData::Atom* ai, const ctkData::Atom* aj, const ctkData::Atom* ak, const ctkData::Atom* al)
+	: _ai(ai), _aj(aj), _ak(ak), _al(al) {
 
 }
 
 bool TorsionCalc::setupConstants(const UFFParameters* pj, const UFFParameters* pk) {
 
-	int coordSum = _bj->getAtomi()->coordination() + _bj->getAtomj()->coordination();
+	int coordSum = _aj->coordination() + _ak->coordination();
 	double vi = pj->Vi;
 	double vj = pk->Vi;
 
@@ -22,7 +22,7 @@ bool TorsionCalc::setupConstants(const UFFParameters* pj, const UFFParameters* p
 			return false;
 		}
 		
-		switch (_bj->getAtomi()->getAtomicNumber()) {
+		switch (_aj->getAtomicNumber()) {
 		case 8: 
 			_n = 2; 
 			_phi0 = 90.0;
@@ -37,7 +37,7 @@ bool TorsionCalc::setupConstants(const UFFParameters* pj, const UFFParameters* p
 			vi = 6.8;
 		}
 
-		switch (_bj->getAtomj()->getAtomicNumber()) {
+		switch (_ak->getAtomicNumber()) {
 		case 8:
 			_n = 2;
 			_phi0 = 90.0;
@@ -61,8 +61,8 @@ bool TorsionCalc::setupConstants(const UFFParameters* pj, const UFFParameters* p
 		_n = 6; 
 		_V = 0.5;
 
-		if (_bj->getAtomi()->coordination()) {
-			switch (_bj->getAtomi()->getAtomicNumber()) {
+		if (_aj->coordination() == 2) {
+			switch (_aj->getAtomicNumber()) {
 			case 8:
 			case 16:
 			case 34:
@@ -73,7 +73,7 @@ bool TorsionCalc::setupConstants(const UFFParameters* pj, const UFFParameters* p
 			}
 		}
 		else {
-			switch (_bj->getAtomj()->getAtomicNumber()) {
+			switch (_ak->getAtomicNumber()) {
 			case 8:
 			case 16:
 			case 34:
@@ -88,18 +88,24 @@ bool TorsionCalc::setupConstants(const UFFParameters* pj, const UFFParameters* p
 	case 4: 
 		// sp2 - sp2
 		double bo;
-		if (_bj->getAtomi()->isAromatic() || _bj->getAtomj()->isAromatic()) {
-			bo = 1.5;
+		if (_aj->isAromatic() || _ak->isAromatic()) {
+			bo = 1 + (4.18 * log(1.5));
 		}
-		else if(_bj->getAtomi()->isAmide() || _bj->getAtomj()->isAmide()) {
-			bo = 1.41;
+		else if(_aj->isAmide() || _ak->isAmide()) {
+			bo = 1 + (4.18 * log(1.41));
+		}
+		else if (_aj->isDouble(_ak)) {
+			bo = 1 + (4.18 * log(2));
+		}
+		else if (_aj->isTriple(_ak)) {
+			bo = 1 + (4.18 * log(3));
 		}
 		else {
-			bo = _bj->getBondOrder();
+			bo = 1;
 		}
 		_phi0 = 180.0;
 		_n = 2;
-		_V = 2.5 * sqrt(pj->Uj * pk->Uj) * (1 + 4.18 * log(bo));
+		_V = 2.5 * sqrt(pj->Uj * pk->Uj) * (bo);
 		break;
 
 	default: 
@@ -115,9 +121,9 @@ bool TorsionCalc::setupConstants(const UFFParameters* pj, const UFFParameters* p
 }
 
 double TorsionCalc::getPhi() const {
-	const ctkMaths::Vector3& b1 = _bi->getBondVector(); 
-	const ctkMaths::Vector3& b2 = _bj->getBondVector();
-	const ctkMaths::Vector3& b3 = _bk->getBondVector();
+	const ctkMaths::Vector3 b1 = _aj->getPosition() - _ai->getPosition();
+	const ctkMaths::Vector3 b2 = _ak->getPosition() - _aj->getPosition();
+	const ctkMaths::Vector3 b3 = _al->getPosition() - _ak->getPosition();
 
 	const ctkMaths::Vector3 n1 = ctkMaths::cross(b1, b2);
 	const ctkMaths::Vector3 n2 = ctkMaths::cross(b2, b3); 

@@ -1,10 +1,10 @@
 #pragma once 
-#include "ForceField/BondCalc.h"
+#include "Data/Atom.h"
 #include "ForceField/UFFParams.h"
 
 class TorsionCalc {
 public:
-	TorsionCalc(const BondCalc* bi, const BondCalc* bj, const BondCalc* bk); 
+	TorsionCalc(const ctkData::Atom* ai, const ctkData::Atom* aj, const ctkData::Atom* ak, const ctkData::Atom* al); 
 	~TorsionCalc() = default;
 
 	TorsionCalc(const TorsionCalc&) = delete; 
@@ -18,10 +18,11 @@ public:
 	const double& getV() const { return _V; }
 
 private:
-	const BondCalc* _bi; 
-	const BondCalc* _bj; 
-	const BondCalc* _bk;
-	int _n; 
-	double _phi0;
-	double _V;
+	const ctkData::Atom* _ai; 
+	const ctkData::Atom* _aj; 
+	const ctkData::Atom* _ak; 
+	const ctkData::Atom* _al;
+	int _n{ 0 };
+	double _phi0{ 0.0 };
+	double _V{ 0.0 };
 };
