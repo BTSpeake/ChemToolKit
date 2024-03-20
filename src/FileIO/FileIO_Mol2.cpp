@@ -15,8 +15,7 @@ void FileIO_Mol2::read(ctkData::Molecule& mol) const {
 	std::regex dummyHeaderRe("^@<TRIPOS>");
 	std::regex atomHeaderRe("^@<TRIPOS>ATOM");
 	std::regex bondHeaderRe("^@<TRIPOS>BOND");
-	//std::regex atomRe(R"((-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+([A-Z,a-z]{1,2}))"); 
-	std::regex atomRe(R"((-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(\S))");
+	std::regex atomRe(R"((-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+([A-Z,a-z]{1,2}))"); 
 	std::regex bondRe(R"(\S+\s+(\d+)\s+(\d+)\s+(\S+))");
 
 	bool readAtoms = false;

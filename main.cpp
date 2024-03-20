@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <cassert>
+#include <string>
 
 #include "Data/Molecule.h"
 #include "ForceField/UFF.h"
@@ -10,6 +11,9 @@
 
 using ctkData::Molecule;
 
+double THR = 1e-8;
+
+void runTest(bool (*func)(void), const std::string& descr);
 bool test_Maths();
 bool test_H2();
 bool test_XYZ();
@@ -20,40 +24,23 @@ bool test_MOL2_write();
 
 int main() {
 
-	if (!test_Maths()) {
-		std::cout << "FAILED :: Maths test." << std::endl;
-	}
-	if (!test_H2()) {
-		std::cout << "FAILED :: H2 test." << std::endl;
-	}
-	if (!test_XYZ()) {
-		std::cout << "FAILED :: xyz parser test." << std::endl;
-	}
-	if (!test_PDB()) {
-		std::cout << "FAILED :: pdb parser test." << std::endl;
- 	}
-	if (!test_XYZ_write()) {
-		std::cout << "FAILED :: xyz write test. " << std::endl;
-	}
-	if (!test_MOL2()) {
-		std::cout << "FAILED :: mol2 parser test." << std::endl;
-	}
-	if (!test_MOL2_write()) {
-		std::cout << "FAILED :: mol2 write test." << std::endl;
-	}
+	runTest(&test_Maths, "Maths test.");
+	runTest(&test_H2, "H2 test.");
+	runTest(&test_XYZ, "xyz parser test.");
+	runTest(&test_PDB, "pdb parser test.");
+	runTest(&test_XYZ_write, "xyz write test.");
+	runTest(&test_MOL2, "mol2 parser test.");
+	runTest(&test_MOL2_write, "mol2 write test.");
 
+}
 
-
-	//Molecule eth; 
-	//fileControl.read("C:/Users/sil23665/Documents/Ethene.xyz", eth);
-	//eth.addBond(0, 1, 2);
-	//{
-	//	std::cout << eth.nAtoms() << ", " << eth.nBonds() << std::endl;
-	//	UFF ff = UFF(eth);
-	//	ff.setupTerms();
-	//	std::cout << ff.nBonds() << std::endl;
-	//	ff.calculateEnergy(false);
-	//}
+void runTest(bool (*func)(void), const std::string& descr) {
+	if (!func()) {
+		std::cout << "FAILED :: " << descr << std::endl;
+	}
+	else {
+		std::cout << "SUCCESS :: " << descr << std::endl;
+	}
 }
 
 bool test_H2() {
@@ -77,9 +64,14 @@ bool test_H2() {
 	UFF uff(mol);
 	uff.setupTerms();
 	uff.calculateEnergy(false);
-	std::cout << "Total Energy: " << uff.energy() << std::endl;
-	std::cout << "Bond Energy:  " << uff.getBondEnergy() << std::endl;
-	std::cout << "Angle Energy: " << uff.getAngleEnergy() << std::endl;
+	if (std::abs(uff.energy() - 0.030356853290024122) > THR) {
+		std::cout << "ERROR :: Incorrect total energy for H2" << std::endl;
+		chk = false;
+	}
+	if (std::abs(uff.getBondEnergy() - 0.030356853290024122) > THR) {
+		std::cout << "ERROR :: Incorrect bond energy for H2" << std::endl;
+		chk = false;
+	}
 
 	return chk;
 }
@@ -88,9 +80,6 @@ bool test_XYZ() {
 	bool chk = true;
 	// Use file parsing 
 	ctkIO::FileControl fileControl;
-
-	std::cout << '\n';
-	std::cout << "Reading XYZ File:" << std::endl;
 	Molecule mol;
 	if (fileControl.read("tests/Water_Trimer.xyz", mol)) {
 		//fio.read(mol2);
@@ -111,9 +100,22 @@ bool test_XYZ() {
 	UFF uff(mol);
 	uff.setupTerms();
 	uff.calculateEnergy(false);
-	std::cout << "Total Energy: " << uff.energy() << std::endl;
-	std::cout << "Bond Energy:  " << uff.getBondEnergy() << std::endl;
-	std::cout << "Angle Energy: " << uff.getAngleEnergy() << std::endl;
+	if (std::abs(uff.energy() - 30.04892287177733) > THR) {
+		std::cout << "ERROR :: Incorrect total energy for Water Trimer" << std::endl;
+		chk = false;
+	}
+	if (std::abs(uff.getBondEnergy() - 6.5221261546325815) > THR) {
+		std::cout << "ERROR :: Incorrect bond energy for Water Trimer" << std::endl;
+		chk = false;
+	}
+	if (std::abs(uff.getAngleEnergy() - 0.22312561395540859) > THR) {
+		std::cout << "ERROR :: Incorrect angle energy for Water Trimer" << std::endl;
+		chk = false;
+	}
+	if (std::abs(uff.getVDWEnergy() - 23.303671103189338) > THR) {
+		std::cout << "ERROR :: Incorrect VdW energy for Water Trimer" << std::endl;
+		chk = false;
+	}
 
 	return chk;
 }
@@ -122,7 +124,6 @@ bool test_PDB() {
 	bool chk = true;
 
 	ctkIO::FileControl fileControl;
-	std::cout << '\n';
 	Molecule mol;
 	if (!fileControl.read("tests/ala_phe_ala.pdb", mol)) {
 		std::cout << "ERROR :: Can't read ala_phe_ala.pdb file." << std::endl;
@@ -302,7 +303,6 @@ bool test_Maths() {
 
 	std::cout << im1 << std::endl;
 
-	std::cout << "Tests completed succesfully!" << std::endl;
 	std::cout << std::endl;
 
 	return chk;
