@@ -10,11 +10,54 @@
 
 using ctkData::Molecule;
 
-void testMaths();
+bool test_Maths();
+bool test_H2();
+bool test_XYZ();
+bool test_PDB();
+bool test_MOL2();
+bool test_XYZ_write();
+bool test_MOL2_write();
+
+int main() {
+
+	if (!test_Maths()) {
+		std::cout << "FAILED :: Maths test." << std::endl;
+	}
+	if (!test_H2()) {
+		std::cout << "FAILED :: H2 test." << std::endl;
+	}
+	if (!test_XYZ()) {
+		std::cout << "FAILED :: xyz parser test." << std::endl;
+	}
+	if (!test_PDB()) {
+		std::cout << "FAILED :: pdb parser test." << std::endl;
+ 	}
+	if (!test_XYZ_write()) {
+		std::cout << "FAILED :: xyz write test. " << std::endl;
+	}
+	if (!test_MOL2()) {
+		std::cout << "FAILED :: mol2 parser test." << std::endl;
+	}
+	if (!test_MOL2_write()) {
+		std::cout << "FAILED :: mol2 write test." << std::endl;
+	}
 
 
-int main()
-{
+
+	//Molecule eth; 
+	//fileControl.read("C:/Users/sil23665/Documents/Ethene.xyz", eth);
+	//eth.addBond(0, 1, 2);
+	//{
+	//	std::cout << eth.nAtoms() << ", " << eth.nBonds() << std::endl;
+	//	UFF ff = UFF(eth);
+	//	ff.setupTerms();
+	//	std::cout << ff.nBonds() << std::endl;
+	//	ff.calculateEnergy(false);
+	//}
+}
+
+bool test_H2() {
+	bool chk = true;
 	// manually create molecule
 	Molecule mol;
 	// Hydrogen Molecule 
@@ -22,54 +65,78 @@ int main()
 	mol.addAtom(1, 0.0, 0.0, 0.0);
 	mol.addBond(0, 1);
 
-	std::cout << "Creating H2 Molecule" << std::endl;
-	std::cout << "Number of Atoms: " << mol.nAtoms() << std::endl;
-	std::cout << "Number of Bonds: " << mol.nBonds() << std::endl;
-	{
-		UFF uff(mol);
-		uff.setupTerms();
-		uff.calculateEnergy(false);
-		std::cout << "Total Energy: " << uff.energy() << std::endl;
-		std::cout << "Bond Energy:  " << uff.getBondEnergy() << std::endl;
-		std::cout << "Angle Energy: " << uff.getAngleEnergy() << std::endl;
+	if (mol.nAtoms() != 2) {
+		std::cout << "ERROR :: Incorrect number of atoms." << std::endl;
+		chk = false;
 	}
+	if (mol.nBonds() != 1) {
+		std::cout << "ERROR :: Incorrect number of bonds." << std::endl;
+		chk = false;
+	}
+
+	UFF uff(mol);
+	uff.setupTerms();
+	uff.calculateEnergy(false);
+	std::cout << "Total Energy: " << uff.energy() << std::endl;
+	std::cout << "Bond Energy:  " << uff.getBondEnergy() << std::endl;
+	std::cout << "Angle Energy: " << uff.getAngleEnergy() << std::endl;
+
+	return chk;
+}
+
+bool test_XYZ() {
+	bool chk = true;
 	// Use file parsing 
 	ctkIO::FileControl fileControl;
 
 	std::cout << '\n';
 	std::cout << "Reading XYZ File:" << std::endl;
-	Molecule mol2;
-	if (fileControl.read("tests/Water_Trimer.xyz", mol2)) {
+	Molecule mol;
+	if (fileControl.read("tests/Water_Trimer.xyz", mol)) {
 		//fio.read(mol2);
-		std::cout << "Number of Atoms: " << mol2.nAtoms() << std::endl;
-		std::cout << "Number of Bonds: " << mol2.nBonds() << std::endl;
-		std::cout << mol2.getAtom(5)->getSymbol() << std::endl;
-	}
-	else {
-		std::cout << "ERROR::File doesn't exist" << std::endl;
-	}
-	mol2.calculateBonding();
-	std::cout << "Number of Bonds: " << mol2.nBonds() << std::endl;
-	{
-		UFF uff(mol2);
-		uff.setupTerms();
-		uff.calculateEnergy(false);
-		std::cout << "Total Energy: " << uff.energy() << std::endl;
-		std::cout << "Bond Energy:  " << uff.getBondEnergy() << std::endl;
-		std::cout << "Angle Energy: " << uff.getAngleEnergy() << std::endl;
-	}
-
-	std::cout << '\n';
-	std::cout << "Reading PDB File:" << std::endl; 
-	Molecule mol3; 
-	if (fileControl.read("tests/ala_phe_ala.pdb", mol3)) {
-		//fpdb.read(mol3);
-		std::cout << "Number of Atoms: " << mol3.nAtoms() << std::endl;
-		std::cout << "Number of Bonds: " << mol3.nBonds() << std::endl;
-		if (mol3.nAtoms() > 0) {
-			std::cout << mol3.getAtom(5)->getSymbol() << std::endl;
+		if (mol.nAtoms() != 9) {
+			std::cout << "ERROR :: Incorrect number of atoms determined." << std::endl;
+			chk = false;
+		}
+		if (mol.nBonds() != 6) {
+			std::cout << "ERROR :: Incorrect number of bonds determined." << std::endl;
+			chk = false;
 		}
 	}
+	else {
+		std::cout << "ERROR :: File doesn't exist" << std::endl;
+		chk = false;
+	}
+	
+	UFF uff(mol);
+	uff.setupTerms();
+	uff.calculateEnergy(false);
+	std::cout << "Total Energy: " << uff.energy() << std::endl;
+	std::cout << "Bond Energy:  " << uff.getBondEnergy() << std::endl;
+	std::cout << "Angle Energy: " << uff.getAngleEnergy() << std::endl;
+
+	return chk;
+}
+
+bool test_PDB() {
+	bool chk = true;
+
+	ctkIO::FileControl fileControl;
+	std::cout << '\n';
+	Molecule mol;
+	if (!fileControl.read("tests/ala_phe_ala.pdb", mol)) {
+		std::cout << "ERROR :: Can't read ala_phe_ala.pdb file." << std::endl;
+		chk = false;
+	}
+	if (mol.nAtoms() != 103) {
+		std::cout << "ERROR :: Incorrect number of atoms." << std::endl;
+		chk = false;
+	}
+	if (mol.nBonds() != 103) {
+		std::cout << "ERROR :: Incorrect number of bonds." << std::endl;
+		chk = false;
+	}
+
 	//{
 	//	UFF uff(mol3);
 	//	uff.setupTerms();
@@ -79,32 +146,73 @@ int main()
 	//	std::cout << "Angle Energy: " << uff.getAngleEnergy() << std::endl;
 	//}
 
-	std::cout << "\nWriting XYZ File:" << std::endl;
-	if (fileControl.write("ala_phe_ala", mol3, "xyz")) {
-		std::cout << "File written succesfully" << std::endl;
-	}
-	else {
-		std::cout << "Error when writting file" << std::endl;
-	}
-
-
-	std::cout << "\nReading a mol2 file " << std::endl; 
-	Molecule m2mol; 
-	if (fileControl.read("tests/CTN.mol2", m2mol)) {
-		std::cout << "File read successfully" << std::endl;
-		std::cout << "nAtoms: " << m2mol.nAtoms() << std::endl;
-		std::cout << "nBonds: " << m2mol.nBonds() << std::endl;
-	}
-	else {
-		std::cout << "Error reading m2 mol file" << std::endl;
-	}
-
-	testMaths();
+	return chk;
 }
 
+bool test_XYZ_write() {
 
+	bool chk = true;
 
-void testMaths() {
+	ctkIO::FileControl fileControl;
+	Molecule mol; 
+	mol.addAtom("H", 0.0, 0.0, 0.0);
+	mol.addAtom("H", 0.0, 0.0, 1.0);
+
+	if (!fileControl.write("tests/H2", mol, "xyz")) {
+		std::cout << "Error :: when writting file." << std::endl;
+		chk = false;
+	}
+
+	Molecule mol2; 
+	if (!fileControl.read("tests/H2.xyz", mol2)) {
+		std::cout << "ERROR :: Can't read H2.xyz file." << std::endl;
+		chk = false;
+	}
+	if (mol2.nAtoms() != 2) {
+		std::cout << "ERROR :: Incorrect number of atoms" << std::endl;
+		chk = false;
+	}
+
+	if (chk) {
+		std::remove("tests/H2.xyz");
+	}
+
+	return chk;
+}
+
+bool test_MOL2() {
+	bool chk = true;
+
+	ctkIO::FileControl fileControl;
+	Molecule mol;
+	if (!fileControl.read("tests/CTN.mol2", mol)) {
+		std::cout << "ERROR :: reading m2 mol file" << std::endl;
+		chk = false;
+	}
+	if (mol.nAtoms() != 53) {
+		std::cout << "ERROR :: Incorrect number of atoms." << std::endl;
+		chk = false;
+	}
+	if (mol.nBonds() != 54) {
+		std::cout << "ERROR :: Incorrect number of bonds." << std::endl;
+		chk = false;
+	}
+
+	return chk;
+}
+
+bool test_MOL2_write() {
+	bool chk = true;
+
+	//ctkIO::FileControl fc;
+	//Molecule mol;
+	//fc.read("tests/")
+
+	return chk;
+}
+
+bool test_Maths() {
+	bool chk = true;
 
 	using namespace ctkMaths;
 	double errThr = 1e-4; // -> Increase this (requries getting better precision for the check values)
@@ -174,5 +282,8 @@ void testMaths() {
 	std::cout << im1 << std::endl;
 
 	std::cout << "Tests completed succesfully!" << std::endl;
+	std::cout << std::endl;
+
+	return chk;
 }
 
