@@ -4,23 +4,32 @@
 
 using namespace ctkData;
 
-// Bond -> This should eventually move to a seperate file 
-Bond::Bond(int i, int j, int o) : _i(i), _j(j), _o(o) {};
-
 Molecule::Molecule() {
 
 }
 
 Molecule::~Molecule() {
 	clearAtoms();
-	clearBonds();
 }
 
 // get functions for atoms/bonds
 int Molecule::nAtoms() const { return _atoms.size(); };
-int Molecule::nBonds() const { return _bonds.size(); };
+
+int Molecule::nBonds() const { 
+	int n = 0; 
+	for (int i = 0; i < _atoms.size(); i++) {
+		for (Atom* atm : _atoms[i]->connections()) {
+			if (std::find(_atoms.begin(), _atoms.begin() + i, atm) != (_atoms.begin() + i)) {
+				n++;
+			}
+		}
+	}
+	return n;
+}
+
 Atom* Molecule::getAtom(int i) const { return _atoms[i]; };
-Bond* Molecule::getBond(int i) const { return _bonds[i]; };
+
+std::vector<Atom*>::const_iterator Molecule::getAtomIt(int i) const { return _atoms.begin() + i; }
 
 // get functions for molecule properties 
 int Molecule::getCharge() const { return _charge; };
@@ -39,7 +48,6 @@ void Molecule::addAtom(std::string s, double x, double y, double z) {
 }
 
 void Molecule::addBond(int i, int j, int bo) {
-	_bonds.push_back(new Bond(i, j, bo)); // -> This is currently broken right now if trying to change bonds to double/triple
 	if (i < _atoms.size() && j < _atoms.size()) {
 		switch (bo) {
 		case 1:
@@ -140,10 +148,6 @@ void Molecule::clearBonds() {
 	for (Atom* a : _atoms) {
 		a->resetBonding();
 	}
-	for (Bond* b : _bonds) {
-		delete b;
-	}
-	_bonds.clear();
 }
 
 std::string Molecule::toString() const {

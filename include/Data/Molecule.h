@@ -15,13 +15,6 @@
 
 namespace ctkData {
 
-	struct MOLECULE_API Bond {
-		Bond(int i, int j, int o);
-		unsigned int _i;
-		unsigned int _j;
-		int _o;
-	};
-
 	class MOLECULE_API Molecule {
 	public:
 		Molecule();
@@ -33,7 +26,7 @@ namespace ctkData {
 		int nAtoms() const;
 		int nBonds() const;
 		Atom* getAtom(int i) const;
-		Bond* getBond(int i) const;
+		std::vector<Atom*>::const_iterator getAtomIt(int i) const;
 		bool connected(const int i, const int j) const;
 		bool connected13(const int i, const int j) const;
 
@@ -71,7 +64,6 @@ namespace ctkData {
 		double _spinProj{ 0.0 };
 		ctkMaths::Vector3 CoM;
 		std::vector<Atom*> _atoms;
-		std::vector<Bond*> _bonds;
 	};
 
 }
