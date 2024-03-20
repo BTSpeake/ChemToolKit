@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include <format>
 
 
 
@@ -222,6 +223,17 @@ double UFF::E_VdW(const NonBond* vdw) {
 
 	return vdw->_dij * ((vdw->_xij12 / r12) - 2 * (vdw->_xij6 / r6));
 }
+
+std::string UFF::energyToString() const {
+	std::string oStr; 
+	oStr += std::format("Bond     : Terms = {0:3d}, Energy = {1:>10.6} Kcal/mol\n", nBonds(), getBondEnergy());
+	oStr += std::format("Angle    : Terms = {0:3d}, Energy = {1:>10.6} Kcal/mol\n", nAngles(), getAngleEnergy());
+	oStr += std::format("Dihedral : Terms = {0:3d}, Energy = {1:>10.6} Kcal/mol\n", nDihedrals(), getDihedralEnergy());
+	oStr += std::format("Inversion: Terms = {0:3d}, Energy = {1:>10.6} Kcal/mol\n", nInversions(), getInversionEnergy());
+	oStr += std::format("Non-Bond : Terms = {0:3d}, Energy = {1:>10.6} Kcal/mol\n", nNonBonded(), getVDWEnergy());
+	return oStr;
+}
+
 
 void UFF::clearBonds() {
 	for (auto b : _bonds) {

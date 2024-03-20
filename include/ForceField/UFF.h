@@ -49,6 +49,8 @@ public:
 	int nInversions() const;
 	int nNonBonded() const;
 
+	std::string energyToString() const;
+
 protected:
 	void setParameters();
 	
