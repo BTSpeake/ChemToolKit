@@ -1,6 +1,7 @@
 #include "FileIO/FileIO_Mol2.h"
 
 #include <regex>
+
 #include <iostream>
 
 using namespace ctkIO;
@@ -14,7 +15,8 @@ void FileIO_Mol2::read(ctkData::Molecule& mol) const {
 	std::regex dummyHeaderRe("^@<TRIPOS>");
 	std::regex atomHeaderRe("^@<TRIPOS>ATOM");
 	std::regex bondHeaderRe("^@<TRIPOS>BOND");
-	std::regex atomRe(R"((-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+([A-Z,a-z]{1,2}))");
+	//std::regex atomRe(R"((-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+([A-Z,a-z]{1,2}))"); 
+	std::regex atomRe(R"((-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(\S))");
 	std::regex bondRe(R"(\S+\s+(\d+)\s+(\d+)\s+(\S+))");
 
 	bool readAtoms = false;
@@ -26,7 +28,6 @@ void FileIO_Mol2::read(ctkData::Molecule& mol) const {
 	while (getline(file, line)) {
 		
 		if (readAtoms) {
-			
 			if (regex_search(line, match, atomRe)) {
 				mol.addAtom(match[4], std::stod(match[1]), std::stod(match[2]), std::stod(match[3]));
 			}
@@ -127,15 +128,31 @@ void FileIO_Mol2::write(const ctkData::Molecule& mol) const {
 
 	// Write the BOND section 
 	file << "@<TRIPOS>BOND\n";
-	for (int i = 0; i < mol.nBonds(); i++) {
-		file << '\t' << i << '\t';
-		file << mol.getBond(i)->_i << '\t';
-		file << mol.getBond(i)->_j << '\t';
-		if (mol.getAtom(mol.getBond(i)->_i)->isAromatic() && mol.getAtom(mol.getBond(i)->_j)->isAromatic()) {
-			file << "ar\n";
-		}
-		else {
-			file << mol.getBond(i)->_o << '\n';
+	int bi = 0; // simple bond index counter
+	auto atmEndIt = mol.getAtomIt(mol.nAtoms());
+	auto atmBegIt = mol.getAtomIt(0);
+	for (int i = 0; i < (mol.nAtoms() - 1); i++) {
+		ctkData::Atom* atmi = mol.getAtom(i);
+		for (ctkData::Atom* atmj : atmi->connections()) {
+			auto atmIt = std::find((mol.getAtomIt(i) + 1), atmEndIt, atmj);
+			if (atmIt == atmEndIt) {
+				continue;
+			}
+			int j = std::distance(atmBegIt, atmIt);
+
+			file << '\t' << bi << '\t';
+			file << i << '\t' << j << '\t'; 
+			if (atmi->isAromatic() && mol.getAtom(j)->isAromatic()) {
+				file << "ar\n";
+			}
+			else if (atmi->isDouble(mol.getAtom(j))) {
+				file << "2\n";
+			}
+			else {
+				file << "1\n";
+			}
+			bi++;
 		}
 	}
+
 }

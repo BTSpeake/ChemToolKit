@@ -49,7 +49,6 @@ bool FileControl::_read(std::filesystem::path fpath, std::string ftype, ctkData:
 	}
 	
 	if (setFileType(ftype)) {
-		std::cout << "found file and checked extension" << std::endl;
 		_fileIO->setFileName(fpath);
 		_fileIO->read(mol);
 		return true;
@@ -58,18 +57,18 @@ bool FileControl::_read(std::filesystem::path fpath, std::string ftype, ctkData:
 }
 
 bool FileControl::_write(std::filesystem::path fpath, std::string ftype, const ctkData::Molecule& mol) {
-	std::cout << "Entering write function" << std::endl;
-	std::cout << "ftype = " << ftype << std::endl;
  	if (setFileType(ftype)) {
 		std::filesystem::path ext = getFileExtension(ftype);
 		if (ext != fpath.extension()) {
 			fpath.replace_extension(ext);
 		}
-		std::cout << fpath << std::endl;
 		if (!fileExists(fpath)) { // change this to a user check or just overwrite (this could be dangerous)
 			_fileIO->setFileName(fpath);
 			_fileIO->write(mol);
 			return true;
+		}
+		else {
+			std::cout << "FILE EXISTS!" << std::endl;
 		}
 	}
 	return false;

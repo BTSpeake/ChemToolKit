@@ -95,11 +95,11 @@ bool test_XYZ() {
 	if (fileControl.read("tests/Water_Trimer.xyz", mol)) {
 		//fio.read(mol2);
 		if (mol.nAtoms() != 9) {
-			std::cout << "ERROR :: Incorrect number of atoms determined." << std::endl;
+			std::cout << "ERROR :: Incorrect number of atoms determined. :: " << mol.nAtoms() << std::endl;
 			chk = false;
 		}
 		if (mol.nBonds() != 6) {
-			std::cout << "ERROR :: Incorrect number of bonds determined." << std::endl;
+			std::cout << "ERROR :: Incorrect number of bonds determined. :: " << mol.nBonds() << std::endl;
 			chk = false;
 		}
 	}
@@ -204,9 +204,30 @@ bool test_MOL2() {
 bool test_MOL2_write() {
 	bool chk = true;
 
-	//ctkIO::FileControl fc;
-	//Molecule mol;
-	//fc.read("tests/")
+	ctkIO::FileControl fc;
+	Molecule mol;
+	fc.read("tests/Water_Trimer.xyz", mol);
+	if (!fc.write("tests/Water_Trimer.mol2", mol, "ml2")) {
+		std::cout << "ERROR :: writing mol2 file." << std::endl;
+		chk = false;
+	}
+	Molecule mol2;
+	if (!fc.read("tests/Water_Trimer.mol2", mol2, "ml2")) {
+		std::cout << "ERROR :: reading writen mol2 file." << std::endl;
+		chk = false;
+	}
+	if (mol2.nAtoms() != 9) {
+		std::cout << "ERROR :: Incorrect number of atoms. :: " << mol2.nAtoms() << std::endl;
+		chk = false;
+	}
+	if (mol2.nBonds() != 6) {
+		std::cout << "ERROR :: Incorrect number of bonds. :: " << mol2.nBonds() << std::endl;
+		chk = false;
+	}
+
+	if (chk) {
+		std::remove("tests/Water_Trimer.mol2");
+	}
 
 	return chk;
 }
