@@ -1,21 +1,36 @@
-#include "Data/Molecule.h"
+#include "Data/Model.h"
 
 #include "Maths/Vector3.h"
 
 using namespace ctkData;
 
-Molecule::Molecule() {
+Model::Model() {
 
 }
 
-Molecule::~Molecule() {
+Model::~Model() {
 	clearAtoms();
 }
 
-// get functions for atoms/bonds
-int Molecule::nAtoms() const { return _atoms.size(); };
+Model::Model(const Model& model) {
+	// Make all the atoms 
+	for (int i = 0; i < model.nAtoms(); i++) {
+		Atom* a = model.getAtom(i);
+		addAtom(a->getAtomicNumber(), a->getPosition()[0], a->getPosition()[1], a->getPosition()[2]);
+	}
+	// Connect all the atoms 
+	//for (int i = 0; i < model.nAtoms(); i++) {
+	//	Atom* ai = model.getAtom(i);
+	//	for (Atom* aj : ai->connections()) {
 
-int Molecule::nBonds() const { 
+	//	}
+	//}
+}
+
+// get functions for atoms/bonds
+int Model::nAtoms() const { return _atoms.size(); };
+
+int Model::nBonds() const { 
 	int n = 0; 
 	for (int i = 0; i < _atoms.size(); i++) {
 		for (Atom* atm : _atoms[i]->connections()) {
@@ -27,27 +42,27 @@ int Molecule::nBonds() const {
 	return n;
 }
 
-Atom* Molecule::getAtom(int i) const { return _atoms[i]; };
+Atom* Model::getAtom(int i) const { return _atoms[i]; };
 
-std::vector<Atom*>::const_iterator Molecule::getAtomIt(int i) const { return _atoms.begin() + i; }
+std::vector<Atom*>::const_iterator Model::getAtomIt(int i) const { return _atoms.begin() + i; }
 
-// get functions for molecule properties 
-int Molecule::getCharge() const { return _charge; };
-double Molecule::getSpinProjection() const { return _spinProj; };
-int Molecule::getMultiplicity() const { return static_cast<int>(round(2 * _spinProj)) + 1; };
-const ctkMaths::Vector3& Molecule::getCoM() const { return CoM; };
+// get functions for Model properties 
+int Model::getCharge() const { return _charge; };
+double Model::getSpinProjection() const { return _spinProj; };
+int Model::getMultiplicity() const { return static_cast<int>(round(2 * _spinProj)) + 1; };
+const ctkMaths::Vector3& Model::getCoM() const { return CoM; };
 
-void Molecule::addAtom(int a, double x, double y, double z) {
+void Model::addAtom(int a, double x, double y, double z) {
 	Atom* nAtm = new Atom(a, x, y, z);
 	_atoms.push_back(nAtm);
 }
 
-void Molecule::addAtom(std::string s, double x, double y, double z) {
+void Model::addAtom(std::string s, double x, double y, double z) {
 	Atom* nAtm = new Atom(s, x, y, z);
 	_atoms.push_back(nAtm);
 }
 
-void Molecule::addBond(int i, int j, int bo) {
+void Model::addBond(int i, int j, int bo) {
 	if (i < _atoms.size() && j < _atoms.size()) {
 		switch (bo) {
 		case 1:
@@ -67,7 +82,7 @@ void Molecule::addBond(int i, int j, int bo) {
 	return;
 };
 
-bool Molecule::connected(const int i, const int j) const {
+bool Model::connected(const int i, const int j) const {
 	if (j < 0 || j >= _atoms.size()) {
 		return false;
 	}
@@ -79,7 +94,7 @@ bool Molecule::connected(const int i, const int j) const {
 	}
 }
 
-bool Molecule::connected13(const int i, const int j) const {
+bool Model::connected13(const int i, const int j) const {
 	for (Atom* k : _atoms[i]->connections()) {
 		if (_atoms[j]->isConnected(k)) {
 			return true;
@@ -89,11 +104,12 @@ bool Molecule::connected13(const int i, const int j) const {
 }
 
 // set functions properties 
-void Molecule::setCharge(int charge) { _charge = charge; };
-void Molecule::setSpinProjection(double sp) { _spinProj = sp; };
-void Molecule::setMultiplicity(double m) { _spinProj = (m - 1) / 2; };
+void Model::setCharge(int charge) { _charge = charge; };
+void Model::setSpinProjection(double sp) { _spinProj = sp; };
+void Model::setMultiplicity(double m) { _spinProj = (m - 1) / 2; };
 
-void Molecule::calculateBonding() {
+/*! \todo Update to allow a scale factor to control how the bonds are assigned */
+void Model::calculateBonding(const double scale) {
 	clearBonds();
 	for (int i = 0; i < nAtoms(); i++) {
 		for (int j = (i + 1); j < nAtoms(); j++) {
@@ -107,7 +123,7 @@ void Molecule::calculateBonding() {
 	}
 }
 
-void Molecule::calculateCoM() {
+void Model::calculateCoM() {
 	CoM.setX(0.0);
 	CoM.setY(0.0); 
 	CoM.setZ(0.0);
@@ -118,14 +134,14 @@ void Molecule::calculateCoM() {
 	CoM /= nAtoms();
 }
 
-void Molecule::centreOnOrigin() {
+void Model::centreOnOrigin() {
 	calculateCoM();
 	for (Atom* atom : _atoms) {
 		atom->getPosition() -= CoM;
 	}
 }
 
-double Molecule::calculateNNR() const {
+double Model::calculateNNR() const {
 	double nnr{ 0.0 };
 	for (int i = 0; i < _atoms.size(); i++) {
 		for (int j = (i + 1); j < _atoms.size(); j++) {
@@ -137,22 +153,22 @@ double Molecule::calculateNNR() const {
 	return nnr;
 }
 
-void Molecule::clearAtoms() {
+void Model::clearAtoms() {
 	for (Atom* a : _atoms) {
 		delete a;
 	}
 	_atoms.clear();
 }
 
-void Molecule::clearBonds() {
+void Model::clearBonds() {
 	for (Atom* a : _atoms) {
 		a->resetBonding();
 	}
 }
 
-std::string Molecule::toString() const {
+std::string Model::toString() const {
 	std::string s;
-	s += "Molecule Object\n---------------\n"; 
+	s += "Model Object\n---------------\n"; 
 	s += "No. Atoms: " + std::to_string(nAtoms()) + '\n';
 	s += "No. Bonds: " + std::to_string(nBonds()) + '\n';
 	s += "Charge:    " + std::to_string(getCharge()) + '\n';
@@ -161,7 +177,7 @@ std::string Molecule::toString() const {
 	return s;
 }
 
-std::string Molecule::atomsList() const {
+std::string Model::atomsList() const {
 	std::string s = "\nAtoms: ";
 	for (Atom* a : _atoms) {
 		s += '\n' + a->toString();

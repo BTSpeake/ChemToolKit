@@ -5,8 +5,8 @@ namespace ctkIO {
 
 	class FileIO_PDB : public FileIO {
 	public:
-		void read(ctkData::Molecule& mol) const;
-		void write(const ctkData::Molecule& mol) const;
+		void read(ctkData::Model& mol) const;
+		void write(const ctkData::Model& mol) const;
 	};
 
 }

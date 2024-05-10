@@ -2,14 +2,14 @@
 #include <cassert>
 #include <string>
 
-#include "Data/Molecule.h"
+#include "Data/Model.h"
 #include "ForceField/UFF.h"
 #include "FileIO/FileControl.h"
 
 #include "Maths/Vector3.h"
 #include "Maths/Matrix33.h"
 
-using ctkData::Molecule;
+using ctkData::Model;
 
 double THR = 1e-8;
 
@@ -46,7 +46,7 @@ void runTest(bool (*func)(void), const std::string& descr) {
 bool test_H2() {
 	bool chk = true;
 	// manually create molecule
-	Molecule mol;
+	Model mol;
 	// Hydrogen Molecule 
 	mol.addAtom(1, 0.0, 0.0, 0.7);
 	mol.addAtom(1, 0.0, 0.0, 0.0);
@@ -80,7 +80,7 @@ bool test_XYZ() {
 	bool chk = true;
 	// Use file parsing 
 	ctkIO::FileControl fileControl;
-	Molecule mol;
+	Model mol;
 	if (fileControl.read("tests/Water_Trimer.xyz", mol)) {
 		//fio.read(mol2);
 		if (mol.nAtoms() != 9) {
@@ -124,7 +124,7 @@ bool test_PDB() {
 	bool chk = true;
 
 	ctkIO::FileControl fileControl;
-	Molecule mol;
+	Model mol;
 	if (!fileControl.read("tests/ala_phe_ala.pdb", mol)) {
 		std::cout << "ERROR :: Can't read ala_phe_ala.pdb file." << std::endl;
 		chk = false;
@@ -155,7 +155,7 @@ bool test_XYZ_write() {
 	bool chk = true;
 
 	ctkIO::FileControl fileControl;
-	Molecule mol; 
+	Model mol;
 	mol.addAtom("H", 0.0, 0.0, 0.0);
 	mol.addAtom("H", 0.0, 0.0, 1.0);
 
@@ -164,7 +164,7 @@ bool test_XYZ_write() {
 		chk = false;
 	}
 
-	Molecule mol2; 
+	Model mol2;
 	if (!fileControl.read("tests/H2.xyz", mol2)) {
 		std::cout << "ERROR :: Can't read H2.xyz file." << std::endl;
 		chk = false;
@@ -185,7 +185,7 @@ bool test_MOL2() {
 	bool chk = true;
 
 	ctkIO::FileControl fileControl;
-	Molecule mol;
+	Model mol;
 	if (!fileControl.read("tests/CTN.mol2", mol)) {
 		std::cout << "ERROR :: reading m2 mol file" << std::endl;
 		chk = false;
@@ -206,13 +206,13 @@ bool test_MOL2_write() {
 	bool chk = true;
 
 	ctkIO::FileControl fc;
-	Molecule mol;
+	Model mol;
 	fc.read("tests/Water_Trimer.xyz", mol);
 	if (!fc.write("tests/Water_Trimer.mol2", mol, "ml2")) {
 		std::cout << "ERROR :: writing mol2 file." << std::endl;
 		chk = false;
 	}
-	Molecule mol2;
+	Model mol2;
 	if (!fc.read("tests/Water_Trimer.mol2", mol2, "ml2")) {
 		std::cout << "ERROR :: reading writen mol2 file." << std::endl;
 		chk = false;

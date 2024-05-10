@@ -10,7 +10,7 @@
 
 using namespace ctkIO;
 
-void FileIO_PDB::read(ctkData::Molecule& mol) const {
+void FileIO_PDB::read(ctkData::Model& mol) const {
     std::ifstream file(_fname);
     if (!file.is_open()) {
         return;
@@ -50,6 +50,6 @@ void FileIO_PDB::read(ctkData::Molecule& mol) const {
     }
 }
 
-void FileIO_PDB::write(const ctkData::Molecule& mol) const {
+void FileIO_PDB::write(const ctkData::Model& mol) const {
     throw std::runtime_error("Writing to PDB files is currently unsupported!");
 }

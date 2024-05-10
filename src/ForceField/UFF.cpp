@@ -7,7 +7,7 @@
 
 
 
-UFF::UFF(ctkData::Molecule& mol) : ForceField(mol) {
+UFF::UFF(ctkData::Model& mol) : ForceField(mol) {
 	setParameters();
 }
 

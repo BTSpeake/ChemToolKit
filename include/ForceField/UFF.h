@@ -14,7 +14,7 @@
 #include <string>
 
 #include "ForceField.h"
-#include "Data/Molecule.h"
+#include "Data/Model.h"
 #include "Data/Atom.h"
 #include "ForceField/BondCalc.h"
 #include "ForceField/AngleCalc.h"
@@ -26,7 +26,7 @@
 
 class UFF_API UFF : protected ForceField {
 public:
-	UFF(ctkData::Molecule& mol);
+	UFF(ctkData::Model& mol);
 	~UFF();
 
 	void setupTerms();

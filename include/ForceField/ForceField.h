@@ -10,12 +10,12 @@
 #define FF_API
 #endif //_WIN32 
 
-#include "Data/Molecule.h"
+#include "Data/Model.h"
 
 
 class FF_API ForceField {
 public:
-	ForceField(ctkData::Molecule& mol) : _mol(mol) {};
+	ForceField(ctkData::Model& mol) : _mol(mol) {};
 	~ForceField() {};
 	
 	ForceField(const ForceField*) = delete;
@@ -30,7 +30,7 @@ public:
 
 protected:
 	double _energy{ 0.0 };
-	ctkData::Molecule& _mol;
+	ctkData::Model& _mol;
 
 	virtual void calculateEnergy(bool gradients) = 0;
 	virtual void setParameters() = 0;

@@ -5,7 +5,7 @@
 
 using namespace ctkIO;
 
-void FileIO_XYZ::read(ctkData::Molecule& mol) const {
+void FileIO_XYZ::read(ctkData::Model& mol) const {
     std::ifstream file(_fname);
     if (!file.is_open()) {
         throw std::runtime_error("Error opening file");
@@ -54,7 +54,7 @@ void FileIO_XYZ::read(ctkData::Molecule& mol) const {
 }
 
 
-void FileIO_XYZ::write(const ctkData::Molecule& mol) const {
+void FileIO_XYZ::write(const ctkData::Model& mol) const {
     std::ofstream file(_fname);
     if (!file.is_open()) {
         throw std::runtime_error("Error opening file");

@@ -25,7 +25,7 @@ set(MATHS_SOURCES "src/Maths/Vector3.cpp" "src/Maths/Matrix33.cpp")
 add_library(ctkMaths ${MATHS_SOURCES})
 
 # Make the molecular structure library 
-set(MOL_SOURCES "src/Data/Molecule.cpp" "src/Data/Atom.cpp")
+set(MOL_SOURCES "src/Data/Model.cpp" "src/Data/Atom.cpp")
 add_library(ctkDataObjs ${MOL_SOURCES})
 target_link_libraries(ctkDataObjs ctkMaths)
 
