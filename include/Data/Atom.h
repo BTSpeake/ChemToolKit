@@ -1,19 +1,9 @@
 #pragma once
 
-#ifdef _WIN32
-#ifdef ctkDataObjs_EXPORTS
-#define ATOM_API __declspec(dllexport)
-#else
-#define ATOM_API __declspec(dllimport)
-#endif // ctkDataObjs_EXPORTS 
-#else
-#define ATOM_API
-#endif //_WIN32 
-
-
 #include <map>
 #include <string>
 #include <vector>
+#include "Data/api.h"
 #include "Maths/Vector3.h"
 
 namespace ctkData {
@@ -21,7 +11,7 @@ namespace ctkData {
 	/*! \brief The basic atom class 
 	* This contains all the information needed to describe a single atom instance. 
 	*/
-	class ATOM_API Atom {
+	class DATA_API Atom {
 	public:
 		//! Constructor -> sets atomic number and position in Cartesian space
 		Atom(int a, double x, double y, double z);
@@ -74,6 +64,10 @@ namespace ctkData {
 		int standardValence() const;
 		//! Get atomic mass 
 		const double getMass() const;
+#ifdef WITH_GRAPHICS
+		//! Gets the default rgb colour value for this atom 
+		const short* getColour() const;
+#endif
 
 		// set functions 
 		//! Sets the atomic number
