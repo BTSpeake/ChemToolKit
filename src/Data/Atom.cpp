@@ -162,6 +162,12 @@ const double Atom::getMass() const {
     return 0;
 }
 
+#ifdef WITH_GRAPHICS
+const short* Atom::getColour() const {
+    return NULL;
+}
+#endif
+
 // Set Functions 
 void Atom::setAtomicNumber(int a) { _a = a; }
 void Atom::updatePosition(const double x, const double y, const double z) {
