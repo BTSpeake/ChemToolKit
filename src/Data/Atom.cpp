@@ -43,7 +43,7 @@ Atom& Atom::operator=(const Atom& atm) {
 }
 
 // Access Functions 
-int Atom::getAtomicNumber() const { return _a; };
+const short Atom::getAtomicNumber() const { return _a; };
 ctkMaths::Vector3& Atom::getPosition() { return _pos; };
 const ctkMaths::Vector3& Atom::getPosition() const { return _pos; };
 const char* Atom::getSymbol() const { return Atom::atmDict[_a]; };
@@ -156,6 +156,10 @@ int Atom::standardValence() const {
     default:
         return 0;
     }
+}
+
+const double Atom::getMass() const {
+    return 0;
 }
 
 // Set Functions 
