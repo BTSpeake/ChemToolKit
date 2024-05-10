@@ -1,4 +1,3 @@
-set(Python3_ROOT_DIR ${Python_ROOT_DIR})
 include(FetchContent)
 FetchContent_Declare(
 	googletest

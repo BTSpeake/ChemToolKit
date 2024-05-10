@@ -35,18 +35,24 @@ add_library(ctkForceField SHARED "src/ForceField/BondCalc.cpp" "src/ForceField/U
 target_link_libraries(ctkForceField ctkMaths)
 target_link_libraries(ctkForceField ctkDataObjs)
 
-# Add source to this project's executable.
-add_executable (ChemToolKit "main.cpp" )
-target_link_libraries(ChemToolKit ctkMaths)
-target_link_libraries(ChemToolKit ctkDataObjs)
-target_link_libraries(ChemToolKit ctkFileIO)
-target_link_libraries(ChemToolKit ctkForceField)
+if (WITH_GRAPHICS)
+    # Graphics library 
+    add_library(ctkGraphics "src/GUI/ModelController.cpp")
+    targer_link_libraries(ctkGraphics ctkDataObjs)
+endif()
 
+
+# Dummy executable (for now)
+add_executable (ChemToolKit "main.cpp" )
+
+
+# Global resource data files 
 file(GLOB PARAM_FILES "Resources/*.prm")
 file(COPY ${PARAM_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resources/) 
 
-# TODO: Add tests and install targets if needed.
-set(WITH_TESTING ON)
+
+
+# CTests for C++ testing 
 if (WITH_TESTING)
     file(GLOB TEST_FILES "tests/Resources/*")
 file(COPY ${TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test_files/)
@@ -55,12 +61,10 @@ endif()
 
 
 ## Python bindings
-set(CTK_BIND_PYTHON OFF) # -> Auto set to on for now 
 if (CTK_BIND_PYTHON)
     # Find python interpreter -> hint Python_ROOT_DIR
     find_package(Python COMPONENTS Interpreter Development REQUIRED)
-    set_target_properties(Python::Module PROPERTIES
-            MAP_IMPORTED_CONFIG_DEBUG ";RELEASE")
+    set_target_properties(Python::Module PROPERTIES MAP_IMPORTED_CONFIG_DEBUG ";RELEASE")
     include_directories(${Python_INCLUDE_DIRS})
     # Find pybind11 -> hint pybind11_DIR
     find_package(pybind11 REQUIRED)
@@ -77,4 +81,6 @@ if (CTK_BIND_PYTHON)
 
     pybind11_add_module(ctkPyForceField "Bindings/Python/ForceField.cpp")
     target_link_libraries(ctkPyForceField PRIVATE ctkForceField ctkDataObjs)
+
+    # TODO: Add tests for python bindings 
 endif()
