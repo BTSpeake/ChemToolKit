@@ -10,6 +10,8 @@ namespace ctkData {
 	public:
 		//! Constructor 
 		Model();
+		//! Constructor which sets a title string 
+		Model(std::string title);
 		//! Destructor 
 		~Model();
 		//! Copy Constructor 
@@ -77,12 +79,17 @@ namespace ctkData {
 		std::string toString() const;
 		//! Returns a string representation of the atoms contained within the model instance 
 		std::string atomsList() const;
+		//! Returns the models title 
+		std::string getTitle() const;
+		//! Sets the model's title 
+		void setTitle(std::string title);
 
 	private:
 		int _charge{ 0 };
 		double _spinProj{ 0.0 };
 		ctkMaths::Vector3 CoM;
 		std::vector<Atom*> _atoms;
+		std::string _title;
 	};
 
 }

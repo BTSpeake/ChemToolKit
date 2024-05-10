@@ -4,9 +4,11 @@
 
 using namespace ctkData;
 
-Model::Model() {
+Model::Model() : _title("New Model") {
 
 }
+
+Model::Model(std::string title) : _title(title) {}
 
 Model::~Model() {
 	clearAtoms();
@@ -183,4 +185,12 @@ std::string Model::atomsList() const {
 		s += '\n' + a->toString();
 	}
 	return s;
+}
+
+std::string Model::getTitle() const {
+	return _title;
+}
+
+void Model::setTitle(std::string title) {
+	_title = title;
 }
