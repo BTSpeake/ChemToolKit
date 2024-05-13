@@ -65,9 +65,20 @@ void RenderWindow::drawAtoms() {
 	//_atomSphere.glyph->SetScaleFactor(1.0);
 }
 
+void RenderWindow::finalise() {
+	_rw->Finalize();
+}
+
 void RenderWindow::render() {
-	_rw->Render();
-	_rw->SetWindowName("Test");
-	_iren->Initialize();
-	_iren->Start();
+	//_rw->Render();
+	//_iren->Initialize();
+	//_iren->Start();
+	_iren->Render();
+}
+
+void RenderWindow::resize(const int w, const int h, const int dpi) {
+	_rw->SetDPI(dpi);
+	_rw->SetSize(w, h);
+	_iren->SetSize(w, h);
+	_iren->ConfigureEvent();
 }

@@ -10,5 +10,9 @@ PYBIND11_MODULE(ctkGraphics, m) {
 	pybind11::class_<RenderWindow>(m, "RenderWindow")
 		.def(pybind11::init<>())
 		.def("setModel", pybind11::overload_cast<const ctkData::Model&>(&RenderWindow::setModel))
+		.def("updateRendering", &RenderWindow::updateRendering)
+		.def("render", &RenderWindow::render)
+		.def("resize", &RenderWindow::resize)
+		.def("finalise", &RenderWindow::finalise)
 		;
 }
