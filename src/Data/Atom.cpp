@@ -53,7 +53,7 @@ unsigned int Atom::nTripleBonds() const { return _triples.size(); };
 unsigned int Atom::nBonds() const { return _connections.size(); };
 bool Atom::isAromatic() const { return _isAromatic; };
 bool Atom::isAmide() const { return _isAmide; }
-double Atom::getCovalentRadii() const { return covRadiiDict[_a]; }
+float Atom::getCovalentRadii() const { return covRadiiDict[_a]; }
 
 bool Atom::isConnected(const Atom* a) const {
     return (std::find(_connections.begin(), _connections.end(), a) != _connections.end());
@@ -315,7 +315,7 @@ std::map<std::string, int> Atom::symbolDict = {
 
 // Taken from the QUEST collection of computational chemistry codes
 // Values are in Angstroms
-std::map<int, double> Atom::covRadiiDict = {
+std::map<int, float> Atom::covRadiiDict = {
         {  1, 0.32}, {  2, 0.46}, {  3, 1.33}, {  4, 1.04}, {  5, 0.85}, {  6, 0.75},
         {  7, 0.71}, {  8, 0.63}, {  9, 0.64}, { 10, 0.67}, { 11, 1.55}, { 12, 1.39},
         { 13, 1.26}, { 14, 1.16}, { 15, 1.11}, { 16, 1.03}, { 17, 0.80}, { 18, 0.96},

@@ -49,7 +49,7 @@ namespace ctkData {
 		//! Returns whether the atom has been specified as an amide or not 
 		bool isAmide() const;
 		//! Returns the covalent Radii for this atom 
-		double getCovalentRadii() const;
+		float getCovalentRadii() const;
 		//! Checks whehter a given atom is bonded to this atom 
 		bool isConnected(const Atom* a) const;
 		//! Checks whether a given atom is bonded via a double bond to this atom 
@@ -113,7 +113,7 @@ namespace ctkData {
 		// make these const??? seems to break access functions
 		static std::map<int, const char*> atmDict;
 		static std::map<std::string, int> symbolDict; // could we get better performance with a const char* / has approach???
-		static std::map<int, double> covRadiiDict;
+		static std::map<int, float> covRadiiDict;
 	};
 
 }
