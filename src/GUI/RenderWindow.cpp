@@ -1,5 +1,5 @@
 #include "GUI/RenderWindow.h" 
-#include "vtkInteractorStyleTrackballCamera.h"
+#include "GUI/Interactor.h"
 
 using namespace ctkGraphics;
 
@@ -10,7 +10,7 @@ RenderWindow::RenderWindow() {
 	_ren->AddActor(_atomSphere.actor);
 	_iren->SetRenderWindow(_rw);
 
-	vtkNew<vtkInteractorStyleTrackballCamera> style;
+	vtkNew<Interactor> style;
 	_iren->SetInteractorStyle(style);
 
 	_iren->Initialize();
