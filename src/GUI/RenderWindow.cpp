@@ -1,6 +1,5 @@
 #include "GUI/RenderWindow.h" 
-#include "vtkFloatArray.h"
-#include "vtkPointData.h"
+#include "vtkInteractorStyleTrackballCamera.h"
 
 using namespace ctkGraphics;
 
@@ -10,6 +9,10 @@ RenderWindow::RenderWindow() {
 	_rw->SetSize(640, 480);
 	_ren->AddActor(_atomSphere.actor);
 	_iren->SetRenderWindow(_rw);
+
+	vtkNew<vtkInteractorStyleTrackballCamera> style;
+	_iren->SetInteractorStyle(style);
+
 	_iren->Initialize();
 }
 
@@ -36,36 +39,26 @@ void RenderWindow::updateRendering() {
 
 void RenderWindow::drawAtoms() {
 
-	vtkNew<vtkPoints> points;
-	points->SetNumberOfPoints(_model->nAtoms());
+	_atomSphere.data.points->SetNumberOfPoints(_model->nAtoms());
 	for (int i = 0; i < _model->nAtoms(); i++) {
-		points->SetPoint(
+		_atomSphere.data.points->SetPoint(
 			i,
 			_model->getAtom(i)->getPosition()[0],
 			_model->getAtom(i)->getPosition()[1],
 			_model->getAtom(i)->getPosition()[2]
 		);
 	}
-	_atomSphere.data->SetPoints(points);
 
-	vtkNew<vtkUnsignedCharArray> colours; 
-	colours->SetNumberOfComponents(3);
-	colours->SetNumberOfTuples(_model->nAtoms());
-	colours->SetName("Colours");
+	_atomSphere.data.colours->SetNumberOfTuples(_model->nAtoms());
 	for (int i = 0; i < _model->nAtoms(); i++) {
-		double c[3] = { 255, 0, 0 };
-		colours->SetTuple(i, c);
+		_atomSphere.data.colours->SetTuple(i, _model->getAtom(i)->getColour());
 	}
-	_atomSphere.data->GetPointData()->SetScalars(colours);
 
-	vtkNew<vtkFloatArray> radii;
-	radii->SetNumberOfComponents(3);
-	radii->SetNumberOfTuples(_model->nAtoms());
+	_atomSphere.data.radii->SetNumberOfTuples(_model->nAtoms());
 	for (int i = 0; i < _model->nAtoms(); i++) {
 		float r[3] = {_model->getAtom(i)->getCovalentRadii(), _model->getAtom(i)->getCovalentRadii(), _model->getAtom(i)->getCovalentRadii() };
-		radii->SetTuple(i, r);
+		_atomSphere.data.radii->SetTuple(i, r);
 	}
-	_atomSphere.data->GetPointData()->SetVectors(radii);
 
 
 	_atomSphere.glyph->Update();

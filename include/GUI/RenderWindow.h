@@ -9,15 +9,34 @@
 #include <vtkGlyph3D.h>
 #include <vtkSphereSource.h>
 #include <vtkRenderWindowInteractor.h>
+#include "vtkFloatArray.h"
+#include "vtkPointData.h"
 
 #include "Data/Model.h"
 
 namespace ctkGraphics {
 
 	namespace utils {
+
+		struct RenderData {
+			vtkNew<vtkPolyData> data;
+			vtkNew<vtkPoints> points;
+			vtkNew<vtkFloatArray> radii;
+			vtkNew<vtkUnsignedCharArray> colours;
+
+			RenderData() {
+				data->SetPoints(points);
+				colours->SetNumberOfComponents(3);
+				colours->SetName("Colours");
+				data->GetPointData()->SetScalars(colours);
+				radii->SetNumberOfComponents(3);
+				data->GetPointData()->SetVectors(radii);
+			}
+		};
+
 		struct AtomSphere {
 			vtkNew<vtkActor> actor;
-			vtkNew<vtkPolyData> data;
+			RenderData data;
 			vtkNew<vtkPolyDataMapper> mapper;
 			vtkNew<vtkGlyph3D> glyph;
 			vtkNew<vtkSphereSource> src;
@@ -31,7 +50,7 @@ namespace ctkGraphics {
 				glyph->SetScaleModeToScaleByVector();
 				glyph->SetColorModeToColorByScalar();
 				glyph->GeneratePointIdsOn();
-				glyph->SetInputData(data);
+				glyph->SetInputData(data.data);
 				mapper->SetInputConnection(glyph->GetOutputPort());
 				mapper->UseLookupTableScalarRangeOff();
 				mapper->ScalarVisibilityOn();
