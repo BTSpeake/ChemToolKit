@@ -64,9 +64,9 @@ namespace ctkData {
 		int standardValence() const;
 		//! Get atomic mass 
 		const double getMass() const;
-#ifdef WITH_GRAPHICS
+#ifdef WITH_CTK_GRAPHICS
 		//! Gets the default rgb colour value for this atom 
-		const short* getColour() const;
+		const float* getColour() const;
 #endif
 
 		// set functions 
