@@ -35,8 +35,10 @@ add_library(ctkForceField SHARED "src/ForceField/BondCalc.cpp" "src/ForceField/U
 target_link_libraries(ctkForceField ctkMaths)
 target_link_libraries(ctkForceField ctkDataObjs)
 
-# Find VTK 
-if (WITH_CTK_GRAPHICS)
+# Make the graphics library using VTK as a base 
+if (WITH_CTK_GRAPHICS)  
+    add_compile_definitions(WITH_CTK_GRAPHICS)
+    # Find VTK 
     find_package(VTK REQUIRED)
     if (VTK_FOUND)
         include_directories(include ${VTK_INCLUDE_DIRS})
@@ -69,7 +71,7 @@ file(COPY ${PARAM_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resources/)
 # CTests for C++ testing 
 if (WITH_TESTING)
     file(GLOB TEST_FILES "tests/Resources/*")
-file(COPY ${TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test_files/)
+    file(COPY ${TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test_files/)
     include(tests/CMakeLists.txt)
 endif()
 
