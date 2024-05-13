@@ -35,16 +35,30 @@ add_library(ctkForceField SHARED "src/ForceField/BondCalc.cpp" "src/ForceField/U
 target_link_libraries(ctkForceField ctkMaths)
 target_link_libraries(ctkForceField ctkDataObjs)
 
-if (WITH_GRAPHICS)
+# Find VTK 
+if (WITH_CTK_GRAPHICS)
+    find_package(VTK REQUIRED)
+    if (VTK_FOUND)
+        include_directories(include ${VTK_INCLUDE_DIRS})
+    endif()
     # Graphics library 
-    add_library(ctkGraphics "src/GUI/ModelController.cpp")
-    targer_link_libraries(ctkGraphics ctkDataObjs)
+    add_library(ctkGraphics SHARED "src/GUI/ModelController.cpp" "src/GUI/RenderWindow.cpp")
+    target_link_libraries(ctkGraphics ctkDataObjs)
+    target_link_libraries(ctkGraphics ${VTK_LIBRARIES})
+    # vtk_module_autoinit is needed
+    vtk_module_autoinit(
+      TARGETS ctkGraphics
+      MODULES ${VTK_LIBRARIES}
+    )
 endif()
+
 
 
 # Dummy executable (for now)
 add_executable (ChemToolKit "main.cpp" )
-
+if(WITH_CTK_GRAPHICS)
+    target_link_libraries(ChemToolKit ctkDataObjs ctkGraphics ${VTK_LIBRARIES})
+endif()
 
 # Global resource data files 
 file(GLOB PARAM_FILES "Resources/*.prm")
@@ -81,6 +95,11 @@ if (CTK_BIND_PYTHON)
 
     pybind11_add_module(ctkPyForceField "Bindings/Python/ForceField.cpp")
     target_link_libraries(ctkPyForceField PRIVATE ctkForceField ctkDataObjs)
+
+    if(WITH_CTK_GRAPHICS)
+        pybind11_add_module(ctkPyGraphics "Bindings/Python/Graphics.cpp")
+        target_link_libraries(ctkPyGraphics PRIVATE ctkGraphics)
+    endif()
 
     # TODO: Add tests for python bindings 
 endif()

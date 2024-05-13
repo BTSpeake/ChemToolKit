@@ -1,5 +1,7 @@
 #include "GUI/ModelController.h"
 
+using namespace ctkGraphics;
+
 ModelController::ModelController() {}
 
 ModelController::~ModelController() {

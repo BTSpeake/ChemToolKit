@@ -1,4 +1,5 @@
 #pragma once 
+#include "GUI/api.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -8,7 +9,7 @@
 
 namespace ctkGraphics {
 
-	class ModelController {
+	class GRAPHICS_API ModelController {
 	public:
 		//! Contructor 
 		ModelController();
