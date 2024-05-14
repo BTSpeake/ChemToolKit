@@ -17,12 +17,14 @@ bool FileIO_XYZ::read(ctkData::Model& mol) {
     // Parse the number of atoms from the first line in the file 
     if (!getline(file, line)) {
         _error = "ERROR :: file is empty!";
+        file.close();
         return false;
     }
     std::regex nAtomsRegex(R"(^\d+$)"); // Ensure valid integer
     std::smatch nAtomsMatch;
     if (!std::regex_match(line, nAtomsMatch, nAtomsRegex)) {
         _error = "ERROR :: Invalid line format found for line 1 (number of atoms line)!";
+        file.close();
         return false;
     }
     nAtoms = std::stoi(nAtomsMatch[0]);
@@ -38,6 +40,7 @@ bool FileIO_XYZ::read(ctkData::Model& mol) {
         if (!getline(file, line)) {
             _error = "ERROR :: Invalid atom data entry on line " + std::to_string(i);
             mol.reset();
+            file.close();
             return false;
         }
         if (regex_match(line, dataMatch, dataRegex)) {
@@ -48,6 +51,7 @@ bool FileIO_XYZ::read(ctkData::Model& mol) {
     if (mol.nAtoms() != nAtoms) {
         _error = "ERROR :: Invalid XYZ format -> total number of atoms not matched!";
         mol.reset();
+        file.close();
         return false;
     }
 
