@@ -14,5 +14,18 @@ PYBIND11_MODULE(ctkPyGraphics, m) {
 		.def("render", &RenderWindow::render)
 		.def("resize", &RenderWindow::resize)
 		.def("finalise", &RenderWindow::finalise)
+		.def("setBackground", &RenderWindow::setBackground)
+		.def("showAxes", &RenderWindow::showAxes)
+		.def("normaliseCamera", &RenderWindow::normaliseCamera)
+		.def("setDefaultCamera", &RenderWindow::setDefaultCamera)
+		.def("setWinId", &RenderWindow::setWinId)
+		//.def("timerEvent", &RenderWindow::timerEvent)
+		.def("setEventInformation", &RenderWindow::setEventInformation)
+		.def("enterEvent", &RenderWindow::enterEvent)
+		.def("leaveEvent", &RenderWindow::leaveEvent)
+		.def("buttonPressEvent", &RenderWindow::buttonPressEvent)
+		.def("buttonReleaseEvent", &RenderWindow::buttonReleaseEvent)
+		.def("mouseMoveEvent", &RenderWindow::mouseMoveEvent)
+		.def("wheelEvent", &RenderWindow::wheelEvent)
 		;
 }
