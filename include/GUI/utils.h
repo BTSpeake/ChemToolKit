@@ -8,6 +8,7 @@
 #include <vtkGlyph3D.h>
 #include <vtkSphereSource.h>
 #include <vtkTubeFilter.h>
+#include <vtkCellData.h>
 
 namespace ctkGraphics::utils {
 
@@ -54,20 +55,30 @@ namespace ctkGraphics::utils {
 	};
 
 	struct BondTube {
+		vtkNew<vtkActor> actor;
 		vtkNew<vtkTubeFilter> src;
 		vtkNew<vtkPolyDataMapper> mapper;
-		RenderData data;
+		vtkNew<vtkPolyData> data;
+		vtkNew<vtkPoints> points;
+		vtkNew<vtkCellArray> lines;
+		vtkNew<vtkUnsignedCharArray> colours;
 
 		BondTube() {
+
+			data->SetPoints(points);
+			data->SetLines(lines);
+			data->GetCellData()->SetScalars(colours);
+
 			src->SetNumberOfSides(20);
 			src->CappingOff();
 			src->SetVaryRadius(0);
 			src->SetRadiusFactor(10);
-			src->SetInputData(data.data);
+			src->SetInputData(data);
 			mapper->SetInputConnection(src->GetOutputPort());
 			setRadius();
+			actor->SetMapper(mapper);
 		}
-		void setRadius(const float r = 0.1) {
+		void setRadius(const float r = 0.2) {
 			src->SetRadius(r);
 			mapper->Update();
 		}

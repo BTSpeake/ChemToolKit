@@ -164,7 +164,17 @@ const double Atom::getMass() const {
 
 #ifdef WITH_CTK_GRAPHICS
 const float* Atom::getColour() const {
-    float c[3] = { 255, 0, 0 };
+    float c[3] = { 0.0f, 0.0f, 0.0f };
+    if (_a == 1) {
+        c[0] = 255.0f;
+        c[1] = 255.0f;
+        c[2] = 255.0f;
+    }
+    else if (_a == 6) {
+        c[0] = 50.0f;
+        c[1] = 50.0f;
+        c[2] = 50.0f;
+    }
     return c;
 }
 #endif

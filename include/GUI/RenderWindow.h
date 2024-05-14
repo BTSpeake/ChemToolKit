@@ -70,7 +70,11 @@ namespace ctkGraphics {
 
 		double bgCol[3];
 
+		// Rendering control flags 
+		bool _drawBonds = true;
+
 		void drawAtoms();
+		void drawBonds();
 
 		//! Create the viewer's axis arrows 
 		void createAxisArrows() const;

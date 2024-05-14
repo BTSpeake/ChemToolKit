@@ -3,6 +3,7 @@
 
 #include <vtkCamera.h>
 #include <vtkAxesActor.h>
+#include <vtkLine.h>
 
 using namespace ctkGraphics;
 
@@ -11,6 +12,7 @@ RenderWindow::RenderWindow() {
 	_rw->AddRenderer(_ren);
 	_rw->SetSize(640, 480);
 	_ren->AddActor(_atomSphere.actor);
+	_ren->AddActor(_bondTube.actor);
 	//_iren = _rw->GetInteractor();
 	_iren->SetRenderWindow(_rw);
 
@@ -43,6 +45,7 @@ inline void RenderWindow::setModel(const ctkData::Model* model) {
 void RenderWindow::updateRendering() {
 
 	drawAtoms();
+	drawBonds();
 
 }
 
@@ -146,6 +149,63 @@ void RenderWindow::drawAtoms() {
 
 	_atomSphere.glyph->Update();
 	//_atomSphere.glyph->SetScaleFactor(1.0);
+}
+
+// TODO -> use atom ids to improve efficiency ???
+void RenderWindow::drawBonds() {
+
+	_bondTube.lines->Reset();
+	_bondTube.colours->Reset();
+
+	if (_drawBonds) {
+		_bondTube.colours->SetNumberOfComponents(3);
+		_bondTube.colours->SetNumberOfTuples(_model->nBonds() * 2);
+		_bondTube.points->SetNumberOfPoints(_model->nBonds() * 3);
+		int pointId = 0;
+		int bondId = 0;
+		for (int i = 0; i < _model->nAtoms(); i++) {
+			for (int j = (i + 1); j < _model->nAtoms(); j++) {
+				if (_model->connected(i, j)) {
+					
+					// Get the bond midpoint 
+					ctkMaths::Vector3 mp = _model->getAtom(i)->getPosition() - _model->getAtom(j)->getPosition();
+					mp /= 2;
+					mp += _model->getAtom(j)->getPosition();
+
+					// Create the first line 
+					vtkNew<vtkLine> linei;
+					_bondTube.points->SetPoint(pointId, _model->getAtom(i)->getPosition()[0], _model->getAtom(i)->getPosition()[1], _model->getAtom(i)->getPosition()[2]);
+					linei->GetPointIds()->SetId(0, pointId);
+					pointId++;
+					_bondTube.points->SetPoint(pointId, mp[0], mp[1], mp[2]);
+					linei->GetPointIds()->SetId(1, pointId);
+					//pointId++;
+					_bondTube.lines->InsertNextCell(linei);
+					_bondTube.colours->SetTuple(bondId, _model->getAtom(i)->getColour());
+					bondId++;
+
+					// Create the second line 
+					vtkNew<vtkLine> linej;
+					//_bondTube.points->SetPoint(pointId, mp[0], mp[1], mp[2]);
+					linej->GetPointIds()->SetId(0, pointId);
+					pointId++;
+					_bondTube.points->SetPoint(pointId, _model->getAtom(j)->getPosition()[0], _model->getAtom(j)->getPosition()[1], _model->getAtom(j)->getPosition()[2]);
+					linej->GetPointIds()->SetId(1, pointId);
+					pointId++;
+					_bondTube.lines->InsertNextCell(linej);
+					_bondTube.colours->SetTuple(bondId, _model->getAtom(j)->getColour());
+					bondId++;
+
+				}
+			}
+		}
+	}
+	else {
+		_bondTube.points->Reset();
+	}
+	std::cout << _bondTube.lines->GetNumberOfCells() << std::endl;
+	std::cout << _bondTube.points->GetNumberOfPoints() << std::endl;
+	_bondTube.mapper->Update();
 }
 
 void RenderWindow::finalise() {
