@@ -8,12 +8,12 @@ PYBIND11_MODULE(ctkPyDataObjs, m) {
 
 	pybind11::module_::import("ctkPyMaths");
 
-	pybind11::class_<Model>(m, "Molecule")
+	pybind11::class_<Model>(m, "Model")
 		.def(pybind11::init<>())
 		.def("__repr__", &Model::toString)
 
-		.def("nAtoms", &Model::nAtoms, "Returns the total number of atoms contained within the molecule.")
-		.def("nBonds", &Model::nBonds, "Returns the total number of bonds contained within the molecule.")
+		.def("nAtoms", &Model::nAtoms, "Returns the total number of atoms contained within the model.")
+		.def("nBonds", &Model::nBonds, "Returns the total number of bonds contained within the model.")
 		.def_property("charge", &Model::getCharge, &Model::setCharge)
 		.def_property("spinProjection", &Model::getSpinProjection, &Model::setSpinProjection)
 		.def_property("multiplicity", &Model::getMultiplicity, &Model::setMultiplicity)

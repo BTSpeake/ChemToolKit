@@ -2,7 +2,7 @@
 #include <pybind11/operators.h>
 #include "GUI/RenderWindow.h"
 
-PYBIND11_MODULE(ctkGraphics, m) {
+PYBIND11_MODULE(ctkPyGraphics, m) {
 	using namespace ctkGraphics;
 
 	pybind11::module_::import("ctkPyDataObjs");
