@@ -10,10 +10,11 @@
 
 using namespace ctkIO;
 
-void FileIO_PDB::read(ctkData::Model& mol) const {
+bool FileIO_PDB::read(ctkData::Model& mol) {
     std::ifstream file(_fname);
     if (!file.is_open()) {
-        return;
+        _error = "ERROR :: Unable to open file";
+        return false;
     }
     
     // Set Regex definitions 
@@ -41,15 +42,17 @@ void FileIO_PDB::read(ctkData::Model& mol) const {
             std::regex_token_iterator<std::string::iterator> rend;
             std::regex_token_iterator<std::string::iterator> a(line.begin(), line.end(), digitRe);
             while (a != rend) {
-                int atmj = std::stoi(*a++) - 1; 
+                int atmj = std::stoi(*a++) - 1;
                 if (atmj > atmi) {
                     mol.addBond(atmi, atmj);
                 }
             }
         }
     }
+    return true;
 }
 
-void FileIO_PDB::write(const ctkData::Model& mol) const {
-    throw std::runtime_error("Writing to PDB files is currently unsupported!");
+bool FileIO_PDB::write(const ctkData::Model& mol) {
+    _error = "ERROR :: Writing to PDB files is currently unsupported!";
+    return false;
 }

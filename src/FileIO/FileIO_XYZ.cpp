@@ -5,23 +5,25 @@
 
 using namespace ctkIO;
 
-void FileIO_XYZ::read(ctkData::Model& mol) const {
+bool FileIO_XYZ::read(ctkData::Model& mol) {
     std::ifstream file(_fname);
     if (!file.is_open()) {
-        throw std::runtime_error("Error opening file");
-        return;
+        _error = "ERROR :: Unable to open file!";
+        return false;
     }
     std::string line;
     int nAtoms{ 0 };
 
     // Parse the number of atoms from the first line in the file 
     if (!getline(file, line)) {
-        throw std::runtime_error("Error reading number of atoms");
+        _error = "ERROR :: file is empty!";
+        return false;
     }
     std::regex nAtomsRegex(R"(^\d+$)"); // Ensure valid integer
     std::smatch nAtomsMatch;
     if (!std::regex_match(line, nAtomsMatch, nAtomsRegex)) {
-        throw std::runtime_error("Invalid number of atoms format");
+        _error = "ERROR :: Invalid line format found for line 1 (number of atoms line)!";
+        return false;
     }
     nAtoms = std::stoi(nAtomsMatch[0]);
 
@@ -34,7 +36,9 @@ void FileIO_XYZ::read(ctkData::Model& mol) const {
     // Parse the remaining atom data line by line 
     for (int i = 0; i < nAtoms; ++i) {
         if (!getline(file, line)) {
-            throw std::runtime_error("Error reading atom data");
+            _error = "ERROR :: Invalid atom data entry on line " + std::to_string(i);
+            mol.reset();
+            return false;
         }
         if (regex_match(line, dataMatch, dataRegex)) {
             mol.addAtom(dataMatch[1], std::stod(dataMatch[2]), std::stod(dataMatch[3]), std::stod(dataMatch[4]));
@@ -42,7 +46,9 @@ void FileIO_XYZ::read(ctkData::Model& mol) const {
     }
 
     if (mol.nAtoms() != nAtoms) {
-        throw std::runtime_error("Invalid xyz format - Error in file parse.");
+        _error = "ERROR :: Invalid XYZ format -> total number of atoms not matched!";
+        mol.reset();
+        return false;
     }
 
 
@@ -50,15 +56,16 @@ void FileIO_XYZ::read(ctkData::Model& mol) const {
 
     // Calculate bonding as default for xyz files
     mol.calculateBonding();
-
+    
+    return true;
 }
 
 
-void FileIO_XYZ::write(const ctkData::Model& mol) const {
+bool FileIO_XYZ::write(const ctkData::Model& mol) {
     std::ofstream file(_fname);
     if (!file.is_open()) {
-        throw std::runtime_error("Error opening file");
-        return;
+        _error = "ERROR :: Unable to open file!";
+        return false;
     }
     const int nAtms = mol.nAtoms();
     file << nAtms << std::endl; 
@@ -69,4 +76,5 @@ void FileIO_XYZ::write(const ctkData::Model& mol) const {
         file << atm->getSymbol() << "    " << atm->getPosition()[0] << "    " << atm->getPosition()[1] << "    " << atm->getPosition()[2] << std::endl;
     }
     file.close();
+    return true;
 }

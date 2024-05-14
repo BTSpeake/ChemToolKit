@@ -14,12 +14,13 @@ namespace ctkIO {
 		void setFileName(std::filesystem::path fname) {
 			_fname = fname;
 		}
-		virtual void read(ctkData::Model& mol) const = 0;
-		virtual void write(const ctkData::Model& mol) const = 0;;
+		virtual bool read(ctkData::Model& mol) = 0;
+		virtual bool write(const ctkData::Model& mol) = 0;
+		const std::string& getErrorMessage() const { return _error; };
 
 	protected:
 		std::filesystem::path _fname;
-
+		std::string _error;
 	};
 
 }

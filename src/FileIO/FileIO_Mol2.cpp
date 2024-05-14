@@ -6,10 +6,11 @@
 
 using namespace ctkIO;
 
-void FileIO_Mol2::read(ctkData::Model& mol) const {
+bool FileIO_Mol2::read(ctkData::Model& mol) {
 	std::ifstream file(_fname);
 	if (!file.is_open()) {
-		throw std::runtime_error("Error opening file");
+		_error = "ERROR :: Unable to open file.";
+		return false;
 	}
 	std::string line; 
 	std::regex dummyHeaderRe("^@<TRIPOS>");
@@ -95,14 +96,14 @@ void FileIO_Mol2::read(ctkData::Model& mol) const {
 	for (int i : aromaticAtoms) {
 		mol.getAtom(i)->isAromatic(true);
 	}
-
+	return true;
 }
 
-void FileIO_Mol2::write(const ctkData::Model& mol) const {
+bool FileIO_Mol2::write(const ctkData::Model& mol) {
 	std::ofstream file(_fname);
 	if (!file.is_open()) {
-		throw std::runtime_error("Error opening file");
-		return;
+		_error = "ERROR :: Unable to open file!";
+		return false;
 	}
 	// Write the header 
 	file << "# Name: Unknown\n";
@@ -153,5 +154,5 @@ void FileIO_Mol2::write(const ctkData::Model& mol) const {
 			bi++;
 		}
 	}
-
+	return true;
 }
