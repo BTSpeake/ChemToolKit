@@ -155,6 +155,12 @@ double Model::calculateNNR() const {
 	return nnr;
 }
 
+// \Todo this should be extended to include other properties 
+void Model::reset() {
+	clearBonds();
+	clearAtoms();
+}
+
 void Model::clearAtoms() {
 	for (Atom* a : _atoms) {
 		delete a;

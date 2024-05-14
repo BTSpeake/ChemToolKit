@@ -69,7 +69,9 @@ namespace ctkData {
 		//! Calculates the total nuclear-nuclear repulsion within the model 
 		double calculateNNR() const;
 
-		// Utility functions
+		// Utility functions]
+		//! Resets the model object to initial settings 
+		void reset();
 		//! Resets the atom and bonding information 
 		void clearAtoms();
 		//! Resets the bonding information
