@@ -22,9 +22,8 @@ RenderWindow::RenderWindow() {
 	vtkNew<Interactor> style;
 	_iren->SetInteractorStyle(style);
 
-
-	//_iren->ReInitialize();
-	//render();
+	setActorProperties(_atomSphere.actor);
+	setActorProperties(_bondTube.actor);
 }
 
 RenderWindow::~RenderWindow() {
@@ -69,7 +68,7 @@ void RenderWindow::setDefaultCamera() const {
 	_ren->ResetCamera();
 }
 
-void RenderWindow::setWinId(const char* id) const {
+inline void RenderWindow::setWinId(const char* id) const {
 	_rw->SetWindowInfo(id);
 }
 
@@ -126,26 +125,37 @@ void RenderWindow::wheelEvent(const bool forward) const {
 void RenderWindow::drawAtoms() {
 
 	_atomSphere.data.points->SetNumberOfPoints(_model->nAtoms());
+	_atomSphere.data.colours->SetNumberOfTuples(_model->nAtoms());
+	_atomSphere.data.radii->SetNumberOfTuples(_model->nAtoms());
 	for (int i = 0; i < _model->nAtoms(); i++) {
+		// Position
 		_atomSphere.data.points->SetPoint(
 			i,
 			_model->getAtom(i)->getPosition()[0],
 			_model->getAtom(i)->getPosition()[1],
 			_model->getAtom(i)->getPosition()[2]
 		);
-	}
-
-	_atomSphere.data.colours->SetNumberOfTuples(_model->nAtoms());
-	for (int i = 0; i < _model->nAtoms(); i++) {
-		_atomSphere.data.colours->SetTuple(i, _model->getAtom(i)->getColour());
-	}
-
-	_atomSphere.data.radii->SetNumberOfTuples(_model->nAtoms());
-	for (int i = 0; i < _model->nAtoms(); i++) {
-		float r[3] = {_model->getAtom(i)->getCovalentRadii(), _model->getAtom(i)->getCovalentRadii(), _model->getAtom(i)->getCovalentRadii() };
+		// Colour
+		float c[3] = {
+			_model->getAtom(i)->getColour()[0] * 255,
+			_model->getAtom(i)->getColour()[1] * 255,
+			_model->getAtom(i)->getColour()[2] * 255
+		};
+		_atomSphere.data.colours->SetTuple(i, c);
+		// Size 
+		float r[3];
+		if (_wireframe) {
+			r[0] = 0.1165f;
+			r[1] = 0.1165f;
+			r[2] = 0.1165f;
+		}
+		else {
+			r[0] = _model->getAtom(i)->getCovalentRadii();
+			r[1] = _model->getAtom(i)->getCovalentRadii();
+			r[2] = _model->getAtom(i)->getCovalentRadii();
+		}
 		_atomSphere.data.radii->SetTuple(i, r);
 	}
-
 
 	_atomSphere.glyph->Update();
 	//_atomSphere.glyph->SetScaleFactor(1.0);
@@ -158,6 +168,10 @@ void RenderWindow::drawBonds() {
 	_bondTube.colours->Reset();
 
 	if (_drawBonds) {
+		if (_wireframe) {
+			_bondTube.setRadius(0.2f);
+		}
+
 		_bondTube.colours->SetNumberOfComponents(3);
 		_bondTube.colours->SetNumberOfTuples(_model->nBonds() * 2);
 		_bondTube.points->SetNumberOfPoints(_model->nBonds() * 3);
@@ -181,7 +195,12 @@ void RenderWindow::drawBonds() {
 					linei->GetPointIds()->SetId(1, pointId);
 					//pointId++;
 					_bondTube.lines->InsertNextCell(linei);
-					_bondTube.colours->SetTuple(bondId, _model->getAtom(i)->getColour());
+					float c[3] = {
+						_model->getAtom(i)->getColour()[0] * 255,
+						_model->getAtom(i)->getColour()[1] * 255,
+						_model->getAtom(i)->getColour()[2] * 255
+					};
+					_bondTube.colours->SetTuple(bondId, c);
 					bondId++;
 
 					// Create the second line 
@@ -193,7 +212,10 @@ void RenderWindow::drawBonds() {
 					linej->GetPointIds()->SetId(1, pointId);
 					pointId++;
 					_bondTube.lines->InsertNextCell(linej);
-					_bondTube.colours->SetTuple(bondId, _model->getAtom(j)->getColour());
+					c[0] = _model->getAtom(j)->getColour()[0] * 255;
+					c[1] = _model->getAtom(j)->getColour()[1] * 255;
+					c[2] = _model->getAtom(j)->getColour()[2] * 255;
+					_bondTube.colours->SetTuple(bondId, c);
 					bondId++;
 
 				}
@@ -203,12 +225,10 @@ void RenderWindow::drawBonds() {
 	else {
 		_bondTube.points->Reset();
 	}
-	std::cout << _bondTube.lines->GetNumberOfCells() << std::endl;
-	std::cout << _bondTube.points->GetNumberOfPoints() << std::endl;
 	_bondTube.mapper->Update();
 }
 
-void RenderWindow::finalise() {
+inline void RenderWindow::finalise() {
 	_rw->Finalize();
 }
 
@@ -241,6 +261,37 @@ void RenderWindow::createAxisArrows() const {
 	_axes->SetInteractive(true);
 }
 
-void RenderWindow::showAxes(const bool show) const {
+inline void RenderWindow::showAxes(const bool show) const {
 	_axes->SetEnabled(show);
+}
+
+void RenderWindow::createLighting() const {
+
+	//! Front light 
+	_lights[0]->SetLightType(2);
+	_lights[0]->SetPosition(0.0, 0.0, 1.0);
+	_lights[0]->SetIntensity(1);
+	_lights[0]->SetColor(1.0, 1.0, 1.0);
+	_ren->AddLight(_lights[0]);
+
+	//! top light 
+	_lights[1]->SetLightType(2);
+	_lights[1]->SetPosition(0.2, 1.0, 0.0);
+	_lights[1]->SetIntensity(1);
+	_lights[1]->SetColor(1.0, 1.0, 1.0);
+	_ren->AddLight(_lights[1]);
+}
+
+void RenderWindow::lightSwitch(const unsigned int l, const bool on) const {
+	if (l <= 1) {
+		_lights[l]->SetIntensity(on);
+	}
+}
+
+inline void RenderWindow::setBondColour(const double r, const double g, const double b) {
+	_bondTube.actor->GetProperty()->SetColor(r, g, b);
+}
+
+inline void RenderWindow::setBondRadius(const float r) {
+	_bondTube.setRadius(r);
 }

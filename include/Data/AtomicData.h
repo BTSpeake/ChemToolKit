@@ -1,151 +1,74 @@
 #pragma once 
 #include <string>
+#include <map>
 
-namespace AtomData {
+namespace ctkData::AtomData {
 
 	class Element {
 	public:
 		Element(
 			int a,
-			std::string sym,
-			double covR
+			const char* sym,
+			float covR,
+			float colR, 
+			float colG, 
+			float colB
 		) :
 			atomicNumber(a),
 			symbol(sym),
-			covalentRadii(covR)
+			covalentRadii(covR), 
+			colour{ colR, colB, colG }
 		{}
+		~Element() = default;
 
-		int atomicNumber; 
-		std::string symbol;
-		double covalentRadii;
+		int atomicNumber;
+		const char* symbol;
+		float covalentRadii;
+		float colour[3];
 
+	private:
 		Element(const Element&) = delete;
 		Element& operator=(const Element&) = delete;
-		~Element() = default;
 		Element() = delete;
 	};
 
-	namespace Elements {
-		extern const Element HYDROGEN;
-		extern const Element HELIUM;
-		extern const Element LITHIUM;
-		extern const Element BERYLLIUM;
-		extern const Element BORON;
-		extern const Element CARBON;
-		extern const Element NITROGEN;
-		extern const Element OXYGEN;
-		extern const Element FLUORINE;
-		extern const Element NEON;
-		extern const Element SODIUM;
-		extern const Element MAGNESIUM;
-		extern const Element ALUMINIUM;
-		extern const Element SILICON;
-		extern const Element PHOSPHORUS;
-		extern const Element SULFUR;
-		extern const Element CHLORINE;
-		extern const Element ARGON;
-		extern const Element POTASSIUM;
-		extern const Element CALCIUM;
-		extern const Element SCANDIUM;
-		extern const Element TITATNIUM;
-		extern const Element VANADIUM;
-		extern const Element CHROMIUM;
-		extern const Element MANGANESE;
-		extern const Element IRON;
-		extern const Element COBALT;
-		extern const Element NICKEL;
-		extern const Element COPPER;
-		extern const Element ZINC;
-		extern const Element GALLIUM;
-		extern const Element GERMANIUM;
-		extern const Element ARSENIC;
-		extern const Element SELENIUM;
-		extern const Element BROMINE;
-		extern const Element KRYPTON;
-		extern const Element RUBIDIUM;
-		extern const Element STRONTIUM;
-		extern const Element YTTRIUM;
-		extern const Element ZIRCONIUM;
-		extern const Element NIOBIUM;
-		extern const Element MOLYBDENUM;
-		extern const Element TECHNETIUM;
-		extern const Element RUTHENIUM;
-		extern const Element RHODIUM;
-		extern const Element PALLADIUM;
-		extern const Element SILVER;
-		extern const Element CADMIUM;
-		extern const Element INDIUM;
-		extern const Element TIN;
-		extern const Element ANTIMONY;
-		extern const Element TELLURIUM;
-		extern const Element IODINE;
-		extern const Element XENON;
-		extern const Element CAESIUM;
-		extern const Element BARIUM;
-		extern const Element LANTHANUM;
-		extern const Element CERIUM;
-		extern const Element PRASEODYMIUM;
-		extern const Element NEODYMIUM;
-		extern const Element PROMETHIUMM;
-		extern const Element SAMARIUM;
-		extern const Element EUROPIUM;
-		extern const Element GADOLINIUM;
-		extern const Element TERBIUM;
-		extern const Element DYSPROSIUM;
-		extern const Element HOLMIUM;
-		extern const Element ERBIUM;
-		extern const Element THULIUM;
-		extern const Element YTTERBIUM;
-		extern const Element LUTETIUM;
-		extern const Element HAFNIUM;
-		extern const Element TANTALUM;
-		extern const Element TUNGSTEN;
-		extern const Element RHENIUM;
-		extern const Element OSMIUM;
-		extern const Element IRIDIUM;
-		extern const Element PLATINUM;
-		extern const Element GOLD;
-		extern const Element MERCURY;
-		extern const Element THALLIUM;
-		extern const Element LEAD;
-		extern const Element BISMUTH;
-		extern const Element POLONIUM;
-		extern const Element ASTATINE;
-		extern const Element RADON;
-		extern const Element FRANCIUM;
-		extern const Element RADIUM;
-		extern const Element ACTINIUM;
-		extern const Element THORIUM;
-		extern const Element PROTACTINIUM;
-		extern const Element URANIUM;
-		extern const Element NEPTUNIUM;
-		extern const Element PLUTONIUM;
-		extern const Element AMERICIUM;
-		extern const Element CURIUM;
-		extern const Element BERKELIUM;
-		extern const Element CALIFONIUM;
-		extern const Element EINSTEINIUM;
-		extern const Element FERMIUM;
-		extern const Element MENDELEVIUM;
-		extern const Element NOBELIUM;
-		extern const Element LAWRENCIUM;
-		extern const Element RUTHERFORDIUM;
-		extern const Element DUBNIUM;
-		extern const Element SEABORGIUM;
-		extern const Element BOHRIUM;
-		extern const Element HASSIUM;
-		extern const Element MEITNERIUM;
-		extern const Element DARMSTADTIUM;
-		extern const Element ROENTGENIUM;
-		// find data on the following atoms -> this data is assumed not taken from reliable sources ;covalent Radii)
-		extern const Element COPERNICIUM;
-		extern const Element NIHONIUM;
-		extern const Element FLEROVIUM;
-		extern const Element MOSCOVIUM;
-		extern const Element LIVERMORIUM;
-		extern const Element TENNESSINE;
-		extern const Element OGANESSON;
-	}
+	class PeriodicTable {
+	public: 
+		PeriodicTable() = default;
+		~PeriodicTable() = default;
+		const Element& operator[](const unsigned int i) { 
+			if (i >= 19) {
+				return _atoms[0];
+			}
+			else {
+				return _atoms[i];
+			}
+		}
 	
+	private:
+		PeriodicTable(const PeriodicTable&) = delete;
+		PeriodicTable& operator=(const PeriodicTable&) = delete;
 
+		Element _atoms[19] = {
+			Element( 0, "  ", 0.00, 0.00, 0.00, 0.00),
+			Element( 1, "H ", 0.32, 1.00, 1.00, 1.00),
+			Element( 2, "He", 0.32, 0.85, 1.00, 1.00),
+			Element( 3, "Li", 1.33, 0.50, 0.00, 1.00),
+			Element( 4, "Be", 1.04, 0.76, 1.00, 0.00),
+			Element( 5, "B ", 0.85, 1.00, 0.71, 0.71),
+			Element( 6, "C ", 0.75, 0.50, 0.50, 0.50),
+			Element( 7, "N ", 0.71, 0.00, 0.00, 1.00),
+			Element( 8, "O ", 0.63, 1.00, 0.00, 0.00),
+			Element( 9, "F ", 0.64, 0.00, 0.70, 1.00),
+			Element(10, "Ne", 0.67, 0.70, 0.90, 0.96),
+			Element(11, "Na", 1.55, 0.67, 0.36, 0.95), 
+			Element(12, "Mg", 1.39, 0.50, 1.00, 0.00),
+			Element(13, "Al", 1.26, 0.75, 0.65, 0.65), 
+			Element(14, "Si", 1.16, 0.54, 0.60, 0.78), 
+			Element(15, "P ", 1.11, 1.00, 0.50, 0.00), 
+			Element(16, "S ", 1.03, 1.00, 1.00, 0.19), 
+			Element(17, "Cl", 0.80, 0.24, 1.00, 0.00), 
+			Element(18, "Ar", 0.96, 0.50, 0.82, 0.89)
+		};
+	};
 }

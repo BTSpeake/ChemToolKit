@@ -27,5 +27,8 @@ PYBIND11_MODULE(ctkPyGraphics, m) {
 		.def("buttonReleaseEvent", &RenderWindow::buttonReleaseEvent)
 		.def("mouseMoveEvent", &RenderWindow::mouseMoveEvent)
 		.def("wheelEvent", &RenderWindow::wheelEvent)
+		.def("setBondColour", &RenderWindow::setBondColour)
+		.def("setBondRadius", &RenderWindow::setBondRadius)
+		.def("lightSwitch", &RenderWindow::lightSwitch)
 		;
 }

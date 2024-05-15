@@ -9,6 +9,7 @@
 #include <vtkSphereSource.h>
 #include <vtkTubeFilter.h>
 #include <vtkCellData.h>
+#include <vtkProperty.h>
 
 namespace ctkGraphics::utils {
 
@@ -69,16 +70,17 @@ namespace ctkGraphics::utils {
 			data->SetLines(lines);
 			data->GetCellData()->SetScalars(colours);
 
-			src->SetNumberOfSides(20);
-			src->CappingOff();
+			src->SetNumberOfSides(100);
+			//src->CappingOff();]
+			src->CappingOn();
 			src->SetVaryRadius(0);
 			src->SetRadiusFactor(10);
 			src->SetInputData(data);
 			mapper->SetInputConnection(src->GetOutputPort());
-			setRadius();
+			setRadius(0.2);
 			actor->SetMapper(mapper);
 		}
-		void setRadius(const float r = 0.2) {
+		void setRadius(const float r) {
 			src->SetRadius(r);
 			mapper->Update();
 		}
