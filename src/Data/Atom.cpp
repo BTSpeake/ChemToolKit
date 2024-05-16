@@ -6,9 +6,6 @@ using namespace ctkData;
 
 Atom::Atom(int a, double x, double y, double z)
 	: _a(a), _pos(x, y, z) {
-    if (atmDict.find(a) == atmDict.end()) {
-        _a = 0;
-    }
     _connections.reserve(4);
     _doubles.reserve(2);
     _triples.reserve(1);

@@ -113,9 +113,7 @@ namespace ctkData {
 
 
 		// make these const??? seems to break access functions
-		static std::map<int, const char*> atmDict;
 		static std::map<std::string, int> symbolDict; // could we get better performance with a const char* / has approach???
-		static std::map<int, float> covRadiiDict;
 
 		static AtomData::PeriodicTable periodicTable;
 	};

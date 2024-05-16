@@ -37,7 +37,7 @@ namespace ctkData::AtomData {
 		PeriodicTable() = default;
 		~PeriodicTable() = default;
 		const Element& operator[](const unsigned int i) { 
-			if (i >= 31) {
+			if (i >= PeriodicTable::_nElements) {
 				return _atoms[0];
 			}
 			else {
@@ -49,7 +49,8 @@ namespace ctkData::AtomData {
 		PeriodicTable(const PeriodicTable&) = delete;
 		PeriodicTable& operator=(const PeriodicTable&) = delete;
 
-		Element _atoms[31] = {
+		static constexpr int _nElements = 31;
+		Element _atoms[_nElements] = {
 			Element( 0, "  ", 0.00, 0.00, 0.00, 0.00),
 			Element( 1, "H ", 0.32, 1.00, 1.00, 1.00),
 			Element( 2, "He", 0.32, 0.85, 1.00, 1.00),
