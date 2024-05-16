@@ -37,7 +37,7 @@ namespace ctkData::AtomData {
 		PeriodicTable() = default;
 		~PeriodicTable() = default;
 		const Element& operator[](const unsigned int i) { 
-			if (i >= 19) {
+			if (i >= 31) {
 				return _atoms[0];
 			}
 			else {
@@ -49,7 +49,7 @@ namespace ctkData::AtomData {
 		PeriodicTable(const PeriodicTable&) = delete;
 		PeriodicTable& operator=(const PeriodicTable&) = delete;
 
-		Element _atoms[19] = {
+		Element _atoms[31] = {
 			Element( 0, "  ", 0.00, 0.00, 0.00, 0.00),
 			Element( 1, "H ", 0.32, 1.00, 1.00, 1.00),
 			Element( 2, "He", 0.32, 0.85, 1.00, 1.00),
@@ -68,7 +68,19 @@ namespace ctkData::AtomData {
 			Element(15, "P ", 1.11, 1.00, 0.50, 0.00), 
 			Element(16, "S ", 1.03, 1.00, 1.00, 0.19), 
 			Element(17, "Cl", 0.80, 0.24, 1.00, 0.00), 
-			Element(18, "Ar", 0.96, 0.50, 0.82, 0.89)
+			Element(18, "Ar", 0.96, 0.50, 0.82, 0.89), 
+			Element(19, "K ", 1.96, 0.56, 0.25, 0.83),
+			Element(20, "Ca", 1.71, 0.24, 1.00, 0.00), 
+			Element(21, "Sc", 1.48, 0.90, 0.90, 0.90), 
+			Element(22, "Ti", 1.36, 0.75, 0.76, 0.78), 
+			Element(23, "V ", 1.34, 0.65, 0.65, 0.67), 
+			Element(24, "Cr", 1.22, 0.54, 0.60, 0.78), 
+			Element(25, "Mn", 1.19, 0.61, 0.48, 0.78), 
+			Element(26, "Fe", 1.16, 0.88, 0.40, 0.20), 
+			Element(27, "Co", 1.11, 0.94, 0.56, 0.63), 
+			Element(28, "Ni", 1.10, 0.31, 0.82, 0.31), 
+			Element(29, "Cu", 1.12, 0.78, 0.50, 0.20), 
+			Element(30, "Zn", 1.18, 0.49, 0.50, 0.69), 
 		};
 	};
 }
