@@ -3,6 +3,7 @@
 #include <vector>
 #include "Data/api.h"
 #include "Data/Atom.h"
+#include "Data/VolumeData.h"
 
 namespace ctkData {
 
@@ -42,6 +43,8 @@ namespace ctkData {
 		int getMultiplicity() const;
 		//! Return the centre of mass for the total model 
 		const ctkMaths::Vector3& getCoM() const;
+		//! Returns a given volumetric data set attached to the model 
+		std::shared_ptr<VolumeData> getVolumetricDataSet(const int i);
 
 		// set functions atoms/bonds 
 		//! Adds a new atom with atomic number [a] at position ([x], [y], [z])
@@ -58,6 +61,8 @@ namespace ctkData {
 		void setSpinProjection(double sp);
 		//! Sets the global spin projection of the model based on a multiplicity value
 		void setMultiplicity(double m);
+		//! Adds an associated volumetric data set (such as electronic density values) to the model 
+		void addVolumetricDataSet(std::shared_ptr<VolumeData> data);
 
 		// processing functions 
 		//! Generates an approximate bonding model based in covalent radii
@@ -92,6 +97,7 @@ namespace ctkData {
 		ctkMaths::Vector3 CoM;
 		std::vector<Atom*> _atoms;
 		std::string _title;
+		std::vector<std::shared_ptr<VolumeData>> _gridData;
 	};
 
 }

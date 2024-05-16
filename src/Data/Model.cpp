@@ -200,3 +200,17 @@ std::string Model::getTitle() const {
 void Model::setTitle(std::string title) {
 	_title = title;
 }
+
+
+std::shared_ptr<VolumeData> Model::getVolumetricDataSet(const int i) {
+	if (i >= _gridData.size()) {
+		return nullptr;
+	}
+	else {
+		return _gridData[i];
+	}
+}
+
+void Model::addVolumetricDataSet(std::shared_ptr<VolumeData> data) {
+	_gridData.push_back(data);
+}

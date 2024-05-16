@@ -3,6 +3,8 @@
 
 #include <vector>
 
+// TODO adapt this so it can house multiple data sets for a given grid 
+
 namespace ctkData {
 
 	class DATA_API VolumeData {
