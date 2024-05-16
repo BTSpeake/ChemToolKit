@@ -15,18 +15,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project ("ChemToolKit")
 include_directories(include "./include")
 
-
 # Make the basic maths library 
 set(MATHS_SOURCES "src/Maths/Vector3.cpp" "src/Maths/Matrix33.cpp") 
 add_library(ctkMaths SHARED ${MATHS_SOURCES})
 
 # Make the molecular structure library 
-set(MOL_SOURCES "src/Data/Model.cpp" "src/Data/Atom.cpp")
+set(MOL_SOURCES "src/Data/Model.cpp" "src/Data/Atom.cpp" "src/Data/VolumeData.cpp" "src/Data/Surface.cpp" "include/Data/HalfEdge.h" "include/Data/Vertex.h" "include/Data/Face.h")
 add_library(ctkDataObjs SHARED ${MOL_SOURCES})
 target_link_libraries(ctkDataObjs ctkMaths)
 
 # Make the FileIO library 
-set(FILEIO_SOURCES "src/FileIO/FileControl.cpp" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileIO_Mol2.cpp")
+set(FILEIO_SOURCES "src/FileIO/FileControl.cpp" "src/FileIO/FileIO_XYZ.cpp" "src/FileIO/FileIO_PDB.cpp" "src/FileIO/FileIO_Mol2.cpp" "src/FileIO/FileIO_DLP.cpp")
 add_library(ctkFileIO SHARED ${FILEIO_SOURCES})
 target_link_libraries(ctkFileIO ctkDataObjs)
 
