@@ -1,5 +1,7 @@
 #include "Data/Model.h"
 #include "Data/Atom.h"
+#include "Data/Surface.h"
+#include "Data/VolumeData.h"
 #include <pybind11/pybind11.h>
 
 using namespace ctkData;
@@ -45,4 +47,23 @@ PYBIND11_MODULE(ctkPyDataObjs, m) {
 		.def("getCovRadii", &Atom::getCovalentRadii)
 		;
 
+	pybind11::class_<VolumeData>(m, "VolumeData")
+		.def(pybind11::init<int*>())
+		.def("addNewValue", pybind11::overload_cast<const double, const double, const double, const double>(&VolumeData::addNewValue))
+		.def("addNewValue", pybind11::overload_cast<const double>(&VolumeData::addNewValue))
+		.def("setValue", pybind11::overload_cast<const int, const double, const double, const double, const double>(&VolumeData::setValue))
+		.def("setValue", pybind11::overload_cast<const int, const double>(&VolumeData::setValue))
+		.def("getGridX", &VolumeData::getGridX)
+		.def("getGridY", &VolumeData::getGridY)
+		.def("getGridZ", &VolumeData::getGridZ)
+		;
+
+	pybind11::class_<Surface>(m, "Surface")
+		.def(pybind11::init<const VolumeData&>())
+		.def("MarchingCubes", &Surface::MarchingCubes)
+		.def("laplcianSmoothing", &Surface::laplacianSmoothing)
+		.def("calculateVertexNormals", &Surface::calculateVertexNormals)
+		.def("subdivide", &Surface::subdivide)
+		.def("nFaces", &Surface::nFaces)
+		;
 }

@@ -2,7 +2,7 @@
 
 using namespace ctkData;
 
-VolumeData::VolumeData(int dim[])
+VolumeData::VolumeData(int* dim)
 	: _dim{ dim[0], dim[1], dim[2] } {
 	int tot = dim[0] * dim[1] * dim[2];
 	_grid.reserve(tot * 3);

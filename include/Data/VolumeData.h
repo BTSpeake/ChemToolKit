@@ -7,7 +7,7 @@ namespace ctkData {
 
 	class DATA_API VolumeData {
 	public:
-		VolumeData(int dim[]);
+		VolumeData(int* dim);
 		~VolumeData();
 
 		void addNewValue(const double x, const double y, const double z, const double val);
