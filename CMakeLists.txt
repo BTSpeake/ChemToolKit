@@ -15,6 +15,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project ("ChemToolKit")
 include_directories(include "./include")
 
+# Some compiler and environment specific controls 
+if (MSVC) 
+    if (WITH_OMP)
+        add_compile_options(/openmp)
+    endif()
+else() 
+    if (WITH_OMP)
+        add_compile_options(-fopenmp)
+    endif()
+endif() 
+
 # Make the basic maths library 
 set(MATHS_SOURCES "src/Maths/Vector3.cpp" "src/Maths/Matrix33.cpp") 
 add_library(ctkMaths SHARED ${MATHS_SOURCES})
